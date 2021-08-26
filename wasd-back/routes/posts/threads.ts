@@ -10,7 +10,7 @@ Route.use(json);
 
 
 /* 
-    GET /api/v1/threads/create
+    POST /api/v1/threads/create
 
     PERMISSIONS: CREATE_POST
     Auth: API_TOKEN
@@ -24,7 +24,7 @@ Route.use(json);
         }
     }
 */
-Route.get("/create", checkAuth, async (req, res, next) => {
+Route.post("/create", checkAuth, async (req, res, next) => {
 
     let body = req.body;
     let user = res.locals.user;
@@ -45,6 +45,7 @@ Route.get("/create", checkAuth, async (req, res, next) => {
     if(!post) errors.push("Your thread must have an init post!");
     if(!post.contents) errors.push("Your post must contain something!");
 
+    if(errors.length !== 0) return res.json({ error: true, errors });
 
     let thread = await Threads.create({ title, 
         topicId, 

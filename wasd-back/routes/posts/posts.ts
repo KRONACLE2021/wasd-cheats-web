@@ -42,11 +42,11 @@ Route.post("/create", async (req, res, next) => {
     let thread = await Threads.findOne({ id: threadId });
 
     if(!thread) return res.json({ error: true, errors: "There is no thread to go along with this post."});
-    if(errors) return res.json({error: true, errors});
+    if(errors.length !== 0) return res.json({error: true, errors});
 
-    CreatePost(attachments, contents, user.uid, threadId)
+    let post = await CreatePost(attachments, contents, user.uid, threadId)
 
-    let post = await PostsModel.create({ id, threadId, contents, uid: user.uid, attachments });
+    if(post == false) return res.json({ error: true, errors: ["Could not save post to database! If this error continues please contact a website admin. "]});
 
     thread.posts.push(id);
     await thread.save(); 

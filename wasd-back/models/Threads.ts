@@ -22,4 +22,4 @@ const PostsSchema = new Schema<IThread>({
 });
 
 
-export default model<IThread>('Posts', PostsSchema);
+export default model<IThread>('Threads', PostsSchema);
