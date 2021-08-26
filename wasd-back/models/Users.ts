@@ -17,6 +17,7 @@ export interface IUser {
 const UserSchema = new Schema<IUser>({
     username: { type: String, required: true },
     email: { type: String, required: true },
+    permissions: Array,
     password: { type: String, required: true },
     avatar: String,
     created_at: { type: Date, required: true, default: () => new Date() },

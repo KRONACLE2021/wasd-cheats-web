@@ -5,7 +5,8 @@ import bcrypt from 'bcrypt';
 
 let Route = Router();
 
-Route.use(json);
+
+Route.use(json());
 
 Route.post("/register", async (req, res, next) => {
 
@@ -34,10 +35,10 @@ Route.post("/register", async (req, res, next) => {
             permissions: ["REGULAR"],
             avatar: "",
             email: body.email,
-            api_key: generateRandomString(16),
+            api_key: generateRandomString(64),
             posts: [],
             username: body.username,
-            passowrd: hash
+            password: hash
         }
 
         await UserModel.create(user);
@@ -56,18 +57,22 @@ Route.post("/register", async (req, res, next) => {
 });
 
 
-Route.get("/login", async (req, res, next) => {
+Route.post("/login", async (req, res, next) => {
     let body = req.body;
 
     if(!body.username) return res.json({error: true, errors: ["No email/username provided!"]});
     if(!body.password) return res.json({error: true, errors: ["No password provided!"]});
 
 
-    let user = await UserModel.findOne({ username: body.username }, { email: body.email });
+    let user = await UserModel.findOne({ username: body.username });
+
+    if(!user) {
+        user = await UserModel.findOne({ email: body.email });
+    }
 
     if(!user) return res.json({error: true, errors: ["User does not exsist!"]});
      
-    let pwdCheck = bcrypt.compareSync(body.username, user.password);
+    let pwdCheck = bcrypt.compareSync(body.password, user.password);
 
     if(!pwdCheck) return res.json({error: true, errors: ["Password is incorrect!"]});
 
@@ -86,4 +91,4 @@ Route.get("/login", async (req, res, next) => {
 });
 
 
-export default Router;
+export default Route;

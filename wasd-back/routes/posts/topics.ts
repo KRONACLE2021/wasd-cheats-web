@@ -1,11 +1,12 @@
 import { Router, json } from 'express';
 import { v4 as uuid } from 'uuid';
 import Topics from '../../models/Topics';
+import Categorys from '../../models/Categorys';
 import checkAuth from '../../middleware/checkAuth';
 
 let Route = Router();
 
-Route.use(json);
+Route.use(json());
 
 Route.get("/home", (req, res, next) => {
     
@@ -43,12 +44,20 @@ Route.post("/create", checkAuth, async (req, res, next) => {
     if(!category) errors.push("The topic you want to create must have a category id!");
     if(!imgUrl) errors.push("The topic you want to create must have a image!");
 
+    let Category = await Categorys.findOne({ id: category });
+
+    if(!Category) errors.push("Category not found!");
+
     if(errors.length !== 0) return res.json({ error: true, errors });
 
     let id = uuid();
 
     let topic = await Topics.create({ id, description, category, imgUrl, threads: [], title });
-    
+
+    Category?.topics.push(id);
+
+    await Category?.save()
+
     return res.json(topic);
 });
 

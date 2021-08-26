@@ -6,20 +6,19 @@ import CreatePost from './functions/createPost';
 
 let Route = Router();
 
-Route.use(json);
+Route.use(json());
 
 
 /* 
     POST /api/v1/threads/create
 
-    PERMISSIONS: CREATE_POST
+    PERMISSIONS: ALLOW_POSTING
     Auth: API_TOKEN
 
     Body: {
         title: "thread title",
         topicId: <id of topic to fall under>,
         post: {
-            title: <title of init post>,
             contents: <contents of post>
         }
     }
@@ -38,7 +37,7 @@ Route.post("/create", checkAuth, async (req, res, next) => {
     let id = uuid();
 
 
-    if(!user.permissions.includes("CREATE_POST")) return res.json({error: true, message: "You're not allowed to post things!"});
+    if(!user.permissions.includes("ALLOW_POSTING")) return res.json({error: true, message: "You're not allowed to post things!"});
 
     if(!title) errors.push("Your thread must have a title!");
     

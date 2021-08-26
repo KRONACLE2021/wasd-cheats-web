@@ -1,11 +1,11 @@
 import { Router, json } from 'express';
 import { v4 as uuid } from 'uuid';
-import Categorys from '../../models/Topics';
+import Categorys from '../../models/Categorys';
 import checkAuth from '../../middleware/checkAuth';
 
 let Route = Router();
 
-Route.use(json);
+Route.use(json());
 
 
 /* 
@@ -20,9 +20,11 @@ Route.use(json);
     }
 */
 
+
 Route.post("/create", checkAuth, async (req, res, next) => {
-    
-    if(res.locals.user.permissions.includes("ADMINISTRATOR")) return res.json({ error: true, errors: ["You do not have permission to make a category! Pepega Clap."]}).status(401);
+
+    console.log(res.locals.user.permissions);
+    if(!res.locals.user.permissions.includes("ADMINISTRATOR")) return res.json({ error: true, errors: ["You do not have permission to make a category! Pepega Clap."]}).status(401);
 
     let body = req.body;
 

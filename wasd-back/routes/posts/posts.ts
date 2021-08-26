@@ -27,7 +27,7 @@ Route.post("/create", async (req, res, next) => {
 
     let user : IUser = res.locals.user;
 
-    if(!user.permissions.includes("ALLOW_POSTING")) return res.json({ error: true, errors: ["You're not allowed to post!"] }); 
+    if(!user.permissions.includes("ALLOW_POSTING") && !user.permissions.includes("ADMINISTRATOR")) return res.json({ error: true, errors: ["You're not allowed to post!"] }); 
 
     let attachments = body.attachments;
     let contents = body.contents;

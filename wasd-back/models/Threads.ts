@@ -18,7 +18,7 @@ const PostsSchema = new Schema<IThread>({
     uid: String,
     locked: Boolean,
     posts: Array,
-    createdAt: { type: Date, defualt: () => new Date(), required: true }
+    createdAt: { type: Date, defualt: () => new Date() }
 });
 
 
