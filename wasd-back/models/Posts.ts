@@ -1,6 +1,6 @@
 import { Schema, model } from 'mongoose';
 
-interface IPost {
+export interface IPost {
     id: string;
     title: string;
     contents: string;
@@ -18,4 +18,4 @@ const PostsSchema = new Schema<IPost>({
 });
 
 
-export default model<IPost>('User', PostsSchema);
+export default model<IPost>('Posts', PostsSchema);
