@@ -4,7 +4,9 @@ export interface IThread {
     id: string;
     title: string;
     uid: string;
+    createdAt: Date;
     topicId: string;
+    locked: boolean;
     posts: Array<string>;
 }
 
@@ -14,7 +16,9 @@ const PostsSchema = new Schema<IThread>({
     title: String,
     topicId: String,
     uid: String,
-    posts: String
+    locked: Boolean,
+    posts: Array,
+    createdAt: { type: Date, defualt: () => new Date(), required: true }
 });
 
 

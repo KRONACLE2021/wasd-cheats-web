@@ -2,8 +2,8 @@ import { Schema, model } from 'mongoose';
 
 export interface IPost {
     id: string;
-    title: string;
     contents: string;
+    attachments: Array<string>;
     uid: string;
     threadId: string;
 }
@@ -11,10 +11,10 @@ export interface IPost {
 
 const PostsSchema = new Schema<IPost>({
     id: String,
-    title: String,
     contents: String,
     uid: String,
     threadId: String,
+    attachments: Array
 });
 
 

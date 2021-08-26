@@ -1,7 +1,7 @@
 import { Router, json } from 'express';
 import { v4 as uuid } from 'uuid';
-import TopicsRoute from './topics';
 import PostsModel from '../../models/Posts';
+import CreatePost from './functions/createPost';
 import Threads from '../../models/Threads';
 import { IUser } from '../../models/Users';
 
@@ -29,22 +29,27 @@ Route.post("/create", async (req, res, next) => {
 
     if(!user.permissions.includes("ALLOW_POSTING")) return res.json({ error: true, errors: ["You're not allowed to post!"] }); 
 
-    let title = body.title;
+    let attachments = body.attachments;
     let contents = body.contents;
     let id = uuid();
     let threadId = body.thread_id;
 
-    if(!title) errors.push("You must provide a title!");
+    //provide attachment checking
+
     if(!contents) errors.push("You must provide the contents of what you want to post!");
     if(!threadId) errors.push("There must be a thread to attach this post too!! What are you some sort of maniac who dosent use threads, come on now come get this man.")
 
     let thread = await Threads.findOne({ id: threadId });
 
-    if(!thread) return res.json({ error: true, errors: "There is no thread to go along with this post."})
-
+    if(!thread) return res.json({ error: true, errors: "There is no thread to go along with this post."});
     if(errors) return res.json({error: true, errors});
 
-    let post = await PostsModel.create({ title, id, threadId, contents, uid: user.uid });
+    CreatePost(attachments, contents, user.uid, threadId)
+
+    let post = await PostsModel.create({ id, threadId, contents, uid: user.uid, attachments });
+
+    thread.posts.push(id);
+    await thread.save(); 
 
     return res.json(post);
 });
