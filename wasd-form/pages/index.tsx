@@ -7,6 +7,7 @@ export default function Home() {
       <Head>
         <title>WASD Cheats</title>
       </Head>
+
       <div className={styles.header_container}>
         <video className={styles.header_video} autoPlay loop muted>
             <source src="/home_header.mp4" type="video/mp4"/>
@@ -20,6 +21,11 @@ export default function Home() {
           </div>
         </div>
       </div>
+
+      <div className={styles.pricing_container}>
+        <h1>Pricing</h1>
+      </div>
+
     </div>
   )
 }
