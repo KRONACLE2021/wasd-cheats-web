@@ -1,4 +1,5 @@
 import { Router } from "express";
+import cors from 'cors';
 import PostsRoute from './posts/posts'; 
 import TopicsRoute from './posts/topics';
 import ThreadsRoute from './posts/threads';
@@ -7,6 +8,8 @@ import Categorys from './posts/categorys';
 import StoreAdmin from './store/admin';
 
 let Route = Router();
+
+Route.use(cors());
 
 Route.get("/api/status", (req, res, next) => {
     res.json({status: "online"});

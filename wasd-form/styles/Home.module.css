@@ -10,7 +10,6 @@
 .header_wasd {
     font-size: 80px;
     height: 45px;
-    margin-left: -5px;
 }
 
 
@@ -52,4 +51,91 @@
 
 .pink {
     background-color: var(--pink);
+}
+
+.pricing_container {
+    display: flex;
+    background: linear-gradient(to bottom right, var(--bg-purple), var(--bg-pink));
+    justify-content: center;
+    flex-direction: column;
+}
+
+.pricing_header {
+    text-align: center;
+}
+
+.pricing_header h1 {
+    font-size: 48px;
+    color: white;
+    height: 40px;
+}
+
+.pricing_header p {
+    font-size: 17px;
+    color: white;
+}
+
+.pricing_card__container {
+    padding: 20px 30px;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    height: 350px;
+    width: 250px;
+    text-align: left;
+    background-color: var(--white);
+    border-radius: 8px;
+    color: black;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 50px;
+}
+
+.pricing_card__container:nth-child(n + 1){
+    margin-left: 10px;
+}
+
+.pricing_card__timeline {
+    font-size: 19px;
+    color: grey;
+    font-weight: normal;
+}
+.pricing_card__title {
+    font-weight: bolder;
+    font-size: 19px;
+    height: 14px;
+}
+
+.pricing_card__container ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.pricing_card__container ul li {
+    padding: 3px;
+}
+
+.pricing_card__buy_btn {
+    padding: 10px;
+    width: 100%;
+    border: none;
+    border-radius: 50px;
+    font-family: "Roboto", sans-serif;
+    font-size: 15px;
+    font-weight: bold;
+    background-color:var(--purple);
+    color: white;
+    align-self: flex-end;
+}
+
+.pricing_cards {
+    display: flex;
+    justify-content: center;
+}
+
+.spacer {
+    height: 50px;
+}
+
+.small_spacer {
+    height: 10px;
 }
