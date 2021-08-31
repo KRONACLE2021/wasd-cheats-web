@@ -31,6 +31,7 @@ export default  function Home() {
         </div>
       </div>
 
+      { /* Pricing Section */ }
       <div className={styles.pricing_container}>
       <div className={styles.small_spacer}></div>
         <div className={styles.pricing_header}>
