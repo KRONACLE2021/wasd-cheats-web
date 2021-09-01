@@ -14,7 +14,7 @@ export const LoginUser = async (login: {username: string, password: string}, dis
 
     let result = await axios.post(`${API}/${LOGIN_ROUTE}`, {
         username: login.username,
-        passowrd: login.password
+        password: login.password
     },{
         headers: {
             "content-type": "application/json"
@@ -25,7 +25,7 @@ export const LoginUser = async (login: {username: string, password: string}, dis
         return err.response;
     });
     
-    if(result.data){
+    if(result?.data){
         if(result.data.api_key){
             dispatch({
                 type: SET_USER,
@@ -34,6 +34,8 @@ export const LoginUser = async (login: {username: string, password: string}, dis
         } else if(result.data.error) {
             return result.data;
         }
+    } else {
+        return undefined;
     }
 }
 
