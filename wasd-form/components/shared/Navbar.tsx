@@ -1,6 +1,7 @@
 import React from 'react';
 import styles from '../../styles/navigation.module.css';
 import Link from 'next/link';
+import Router from 'next/router';
 
 const Navbar : React.FC<any> = (props) => {
     return (
@@ -13,7 +14,9 @@ const Navbar : React.FC<any> = (props) => {
                     <li><Link href={"/fourms"}>Pricing</Link></li>
                 </ul>
             </nav>
-            <button className={styles.login_button}>Login</button>
+            <button onClick={() => {
+                Router.push("/login");
+            }} className={styles.login_button}>Login</button>
         </div>
     );
 }
