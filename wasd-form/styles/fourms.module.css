@@ -1,6 +1,40 @@
 .main_container {
-    padding: 40px 10%;
+    max-width: 1264px;
+    padding: 40px 0px;
+    margin: 0 auto;
+
 }
+
+@media (max-width: 1294px) {
+    .main_container{
+        padding: 40px 30px;
+    }
+}
+
+
+@media (max-width: 700px) {
+    .topic_title {
+        height: auto !important;
+        font-size: 9px;
+    }
+
+    .topic_card_image, .topic_card_image img {
+        height: 50px !important;
+        width: 50px !important;
+        padding: 0 !important;
+    }
+
+    .topic_card_container {
+        padding: 0px 0px !important;
+        margin: 0 !important;
+    }
+
+    .category_container {
+        padding: 0px 15px !important;
+    }
+}
+
+
 
 .header {
     font-weight: 400;
