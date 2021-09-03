@@ -18,6 +18,7 @@ export default function topicReducer(state : any = initalState, action : { type:
                 state.topics.push(action.payload);
             }
             return state;
+            
         case REMOVE_TOPIC:
             for(var i in state.topics) {
                 if(state.topics[i].id == action.payload){

@@ -9,7 +9,7 @@ const Navbar : React.FC<any> = (props) => {
             <img src={"/logo.png"} className={styles.logo}/>
             <nav>
                 <ul className={styles.nav_links}>
-                    <li><Link href={"/fourms"}>Fourms</Link></li>
+                    <li><Link href={"/fourm"}>Fourms</Link></li>
                     <li><Link href={"/fourms"}>Shop</Link></li>
                     <li><Link href={"/fourms"}>Pricing</Link></li>
                 </ul>
