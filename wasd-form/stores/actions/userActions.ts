@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { API, LOGIN_ROUTE } from '../../requests/config';
+import { API, LOGIN_ROUTE, REGISTER_ROUTE } from '../../requests/config';
 import { SET_USER } from '../actions';
 
 
@@ -39,3 +39,34 @@ export const LoginUser = async (login: {username: string, password: string}, dis
     }
 }
 
+
+export const RegisterUser = async ({email, username, password}: {email : string, username: string, password: string}, dispatch : any) => {
+    let result = await axios.post(`${API}/${REGISTER_ROUTE}`, {
+        username,
+        email,
+        password
+    }, {
+        headers: {
+            "content-type": "application/json"
+        }
+    })
+    .then((res) => res)
+    .catch((err) => err.response);
+    
+
+    if(result.data){
+        if(result.data.api_key){
+            dispatch({
+                type: SET_USER,
+                payload: result.data
+            });
+
+            return result.data;
+        } else if (result.data.error) {
+            return result.data;
+        }
+    } else {
+        return undefined;
+    }
+
+}

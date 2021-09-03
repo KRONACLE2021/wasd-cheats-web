@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import styles from '../styles/login.module.css'; 
-import { LoginUser } from '../stores/actions/userActions';
+import { RegisterUser } from '../stores/actions/userActions';
 import { useDispatch } from 'react-redux';
 
 const Login : React.FC<any> = (props) => {
@@ -10,6 +10,7 @@ const Login : React.FC<any> = (props) => {
 
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
+    const [username, setUsername] = useState<string>("");
 
     const [isLoading, setLoading] = useState<boolean>(false);
     const [isSubmitting, setSubmitting] = useState<boolean>(false);
@@ -19,9 +20,10 @@ const Login : React.FC<any> = (props) => {
     const submitForm = async () => {
         setSubmitting(true);
 
-        let res = await LoginUser({
-            username: email,
-            password: password
+        let res = await RegisterUser({
+            email: email,
+            password: password,
+            username: username
         }, dispatch);
 
         if(res) {
@@ -30,20 +32,24 @@ const Login : React.FC<any> = (props) => {
             }
         } else {
             setErrors(["Could not contact api!"]);
-        }
+        }    
 
         setSubmitting(false);
     };  
+
+    console.log(errors);
 
     return (
         <div className={styles.login_container}>
             <div className={styles.login_box}>
                 <div>
-                    <h2 className={styles.login_box__header}>Login</h2>
-                    <p className={styles.login_box__sml_txt}>Login to your wasd account</p>  
+                    <h2 className={styles.login_box__header}>Register</h2>
+                    <p className={styles.login_box__sml_txt}>Register for a wasd account</p>  
 
                     <div className={styles.login_box__input_fields}>
-                        <input placeholder={"email/username"} onChange={(e) =>  setEmail(e.target.value)} className={styles.login_input} />
+                        <input placeholder={"username"} onChange={(e) =>  setUsername(e.target.value)} className={styles.login_input} />
+                        <div className={styles.spacer_top}></div>
+                        <input placeholder={"email"} onChange={(e) =>  setEmail(e.target.value)} className={styles.login_input} />
                         <div className={styles.spacer_top}></div>
                         <input placeholder={"password"} type={"password"} onChange={(e) =>  setPassword(e.target.value)} className={styles.login_input} />
                     </div>
@@ -52,16 +58,16 @@ const Login : React.FC<any> = (props) => {
                     <div className={styles.spacer_top}></div>
 
                     <div className={styles.login_box_buttons}>
-                        <button className={`${styles.login_button} ${styles.discord_login}`} disabled={isSubmitting}>Login With Discord</button>
+                        <button className={`${styles.login_button} ${styles.discord_login}`} disabled={isSubmitting}>Register With Discord</button>
                         <div className={styles.spacer_top}></div>
-                        <button className={`${styles.login_button}`} onClick={submitForm} disabled={isSubmitting}>Login</button>
+                        <button className={`${styles.login_button}`} onClick={submitForm} disabled={isSubmitting}>Create an account</button>
                         <div className={styles.spacer_top}></div>
                     </div>
                 </div>
 
 
                 <div style={{textAlign: "center"}}>
-                    <Link href={"/register"}><span style={{color: "grey", cursor: "pointer"}}>Dont have an account? Make one.</span></Link>
+                    <Link href={"/login"}><span style={{color: "grey", cursor: "pointer"}}>Already have an account? Login.</span></Link>
                     <div className={styles.spacer_top}></div>
                 </div>
 

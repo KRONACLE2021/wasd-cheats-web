@@ -1,5 +1,6 @@
 import { Router, json } from "express";
 import UserModel from '../models/Users';
+import { isEmailBurner } from "burner-email-providers";
 import { v4 as uuid } from 'uuid';
 import bcrypt from 'bcrypt';
 
@@ -16,6 +17,14 @@ Route.post("/register", async (req, res, next) => {
     if(!body.password) return res.json({error: true, errors: ["No password provided!"]}).status(300);
     if(!body.email) return res.json({error: true, errors: ["No email provided!"]}).status(300);
     
+    const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    let isEmail = re.test(String(body.email).toLowerCase());
+
+    if(!isEmail) return res.json({error: true, errors: ["The email you provided is invalid!"]});
+
+    let isBurner = isEmailBurner(body.email);
+
+    if(isBurner) return res.json({error: true, errors: ["The email you provided is considered a burner or invalid."]});
 
     let usernameCheck = await UserModel.findOne({username: body.username});
     let emailCheck = await UserModel.findOne({email: body.email});

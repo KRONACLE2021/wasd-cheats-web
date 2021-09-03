@@ -2,10 +2,45 @@ import { Router, json } from 'express';
 import { v4 as uuid } from 'uuid';
 import Categorys from '../../models/Categorys';
 import checkAuth from '../../middleware/checkAuth';
+import Topics from '../../models/Topics';
 
 let Route = Router();
 
 Route.use(json());
+
+Route.get("/all", async (req, res, next) => {
+    
+    let categorys_ = await Categorys.find();
+
+    res.json({
+        categorys: categorys_
+    });
+});
+
+
+/* 
+    GET /api/v1/categorys/:id/topics
+
+    PERMISSIONS: None,
+    Auth: none,
+
+    Request params: 
+    Id = category id
+
+*/
+Route.get('/:id/topics', async (req, res, next) => {
+    let category = await Categorys.findOne({id: req.params.id});
+
+    if(!category) return res.json({ error: true, errors: ["Could not find category!"] }).status(404);
+
+    let topics = await Topics.find({ id: { $in: category.topics } });
+
+    return res.json({
+        category: category,
+        topics: topics
+    });
+
+});
 
 
 /* 

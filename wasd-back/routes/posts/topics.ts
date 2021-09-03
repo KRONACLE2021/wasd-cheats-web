@@ -8,8 +8,12 @@ let Route = Router();
 
 Route.use(json());
 
-Route.get("/home", (req, res, next) => {
-    
+Route.get("/:id", async (req, res, next) => {
+    let topics_ = await Topics.findOne({ id: req.params.id });
+
+    if(!topics_) return res.json({ error: true, errors: ["Topic not found"]}).status(404);
+
+    return res.json(topics_);
 });
 
 /* 
