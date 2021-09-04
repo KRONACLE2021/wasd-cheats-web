@@ -15,13 +15,13 @@ const CategoryContainer: React.FC<{name: string, id: string}> = (props) => {
 
     return (
         <div className={styles.category_container}>
-            <div>
+            <div className={`${styles.category_top_header}`}>
                 <h1 className={styles.category_header}>{props.name}</h1>
             </div>
 
             <div className={styles.bar_seporator}></div>
 
-            <div>
+            <div className={styles.category_topics_container}>
                 {props.children}
                 {topics !== [] ? topics.map((t) => {
                     if(t.category == props.id) {

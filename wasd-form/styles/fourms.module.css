@@ -1,11 +1,12 @@
 .main_container {
-    max-width: 1264px;
+    display: flex;
+    max-width: 1564px;
     padding: 40px 0px;
     margin: 0 auto;
 
 }
 
-@media (max-width: 1294px) {
+@media (max-width: 1664px) {
     .main_container{
         padding: 40px 30px;
     }
@@ -42,6 +43,29 @@
 
 .main_header {
     margin-top: 70px;
+    width: 100%;
+    
+}
+
+.fourm_main_cotent {
+    width: 1230px !important;
+    padding: 0px 30px;
+}
+
+.fourm_right_sidebar {
+    padding: 10px 20px;
+    min-width: 300px;
+    background-color: var(--bg-lighter);
+    border-radius: 6px;
+    max-width: 300px;
+    height: 300px !important;
+    margin-top: 70px;
+    height: auto;
+
+}
+
+.width_full {
+    width: 100%;
 }
 
 .top_spacer {
@@ -57,18 +81,26 @@
     height: auto;
     min-height: 50px;
     background-color: var(--bg-secondary);
-    border-radius: 9px;
-    border: 2px solid var(--bg-lighter);
-    padding: 0px 30px;
+    border-radius: 5px;
+    /* border: 2px solid var(--bg-lighter); */ 
+    padding: 1px 0px;
+}
+
+.category_top_header {
+    padding: 0px 20px;
+}
+
+.category_topics_container {
+    padding: 10px;
 }
 
 .category_header {
-    font-size: 22px;
+    font-size: 18px;
     font-weight: 400;
 }
 
 .fourm_content {
-    width: 70%;
+    width: 100%;
 }
 
 .category_container .bar_seporator {
