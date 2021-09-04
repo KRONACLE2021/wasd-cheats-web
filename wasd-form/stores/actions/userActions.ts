@@ -17,7 +17,10 @@ export const RefreshUser = async (dispatch: any) => {
 
         let api_key = localStorage.getItem("_wasd_api");
 
-        if(!api_key) return;
+        if(!api_key) {
+            console.log("[AUTH MANAGER] No Previous user has logged in.")
+            return;
+        };
 
         let result = await axios.get(`${API}/${GET_CURRENT_USER}`, {
             headers: {
@@ -107,4 +110,11 @@ export const RegisterUser = async ({email, username, password}: {email : string,
         return undefined;
     }
 
+}
+
+export const LogoutUser = () => {
+    return {
+        type: SET_USER,
+        payload: {}
+    }
 }

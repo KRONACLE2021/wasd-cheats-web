@@ -19,7 +19,7 @@ const Navbar : React.FC<any> = (props) => {
                     <li><Link href={"/fourms"}>Pricing</Link></li>
                 </ul>
             </nav>
-            {userStore !== {} ? (
+            {userStore.username !== undefined ? (
                 <>
                     <div className={styles.logged_in_user}>
                         <img src={userStore.avatar !== "" ? userStore.avatar : `https://avatars.dicebear.com/api/jdenticon/${userStore.uid}.svg`}></img>

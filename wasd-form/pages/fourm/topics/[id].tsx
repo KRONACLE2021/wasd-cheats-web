@@ -18,7 +18,7 @@ const TopicPage : React.FC<any> = () => {
     const fetchTopic = async () => {
         let res = await FetchTopicById(id, dispatch);
 
-        if(res.error) {
+        if(res.error) { 
             console.log(res);
         }
     }
