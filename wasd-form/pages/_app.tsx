@@ -2,12 +2,19 @@ import { AppProps } from 'next/app';
 import Store from '../stores/store';
 import Navbar from '../components/shared/Navbar';
 import { Provider } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import '../styles/globals.css';
 import "../styles/vars.css";
-import "../styles/bootstrap/bootstrap.min.css";
+
+import {RefreshUser} from '../stores/actions/userActions';
 import { createWrapper } from 'next-redux-wrapper';
 
 function MyApp({ Component, pageProps }: AppProps) {
+
+  let dispatch = useDispatch();
+
+  RefreshUser(dispatch);
+
   return <>
     <Provider store={Store}>
       <Navbar></Navbar>

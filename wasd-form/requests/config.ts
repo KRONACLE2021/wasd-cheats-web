@@ -12,3 +12,8 @@ export const LOGIN_ROUTE = "api/v1/auth/login";
 export const FETCH_TOPIC = (id : string) => `api/v1/topics/${id}`;
 export const FETCH_TOPICS_BY_CATEGORY = (categoryId: string) => `api/v1/categorys/${categoryId}/topics`;
 export const FETCH_CATEGORYS = `api/v1/categorys/all`;
+
+/* USER ROUTES */
+export const GET_CURRENT_USER = `api/v1/users/me`;
+
+
