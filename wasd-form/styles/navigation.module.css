@@ -22,7 +22,7 @@
     list-style: none;
 }
 
-.nav_links li {
+.nav_links li { 
     display: inline-block;
     padding: 0px 10px;
 }
@@ -35,4 +35,71 @@
     background-color: var(--pink);
     color: white;
     margin-left: 10px;
+}
+
+.logged_in_user {
+    background-color: var(--bg-secondary);
+    border: 2px solid var(--bg-lighter);
+    border-radius: 7px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: 0px 15px;
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+.logged_in_user img {
+    height: 35px;
+    background-color: white;
+    margin-right: 10px;
+    border-radius: 50px;
+}
+
+.logged_in_user_username {
+    font-weight: bold;
+}
+
+.logged_in_user:hover .logged_in_dropdown {
+    display: block;
+}
+
+.logged_in_dropdown {
+    display: none;
+    position: absolute;
+    height: auto;
+    width: 150%;
+    background-color: var(--bg-secondary);
+    top: 50px;
+    left: -55px;
+    border-top-left-radius: 7px;
+    border-top-right-radius: 7px;
+    border-bottom-left-radius: 7px;
+    border-bottom-right-radius: 7px;
+}
+
+.signed_in_as {
+    padding: 0px 15px;
+}
+
+.signed_in_as p {
+    height: 5px;
+    font-size: 14px;
+}
+
+.signed_in_as h3 {
+    font-size: 16px;
+}
+
+.drop_down_list {
+    padding-left: 15px;
+    margin: 0 !important;
+    list-style: none;
+}
+
+.drop_down_list li {
+    padding: 8px 0px !important;
+
+    padding-left: 0 !important;
+    margin: 0 !important;
 }

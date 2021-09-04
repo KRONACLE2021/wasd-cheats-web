@@ -1,12 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Router from 'next/router';
 import styles from '../styles/login.module.css'; 
 import { LoginUser } from '../stores/actions/userActions';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 const Login : React.FC<any> = (props) => {
     
     const dispatch = useDispatch();
+
+    const userStore = useSelector(state => state.user);
 
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
@@ -15,6 +18,15 @@ const Login : React.FC<any> = (props) => {
     const [isSubmitting, setSubmitting] = useState<boolean>(false);
 
     const [errors, setErrors] = useState<Array<string>>([]);
+
+    
+    useEffect(() => {
+        if(userStore){
+            if(userStore.username){
+                Router.push("/fourm");
+            }
+        }
+    }, [userStore]);
 
     const submitForm = async () => {
         setSubmitting(true);
