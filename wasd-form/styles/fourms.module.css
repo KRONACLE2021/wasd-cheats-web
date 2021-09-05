@@ -6,6 +6,16 @@
 
 }
 
+.editor_container {
+    margin: 0 auto;
+    padding: 40px 0px;
+    max-width: 1564px;
+}
+
+.editor-js{
+    border: 1px solid white;
+}
+
 @media (max-width: 1664px) {
     .main_container{
         padding: 40px 30px;
@@ -172,4 +182,46 @@
     margin-top: 10px;
     margin-bottom: 10px;
     float: right;
+}
+
+.editor_main_container {
+    background-color: var(--bg-secondary);
+    width: 100%;
+    padding: 10px 25px;
+    border-radius: 7px;
+}
+
+.editor_input {
+    padding: 15px 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: transparent;
+    font-family: "Roboto", sans-serif;
+    font-size: 16px;
+    width: 100%;
+    border-bottom: solid var(--purple);
+    color: white;
+}
+
+.editor_details {
+    font-size: 14px;
+    color: grey;
+}
+
+
+.post_editor {
+    padding: 10px 0px;
+    border-radius: 7px;
+    height: auto;
+    background-color: var(--bg-lighter);
+}
+
+.post_thread_btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 7px;
+    font-family: "Roboto", sans-serif;
+    background-color: var(--pink);
+    color: white;
+    font-weight: bold;
 }
