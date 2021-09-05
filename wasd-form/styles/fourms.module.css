@@ -213,7 +213,9 @@
     padding: 10px 0px;
     border-radius: 7px;
     height: auto;
-    background-color: var(--bg-lighter);
+    background-color: rgba(0,0,0,0.5);
+    display: inline-block;
+    width: 100%;
 }
 
 .post_thread_btn {
