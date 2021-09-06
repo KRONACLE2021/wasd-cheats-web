@@ -48,12 +48,12 @@ const TopicPage : React.FC<any> = () => {
                     <div className={styles.thread_create_container}>
                             <button className={styles.thread_create} onClick={() => router.push(`/fourm/topics/${topics[0].id}/new`)}>Start a Thread</button>
                     </div>
-                    <div className={styles.fourm_container}>
-                        {threads.map((i) => <h1>{i.title}</h1>)}
-                    </div>
                 </>
             ) : ""
         }> 
+            <div className={styles.fourm_container}>
+                {threads.map((i) => <h1>{i.title}</h1>)}
+            </div>
         </FourmRoot>
     );
 }
