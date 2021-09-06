@@ -5,6 +5,7 @@ import { Provider } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import '../styles/globals.css';
 import "../styles/vars.css";
+import "draft-js/dist/Draft.css"; 
 
 import {RefreshUser} from '../stores/actions/userActions';
 import { createWrapper } from 'next-redux-wrapper';

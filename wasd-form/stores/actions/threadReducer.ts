@@ -5,7 +5,7 @@ import { ADD_THREADS, CREATE_THREAD } from '../actions';
 
 export const AddThread = (payload : Array<any> | object) => {
     return {
-        action: ADD_THREADS,
+        type: ADD_THREADS,
         payload: payload
     }
 }
@@ -25,6 +25,15 @@ export const CreateThread = async ({title, post, attachments, topic_id} : {title
     }).then((res) => res)
     .catch((err) => err.response);
 
-    console.log(response);
+    let data = response.data;
 
+    if(!data?.error && data?.title){
+        dispatcher({
+            type: CREATE_THREAD,
+            payload: data
+        })
+        return data;
+    } else {
+        return data;
+    }
 }
