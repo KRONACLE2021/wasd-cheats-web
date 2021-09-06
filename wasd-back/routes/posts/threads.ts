@@ -55,7 +55,8 @@ Route.post("/create", checkAuth, async (req, res, next) => {
         topicId, 
         locked: false, 
         posts: [], 
-        uid, 
+        uid,
+        createdAt: new Date(), 
         id 
     });
 

@@ -5,6 +5,7 @@ import { FetchTopicById } from '../../../stores/actions/topicActions';
 import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
 import { FetchThreadsByTopic } from '../../../stores/actions/threadReducer';
+import ThreadCard from '../../../components/fourm/ThreadCard';
 
 const TopicPage : React.FC<any> = () => {
     
@@ -52,7 +53,18 @@ const TopicPage : React.FC<any> = () => {
             ) : ""
         }> 
             <div className={styles.fourm_container}>
-                {threads.map((i) => <h1>{i.title}</h1>)}
+                <div className={styles.thread_container}>
+                    {threads.map((i) => {
+                        return <ThreadCard title={i.title} 
+                            id={i.id} 
+                            uid={i.uid} 
+                            createdAt={i.createdAt} 
+                            locked={i.locked} 
+                            topicId={i.topicId} 
+                            posts={i.posts} 
+                        />
+                    })}
+                </div>
             </div>
         </FourmRoot>
     );

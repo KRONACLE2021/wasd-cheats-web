@@ -27,9 +27,9 @@ Route.get("/:id/threads", async (req, res, next) => {
 
     if(!topic_) return res.json({ error: true, errors: ["Topic not found!"]});
 
-    let topics = await Threads.find({ id: { $in: topic_.threads } }).limit(limit).skip(skip);
+    let threads = await Threads.find({ id: { $in: topic_.threads } }).limit(limit).skip(skip);
 
-    return res.json(topics);
+    return res.json(threads);
 });
 
 Route.get("/:id", async (req, res, next) => {

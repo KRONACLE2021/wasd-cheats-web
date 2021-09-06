@@ -83,6 +83,7 @@
 }
 
 .fourm_container {
+    width: 100%;
     display: flex;  
 }
 
@@ -226,4 +227,16 @@
     background-color: var(--pink);
     color: white;
     font-weight: bold;
+}
+
+.thread_container {
+    padding: 10px;
+    width: 100%;
+    height: auto;
+    background-color: var(--bg-secondary);
+    border-radius: 7px;
+}
+
+.thread_card {
+    width: 100%;
 }
