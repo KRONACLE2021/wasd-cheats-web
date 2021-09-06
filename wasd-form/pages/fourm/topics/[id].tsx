@@ -15,6 +15,7 @@ const TopicPage : React.FC<any> = () => {
     const { query: { id } } = router;
 
     const topics = useSelector(state => state.topics.topics.filter((item) => (item["id"] == id)));
+    const threads = useSelector(state => state.threadStore.threads.filter((item) => (item["topicId"] == id)));
 
     const fetchTopic = async () => {
         let res = await FetchTopicById(id, dispatch);
@@ -25,13 +26,15 @@ const TopicPage : React.FC<any> = () => {
     }
 
     useEffect(() => {
+        FetchThreadsByTopic(id, 0, 20, dispatch);
+    }, [id]);
+
+    useEffect(() => {
         if(topics.length == 0) {
             fetchTopic();
-            FetchThreadsByTopic(id, 0, 20, dispatch);
         }
-    }, [topics]);
+    }, [id]);
 
-    console.log(topics);
 
     return (
 
@@ -46,10 +49,11 @@ const TopicPage : React.FC<any> = () => {
                             <button className={styles.thread_create} onClick={() => router.push(`/fourm/topics/${topics[0].id}/new`)}>Start a Thread</button>
                     </div>
                     <div className={styles.fourm_container}>
+                        {threads.map((i) => <h1>{i.title}</h1>)}
                     </div>
                 </>
             ) : ""
-        }>
+        }> 
         </FourmRoot>
     );
 }

@@ -12,9 +12,10 @@ export default function topicReducer(state : any = initalState, action : { type:
             return state;
         case ADD_TOPIC:
             //check for duplicate topics, if there is a dupe topic then replace it with the updated data.
-            if(state.topics.indexOf(action.payload) !== -1) {
+            if(state.topics.filter((t) => t.id === action.payload.id).length == 1) {
                 state.topics[state.topics.indexOf(action.payload)] = action.payload;
             } else {
+                console.log("hello");
                 state.topics.push(action.payload);
             }
             return state;

@@ -9,5 +9,5 @@ export default combineReducers({
     user: userReducer,
     topics: topicReducer,
     categorys: categoryReducer,
-    threads: threadReducer
+    threadStore: threadReducer
 });
