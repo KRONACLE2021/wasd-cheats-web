@@ -13,6 +13,7 @@ export const FETCH_TOPIC = (id : string) => `api/v1/topics/${id}`;
 export const FETCH_TOPICS_BY_CATEGORY = (categoryId: string) => `api/v1/categorys/${categoryId}/topics`;
 export const FETCH_CATEGORYS = `api/v1/categorys/all`;
 export const CREATE_NEW_THREAD = `api/v1/threads/create`;
+export const FETCH_THREADS = (topic_id: string) =>  `api/v1/topics/${topic_id}/threads`;
 
 /* USER ROUTES */
 export const GET_CURRENT_USER = `api/v1/users/me`;

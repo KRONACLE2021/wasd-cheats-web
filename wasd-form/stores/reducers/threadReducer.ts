@@ -1,4 +1,4 @@
-import { ADD_THREADS} from '../actions';
+import { ADD_THREADS, CREATE_THREAD } from '../actions';
 
 const initalState = {
     threads: [],
@@ -12,12 +12,19 @@ export default function threadReducer(state : any = initalState, action: { type:
 
             //check if threads is an array
             if(threads.length) {
+                console.log(threads);
                 state.threads.concat(threads); 
             } else {
                 state.threads.append(threads);
             }
 
-            return threads;
+            return state;
+        case CREATE_THREAD: 
+            let thread = action.payload;
+
+            state.threads.append(thread);
+            
+            return state;
         default:
             return state;
     }

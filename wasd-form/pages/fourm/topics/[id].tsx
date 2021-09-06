@@ -4,6 +4,7 @@ import FourmRoot from '../../../components/fourm/FourmRoot';
 import { FetchTopicById } from '../../../stores/actions/topicActions';
 import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
+import { FetchThreadsByTopic } from '../../../stores/actions/threadReducer';
 
 const TopicPage : React.FC<any> = () => {
     
@@ -26,6 +27,7 @@ const TopicPage : React.FC<any> = () => {
     useEffect(() => {
         if(topics.length == 0) {
             fetchTopic();
+            FetchThreadsByTopic(id, 0, 20, dispatch);
         }
     }, [topics]);
 

@@ -3,6 +3,7 @@ import { v4 as uuid } from 'uuid';
 import Topics from '../../models/Topics';
 import Categorys from '../../models/Categorys';
 import checkAuth from '../../middleware/checkAuth';
+import Threads from '../../models/Threads';
 
 let Route = Router();
 
@@ -12,9 +13,23 @@ Route.use(json());
 
 Route.get("/:id/threads", async (req, res, next) => {
 
+    let limit : any = req.query.limit;
+    let skip : any = req.query.skip;
+
+
+    if(isNaN(limit)) limit = 20;
+    if(isNaN(skip)) limit = 0;
+
+    if(!limit) limit = 20;
+    if(!skip) skip = 0;
+
     let topic_ = await Topics.findOne({ id: req.params.id });
 
-    if(!topic_) return res.json({ error: true, errors: ["Topic not found!"]})
+    if(!topic_) return res.json({ error: true, errors: ["Topic not found!"]});
+
+    let topics = await Threads.find({ id: { $in: topic_.threads } }).limit(limit).skip(skip);
+
+    return res.json(topics);
 });
 
 Route.get("/:id", async (req, res, next) => {
