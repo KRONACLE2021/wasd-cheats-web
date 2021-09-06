@@ -23,3 +23,39 @@ a {
 
   padding: 10px;
 }
+
+.editor_container {
+  padding: 10px 15px;
+  background-color: rgba(0,0,0,0.3);
+  border: 2px solid var(--bg-lighter);
+  border-radius: 6px;
+  min-height: 150px;
+}
+
+.editor_button {
+  border: none;
+  background-color: transparent;
+  border-bottom: 2px solid var(--white);
+  color: white;
+  padding: 2px 5px;
+  border-radius: 2px;
+  background-color: var(--bg-secondary) !important;
+}
+
+.editor_active {
+  color: var(--purple);
+}
+
+.editor_button_container {
+  padding: 5px;
+}
+
+.editor_button_container span {
+  margin-left: 7px;
+}
+
+.editor_spacer {
+  margin-top: 10px;
+  border-top: 2px solid grey;
+  padding: 10px;
+}
