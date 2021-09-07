@@ -9,6 +9,16 @@ let Route = Router();
 
 Route.use(json());
 
+Route.get('/:id', async (req, res, next) => {
+    
+    let id = req.params.id;
+
+    let thread = await Threads.findOne({ id: id });
+
+    if(!thread) return res.json({ error: true, errors: ["Thread not found!"] });
+
+    res.json(thread);
+});
 
 /* 
     POST /api/v1/threads/create

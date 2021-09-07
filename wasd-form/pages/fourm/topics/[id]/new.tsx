@@ -2,8 +2,8 @@ import React, { useEffect, useState, useRef } from 'react';
 import dynamic from 'next/dynamic';
 import axios from 'axios';
 import styles from '../../../../styles/fourms.module.css';
-import { CreateThread } from '../../../../stores/actions/threadReducer';
-import { useRouter } from 'next/router';
+import { CreateThread } from '../../../../stores/actions/threadActions';
+import { Router, useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
 import Draft from '../../../../components/editor/draft';
 
@@ -20,7 +20,11 @@ const NewThread: React.FC<any> = (props) => {
     const [htmlPost, setHtmlPost] = useState<string>("");
 
     const submitForm = async () => {
-        CreateThread({title, post: htmlPost, attachments: null, topic_id: id }, user.api_key, dispatch);
+        let response = await CreateThread({title, post: htmlPost, attachments: null, topic_id: id }, user.api_key, dispatch);
+
+        if(!response.error){
+            router.push(`/fourm/posts/${response.id}`);
+        }
     }
     
     return (

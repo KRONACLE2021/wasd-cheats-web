@@ -5,6 +5,7 @@ export interface IThread {
     createdAt: Date;
     topicId: string;
     locked: boolean;
+    pinned: boolean | null;
     posts: Array<IPost>;
 }
 
@@ -33,4 +34,16 @@ export interface ITopics {
     createdAt: Date;
     category: string;
     threads: Array<IThread>;
+}
+
+export interface IUser {
+    username: string;
+    permissions: Array<string>;
+    posts: Array<string>;
+    uid: string;
+}
+
+export interface IApiError {
+    error: true;
+    errors: Array<String>;
 }

@@ -14,6 +14,8 @@ export const FETCH_TOPICS_BY_CATEGORY = (categoryId: string) => `api/v1/category
 export const FETCH_CATEGORYS = `api/v1/categorys/all`;
 export const CREATE_NEW_THREAD = `api/v1/threads/create`;
 export const FETCH_THREADS = (topic_id: string) =>  `api/v1/topics/${topic_id}/threads`;
+export const FETCH_USER = (id: string) => `api/v1/users/${id}`;
+export const FETCH_THREAD = (id: string) => `api/v1/threads/${id}`;
 
 /* USER ROUTES */
 export const GET_CURRENT_USER = `api/v1/users/me`;

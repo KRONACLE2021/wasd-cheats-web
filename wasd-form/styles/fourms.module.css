@@ -230,13 +230,47 @@
 }
 
 .thread_container {
-    padding: 10px;
+    padding: 10px 0px;
     width: 100%;
     height: auto;
     background-color: var(--bg-secondary);
     border-radius: 7px;
 }
 
+
 .thread_card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0px 25px;
     width: 100%;
+}
+
+.thread_card .thread_descriptor {
+    color: grey;
+    font-size: 14px;
+}
+
+.thread_title_container {
+    display: inline-block;
+    height: 9px;
+}
+
+.thread_title {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.bar_seporator {
+    height: 1px;
+    background-color: rgb(44, 44, 44);
+}
+
+.thread_stats {
+    float: right;
+}
+
+.thread_stats p {
+    color: grey;
+    font-size: 14px;
 }

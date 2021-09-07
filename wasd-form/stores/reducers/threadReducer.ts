@@ -1,4 +1,4 @@
-import { ADD_THREADS, CREATE_THREAD } from '../actions';
+import { ADD_THREADS, CREATE_THREAD, SET_THREAD_OWNER } from '../actions';
 
 const initalState = {
     threads: [],
@@ -32,8 +32,25 @@ export default function threadReducer(state : any = initalState, action: { type:
         case CREATE_THREAD: 
             let thread = action.payload;
 
-            state.threads.append(thread);
+            state.threads.push(thread);
             
+            return state;
+        
+        case SET_THREAD_OWNER: 
+            
+            //im sure theres a better way of doing this but im kinda lazy so this is fine.
+            let threadId = action.payload.thread_id;
+
+            let filteredThread = state.threads.filter((t) => (t["id"] == threadId))[0];
+
+            if(!filteredThread) return state;
+
+            let modifiedThread = filteredThread;
+
+            modifiedThread.user = action.payload.user;
+
+            state.threads[state.threads.indexOf(filteredThread)] = modifiedThread;
+
             return state;
         default:
             return state;
