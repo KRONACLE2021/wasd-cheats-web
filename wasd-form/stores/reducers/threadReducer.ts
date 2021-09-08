@@ -1,15 +1,11 @@
 import { ADD_THREADS, CREATE_THREAD, SET_THREAD_OWNER } from '../actions';
+import filterDuplicates from '../../utils/filterDuplicates';
 
 const initalState = {
     threads: [],
     lastUpdated: new Date()
 }
 
-function filterDuplicates<T>(array: T[], areEqual: ((a: T, b: T) => boolean)): T[] {
-    return array.filter((item: T, pos: number) => {
-      return array.findIndex((other: T) => areEqual(item, other)) == pos;
-    });
-}
 
 export default function threadReducer(state : any = initalState, action: { type: string, payload: any }) {
     switch(action.type) {
@@ -22,7 +18,7 @@ export default function threadReducer(state : any = initalState, action: { type:
             if(threads.length) {
                 state.threads = state.threads.concat(threads); 
             } else {
-                state.threads.append(threads);
+                state.threads.push(threads);
             }
 
             state.threads = filterDuplicates(state.threads, (a, b) => a.id == b.id);

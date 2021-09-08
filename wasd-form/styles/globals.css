@@ -59,3 +59,28 @@ a {
   border-top: 2px solid grey;
   padding: 10px;
 }
+
+.preloader {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.prelaoder_logo {
+  height: 150px;
+  animation: loading-logo 3s ease infinite;
+}
+
+@keyframes loading-logo {
+  0% {
+    scale: 1;
+  }
+  50% {
+    scale: 1.2;
+  }
+  100% {
+    scale: 1;
+  }
+}

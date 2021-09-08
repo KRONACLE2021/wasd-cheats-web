@@ -16,6 +16,8 @@ export const CREATE_NEW_THREAD = `api/v1/threads/create`;
 export const FETCH_THREADS = (topic_id: string) =>  `api/v1/topics/${topic_id}/threads`;
 export const FETCH_USER = (id: string) => `api/v1/users/${id}`;
 export const FETCH_THREAD = (id: string) => `api/v1/threads/${id}`;
+export const FETCH_POSTS_BY_THREAD = (thread_id: string) => `api/v1/threads/${thread_id}/posts`;
+
 
 /* USER ROUTES */
 export const GET_CURRENT_USER = `api/v1/users/me`;

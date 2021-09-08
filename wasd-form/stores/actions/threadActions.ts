@@ -26,7 +26,9 @@ export const CreateThread = async ({title, post, attachments, topic_id} : {title
     }).then((res) => res)
     .catch((err) => err.response);
 
-    let data = response.data;
+    let data = response?.data;
+
+    if(data == undefined) return { error: true, errors: ["Could not contact API"] }; 
 
     if(!data?.error && data?.title){
         dispatcher({
@@ -45,7 +47,9 @@ export const FetchThreadsByTopic = async (topic_id : string, skip : number, limi
     .then((res) => res)
     .catch((err) =>  err.response);
 
-    let data = response.data;
+    let data = response?.data;
+
+    if(data == undefined) return { error: true, errors: ["Could not contact API"] }; 
 
     if(!data?.error) {
         dispatcher({
@@ -63,7 +67,9 @@ export const FetchThreadById = async (id : string, dispatcher: any) => {
     .then((res) => res)
     .catch((err) =>  err.response);
 
-    let data = response.data;
+    let data = response?.data;
+
+    if(data == undefined) return { error: true, errors: ["Could not contact API"] }; 
 
     if(!data?.error) {
         dispatcher({

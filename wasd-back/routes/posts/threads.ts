@@ -4,10 +4,32 @@ import Threads from '../../models/Threads';
 import checkAuth from '../../middleware/checkAuth';
 import CreatePost from './functions/createPost';
 import Topics from '../../models/Topics';
+import Posts from '../../models/Posts';
 
 let Route = Router();
 
 Route.use(json());
+
+Route.get('/:id/posts', async (req, res, next) => {
+    
+    let limit : any = req.query.limit;
+    let skip : any = req.query.skip;
+
+
+    if(isNaN(limit)) limit = 20;
+    if(isNaN(skip)) limit = 0;
+
+    if(!limit) limit = 20;
+    if(!skip) skip = 0;
+
+    let thread_ = await Threads.findOne({ id: req.params.id });
+
+    if(!thread_) return res.json({ error: true, errors: ["Topic not found!"]});
+
+    let posts = await Posts.find({ id: { $in: thread_.posts } }).limit(limit).skip(skip);
+
+    return res.json(posts);
+})
 
 Route.get('/:id', async (req, res, next) => {
     

@@ -300,3 +300,36 @@
     color: white;
     font-weight: bold;
 }
+
+.fourm_post_container {
+    padding: 10px;
+    width: 100%;
+    height: auto;
+    background-color: var(--bg-secondary);
+    margin-top: 20px;
+    border-radius: 7px;
+    display: flex;
+}
+
+.post_user_container {
+    text-align: center;
+    width: 200px;
+    padding: 10px;
+}
+
+.post_user_container .pfp {
+    height: 100px;
+    width: 100px;
+    border-radius: 4px;
+    object-fit: cover;
+}
+
+.post_user_container .username {
+    margin: 0px;
+}
+
+.post_user_container .permission_type {
+    color: rgb(255, 0, 157);
+    padding: 0;
+    margin: 0;
+}

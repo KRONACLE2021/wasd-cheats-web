@@ -8,7 +8,7 @@ export const FetchCategorys = async (dispatcher : any ) => {
     .then((res) => res)
     .catch((err) => err.response);
 
-    if(!result.data.error) {
+    if(!result?.data?.error && result !== undefined) {
         if(result.data.categorys){
             dispatcher({
                 type: SET_CATEGORYS,

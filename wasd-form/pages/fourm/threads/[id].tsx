@@ -7,6 +7,9 @@ import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
 import { FetchThreadById, SetOwner } from '../../../stores/actions/threadActions';
 import { API, FETCH_USER } from '../../../requests/config';
+import { FetchPostsByThreadId } from '../../../stores/actions/postsAction';
+import PostCard from '../../../components/fourm/PostCard';
+import Preloader from '../../../components/shared/Preloader';
 
 
 const ThreadPage: React.FC<any> = (props) => {
@@ -18,6 +21,7 @@ const ThreadPage: React.FC<any> = (props) => {
 
     const userStore = useSelector(store => store.user);
     const thread = useSelector(store => store.threadStore.threads.filter((item) => (item["id"] == id)));
+    const posts = useSelector(store => store.postStore.posts.filter((i) => (i["threadId"] == id)));
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
@@ -26,10 +30,15 @@ const ThreadPage: React.FC<any> = (props) => {
         .then((res) => res)
         .catch((err) => err.response);
 
-        let data = response.data;
+        let data = response?.data;
 
-        if(!data.error){
+        if(!data.error && data !== undefined){
             dispatch(SetOwner(id, data));
+        }
+
+        if(!data) {
+            console.log("uwu");
+            setError("Could not contact API");
         }
     }
 
@@ -38,18 +47,28 @@ const ThreadPage: React.FC<any> = (props) => {
             if(thread[0].user == null){
                 fetchUser(thread[0].uid);
                 //we can assume that the thread was found
-                setLoading(false);
             }
+
+            FetchPostsByThreadId(id, 20, 0, dispatch);
+
+            setLoading(false);
         }
     }, [id, thread[0]]);
 
-    useEffect(() => {
+    useEffect(async () => {
         if(id){
-            FetchThreadById(id, dispatch);
+            let res = await FetchThreadById(id, dispatch);
+
+            if(res.error) { 
+                setError(res.errors) 
+                setLoading(false);
+            };
         }
     }, [id])
 
-    if(loading == true) return <div></div>;
+    if(loading == true && error !== null) return <Preloader />;
+
+    if(error !== null) return <div><h1>{error}</h1></div>;
 
     return (
         <FourmRoot
@@ -65,7 +84,16 @@ const ThreadPage: React.FC<any> = (props) => {
                 </div>
             </div>
         </>}>
-
+        {posts.map((i) => { 
+            return <PostCard    key={i.id} 
+                                id={i.id}
+                                contents={i.contents} 
+                                uid={i.uid}
+                                user={i.user}
+                                createdAt={i.createdAt}
+                                attachments={i.attachments} 
+                    /> 
+        })}
         </FourmRoot>
     )
 }

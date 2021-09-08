@@ -3,7 +3,6 @@ export const SET_USER = "SET_USER";
 export const UNSET_USER = "REMOVE_USER";
 export const FETCH_USER = "FETCH_USER";
 
-
 /* FOURM TOPIC ACTIONS */
 export const ADD_TOPIC = "ADD_TOPIC";
 export const REMOVE_TOPIC = "REMOVE_TOPIC";
@@ -19,8 +18,16 @@ export const ADD_THREADS = "ADD_THREADS";
 export const CREATE_THREAD = "CREATE_THREAD";
 export const FETCH_THREADS = "FETCH_THREADS";
 export const SET_THREAD_OWNER = "SET_THREAD_OWNER";
+export const SET_THREAD_POST = "SET_THERAD_POST";
+
+/* FOURM POSTS ACTIONS */
+export const ADD_POSTS = "ADD_POSTS";
+export const CREATE_POST = "CREATE_POST";
+export const DELETE_POST = "DELETE_POST";
+export const SET_POST_OWNER = "SET_POST_OWNER";
 
 /* ADMIN ACTIONS */
 export const ADMIN_DELETE_THREAD = "ADMIN_DELETE_THREAD";
 export const ADMIN_PIN_THREAD = "ADMIN_PIN_THREAD";
 export const ADMIN_LOCK_THREAD = "ADMIN_LOCK_THREAD";
+export const ADMIN_DELETE_POST = "ADMIN_DELETE_POST";
