@@ -1,8 +1,11 @@
 import axios from 'axios';
 import { IUser } from '../../interfaces';
 import { API, CREATE_NEW_THREAD, FETCH_THREADS, FETCH_THREAD } from '../../requests/config';
+import Requester from '../../requests/Requester';
 
 import { ADD_THREADS, CREATE_THREAD, SET_THREAD_OWNER } from '../actions';
+
+const Requester_ = new Requester(API);
 
 export const AddThread = (payload : Array<any> | object) => {
     return {
@@ -13,72 +16,57 @@ export const AddThread = (payload : Array<any> | object) => {
 
 export const CreateThread = async ({title, post, attachments, topic_id} : {title: string, post : any, attachments: Array<any> | null, topic_id: string}, api_key: string, dispatcher : any) => {
 
-    let response = await axios.post(`${API}/${CREATE_NEW_THREAD}`, {
+    let response = await Requester_.makePostRequest(CREATE_NEW_THREAD, { 
         title,
         topic_id,
         post: {
             contents: post
         }
     }, {
-        headers: { 
+        headers: {
             authorization: api_key
-        } 
-    }).then((res) => res)
-    .catch((err) => err.response);
+        },
+        queryStringParams: []
+    });
 
-    let data = response?.data;
-
-    if(data == undefined) return { error: true, errors: ["Could not contact API"] }; 
-
-    if(!data?.error && data?.title){
+    if(!response.error){
         dispatcher({
             type: CREATE_THREAD,
-            payload: data
-        })
-        return data;
+            payload: response
+        });
+        return response
     } else {
-        return data;
+        return response
     }
 }
 
 export const FetchThreadsByTopic = async (topic_id : string, skip : number, limit: number, dispatcher : any) => {
     
-    let response = await axios.get(`${API}/${FETCH_THREADS(topic_id)}`)
-    .then((res) => res)
-    .catch((err) =>  err.response);
+    let response = await Requester_.makeGetRequest(FETCH_THREADS(topic_id))
 
-    let data = response?.data;
-
-    if(data == undefined) return { error: true, errors: ["Could not contact API"] }; 
-
-    if(!data?.error) {
+    if(!response.error) {
         dispatcher({
             type: ADD_THREADS,
-            payload: data
+            payload: response
         })
-        return data;
+        return response;
     } else {
-        return data;
+        return response;
     }
 }
 
 export const FetchThreadById = async (id : string, dispatcher: any) => {
-    let response = await axios.get(`${API}/${FETCH_THREAD(id)}`)
-    .then((res) => res)
-    .catch((err) =>  err.response);
 
-    let data = response?.data;
+    let response = await Requester_.makeGetRequest(FETCH_THREAD(id));
 
-    if(data == undefined) return { error: true, errors: ["Could not contact API"] }; 
-
-    if(!data?.error) {
+    if(!response?.error) {
         dispatcher({
             type: CREATE_THREAD,
-            payload: data 
+            payload: response 
         })
-        return data;
+        return response;
     } else {
-        return data;
+        return response;
     }
 }
 

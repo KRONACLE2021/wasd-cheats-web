@@ -1,7 +1,9 @@
-import axios from 'axios';
 import { API, FETCH_TOPIC, FETCH_TOPICS_BY_CATEGORY } from '../../requests/config';
+import Requester from '../../requests/Requester';
 
 import { ADD_CATEGORY, ADD_TOPIC, SET_CATEGORYS, SET_TOPICS } from "../actions"
+
+const Requester_ = new Requester(API);
 
 export const SetTopics = (topic : Array<any>) => {
     return {
@@ -11,41 +13,37 @@ export const SetTopics = (topic : Array<any>) => {
 }
 
 export const FetchTopicById = async (id : string, dispatcher : any ) => {
-    let result = await axios.get(`${API}/${FETCH_TOPIC(id)}`)
-    .then((res) => res)
-    .catch((err) => err.response);
+    let result = await Requester_.makeGetRequest(FETCH_TOPIC(id));
 
-    if(!result.data.error) {
-        if(result.data.id){
+    if(!result.error) {
+        if(result.id){
             dispatcher({
                 type: ADD_TOPIC,
-                payload: result.data
+                payload: result
             })
             
-            return result.data;
+            return result;
         }
     } else {
-        return result.data;
+        return result;
     }
 }
 
 export const FetchTopicsByCategory = async (id : string, dispatcher : any) => {
     
-    let result = await axios.get(`${API}/${FETCH_TOPICS_BY_CATEGORY(id)}`)
-    .then((res) => res)
-    .catch((err) => err.response);
+    let result = await Requester_.makeGetRequest(FETCH_TOPICS_BY_CATEGORY(id))
 
-    if(!result.data.error){
-        if(result.data.topics){
+    if(!result.error){
+        if(result.topics){
             dispatcher({
                 type: SET_TOPICS,
-                payload: result.data.topics
+                payload: result.topics
             });
 
-            return result.data.topics;
+            return result.topics;
         }
     } else {
-        return result.data.errors;
+        return result.errors;
     }
 
 }

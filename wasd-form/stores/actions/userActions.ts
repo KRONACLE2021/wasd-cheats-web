@@ -1,7 +1,8 @@
-import axios from 'axios';
 import { API, LOGIN_ROUTE, REGISTER_ROUTE, GET_CURRENT_USER } from '../../requests/config';
+import Requester from '../../requests/Requester';
 import { SET_USER } from '../actions';
 
+const Requester_ = new Requester(API);
 
 export const SetUser = (user: any) => {
     return {
@@ -22,22 +23,19 @@ export const RefreshUser = async (dispatch: any) => {
             return;
         };
 
-        let result = await axios.get(`${API}/${GET_CURRENT_USER}`, {
+        let result = await Requester_.makeGetRequest(GET_CURRENT_USER, {
             headers: {
                 authorization: `${api_key}`
-            }
-        })
-        .then((res) => res)
-        .catch((err) => err.response);
+            },
+            queryStringParams: []
+        });
 
-        if(result?.data){
-            if(result.data.username){
+        if(!result.error){
+            if(result.username){
                 dispatch({
                     type: SET_USER,
-                    payload: result.data
+                    payload: result
                 })
-            } else if (result.data.error) {
-                localStorage.removeItem("_wasd_api");
             }
         } else {
             console.log("[AUTH MANAGER] Failed to refresh users session");
@@ -47,67 +45,63 @@ export const RefreshUser = async (dispatch: any) => {
 
 export const LoginUser = async (login: {username: string, password: string}, dispatch : any) => {
 
-    let result = await axios.post(`${API}/${LOGIN_ROUTE}`, {
+    let result = await Requester_.makePostRequest(LOGIN_ROUTE, {
         username: login.username,
         password: login.password
     },{
         headers: {
             "content-type": "application/json"
-        }
-    }).then((res) => {
-        return res;
-    }).catch((err) => {
-        return err.response;
+        },
+        queryStringParams: []
     });
     
-    if(result?.data){
-        if(result.data.api_key){
+    if(!result?.error){
+        if(result.api_key){
 
             //Store credentials
             if(typeof window !== "undefined"){
-                localStorage.setItem("_wasd_api", result.data.api_key);
+                localStorage.setItem("_wasd_api", result.api_key);
             }
         
             dispatch({
                 type: SET_USER,
-                payload: result.data
+                payload: result
             });
-        } else if(result.data.error) {
-            return result.data;
-        }
+        } 
     } else {
-        return undefined;
+        return result;
     }
 }
 
 
 export const RegisterUser = async ({email, username, password}: {email : string, username: string, password: string}, dispatch : any) => {
-    let result = await axios.post(`${API}/${REGISTER_ROUTE}`, {
+    let result = await Requester_.makePostRequest(REGISTER_ROUTE, {
         username,
         email,
         password
     }, {
         headers: {
             "content-type": "application/json"
-        }
-    })
-    .then((res) => res)
-    .catch((err) => err.response);
-    
+        },
+        queryStringParams: []
+    });
 
-    if(result.data){
-        if(result.data.api_key){
+    if(!result.error){
+        if(result.api_key){
             dispatch({
                 type: SET_USER,
-                payload: result.data
+                payload: result
             });
 
-            return result.data;
-        } else if (result.data.error) {
-            return result.data;
+            //Store credentials
+            if(typeof window !== "undefined"){
+                localStorage.setItem("_wasd_api", result.api_key);
+            }
+
+            return result;
         }
     } else {
-        return undefined;
+        return result;
     }
 
 }
