@@ -73,6 +73,25 @@ a {
   animation: loading-logo 3s ease infinite;
 }
 
+.full_page_error_container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100vh;
+}
+
+.full_page_error {
+  width: 50%;
+  height: 450px;
+  text-align: center;
+  background-color: var(--bg-secondary);
+}
+
+.error_heading {
+  margin-top: 50px;
+}
+
 @keyframes loading-logo {
   0% {
     scale: 1;

@@ -1,23 +1,20 @@
 import axios from 'axios';
 
+import Requester from '../../requests/Requester';
 import { API, FETCH_CATEGORYS } from '../../requests/config';
 import { ADD_CATEGORY, SET_CATEGORYS } from '../actions';
 
-export const FetchCategorys = async (dispatcher : any ) => {
-    let result = await axios.get(`${API}/${FETCH_CATEGORYS}`)
-    .then((res) => res)
-    .catch((err) => err.response);
+const Requester_ = new Requester(API); 
 
-    if(!result?.data?.error && result !== undefined) {
-        if(result.data.categorys){
-            dispatcher({
-                type: SET_CATEGORYS,
-                payload: result.data.categorys
-            })
-            
-            return result.data;
-        }
-    } else {
-        return result.data;
-    }
+export const FetchCategorys = async (dispatcher : any ) => {
+    let result = await Requester_.makeGetRequest(FETCH_CATEGORYS);
+
+    if(result.error) return result;
+
+    console.log(result);
+
+    dispatcher({
+        type: SET_CATEGORYS,
+        payload: result.categorys
+    });
 }

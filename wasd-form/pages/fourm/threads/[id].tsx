@@ -10,7 +10,7 @@ import { API, FETCH_USER } from '../../../requests/config';
 import { FetchPostsByThreadId } from '../../../stores/actions/postsAction';
 import PostCard from '../../../components/fourm/PostCard';
 import Preloader from '../../../components/shared/Preloader';
-
+import FullPageError from '../../../components/shared/FullpageError';
 
 const ThreadPage: React.FC<any> = (props) => {
     
@@ -68,7 +68,7 @@ const ThreadPage: React.FC<any> = (props) => {
 
     if(loading == true && error !== null) return <Preloader />;
 
-    if(error !== null) return <div><h1>{error}</h1></div>;
+    if(error !== null) return <FullPageError error={error} code={500} />;
 
     return (
         <FourmRoot
