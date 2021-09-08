@@ -51,6 +51,8 @@
 
 .logged_in_user img {
     height: 35px;
+    width: 35px;
+    object-fit: cover;
     background-color: white;
     margin-right: 10px;
     border-radius: 50px;

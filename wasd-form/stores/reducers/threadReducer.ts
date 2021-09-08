@@ -37,7 +37,7 @@ export default function threadReducer(state : any = initalState, action: { type:
             return state;
         
         case SET_THREAD_OWNER: 
-            
+
             //im sure theres a better way of doing this but im kinda lazy so this is fine.
             let threadId = action.payload.thread_id;
 
@@ -50,8 +50,8 @@ export default function threadReducer(state : any = initalState, action: { type:
             modifiedThread.user = action.payload.user;
 
             state.threads[state.threads.indexOf(filteredThread)] = modifiedThread;
-
             return state;
+
         default:
             return state;
     }

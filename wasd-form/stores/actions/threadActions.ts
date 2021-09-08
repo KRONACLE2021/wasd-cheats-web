@@ -22,7 +22,7 @@ export const CreateThread = async ({title, post, attachments, topic_id} : {title
     }, {
         headers: { 
             authorization: api_key
-        }
+        } 
     }).then((res) => res)
     .catch((err) => err.response);
 
@@ -39,7 +39,7 @@ export const CreateThread = async ({title, post, attachments, topic_id} : {title
     }
 }
 
-export const FetchThreadsByTopic = async (topic_id : string | null, skip : number, limit: number, dispatcher : any) => {
+export const FetchThreadsByTopic = async (topic_id : string, skip : number, limit: number, dispatcher : any) => {
     
     let response = await axios.get(`${API}/${FETCH_THREADS(topic_id)}`)
     .then((res) => res)
@@ -64,8 +64,6 @@ export const FetchThreadById = async (id : string, dispatcher: any) => {
     .catch((err) =>  err.response);
 
     let data = response.data;
-
-    console.log(response);
 
     if(!data?.error) {
         dispatcher({

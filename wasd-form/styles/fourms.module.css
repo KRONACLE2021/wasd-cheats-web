@@ -274,3 +274,29 @@
     color: grey;
     font-size: 14px;
 }
+
+.topic_creator_info {
+    display: flex;
+    height: 50px;
+    align-items: center;
+}
+
+
+.user_info p {
+    padding : 0;
+    margin: 3px 8px;
+    font-size: 15px;
+    color: grey;
+}
+
+.user_avatar {
+    border-radius: 4px;
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+}
+
+.user_info .username {
+    color: white;
+    font-weight: bold;
+}

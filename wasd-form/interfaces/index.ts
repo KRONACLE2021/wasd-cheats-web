@@ -39,6 +39,7 @@ export interface ITopics {
 export interface IUser {
     username: string;
     permissions: Array<string>;
+    avatar: string;
     posts: Array<string>;
     uid: string;
 }

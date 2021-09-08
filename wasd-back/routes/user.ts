@@ -34,7 +34,6 @@ Route.get("/:id", async (req, res, next) => {
     
     let cleanUser = {
         avatar: user.avatar, 
-        email: user.email, 
         username: user.username, 
         posts: user.posts, 
         permissions: user.permissions, 
