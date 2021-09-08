@@ -11,10 +11,10 @@ export const FetchCategorys = async (dispatcher : any ) => {
 
     if(result.error) return result;
 
-    console.log(result);
-
     dispatcher({
         type: SET_CATEGORYS,
         payload: result.categorys
     });
+
+    return result;
 }
