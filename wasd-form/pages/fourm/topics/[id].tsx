@@ -32,9 +32,9 @@ const TopicPage : React.FC<any> = () => {
     }
 
     useEffect(() => {
-        FetchThreadsByTopic(id, 0, 10, dispatch);
-        setActiveThreads(threads);
+        requestTopics(0, 10);
     }, [id]);
+
 
     useEffect(() => {
         if(topics.length == 0) {
@@ -54,7 +54,7 @@ const TopicPage : React.FC<any> = () => {
         let skipAmount =  (page - 1) * 10;
         
         setCurrentPage(page);
-        
+
         requestTopics(skipAmount, 10);
     }
 
@@ -80,7 +80,7 @@ const TopicPage : React.FC<any> = () => {
                     {PaginatorWithVars}
                     <div className={styles.top_spacer}></div>
                     <div className={styles.bar_seporator} ></div>
-                    {activeThreads.map((i) => {
+                    {activeThreads ? activeThreads.map((i) => {
                         return <> 
                             <ThreadCard title={i.title} 
                                 id={i.id} 
@@ -92,7 +92,7 @@ const TopicPage : React.FC<any> = () => {
                             /> 
                             <div className={styles.bar_seporator} ></div>
                         </>
-                    })}
+                    }) : ""}
                     <div className={styles.top_spacer}></div>
                     {PaginatorWithVars}
                 </div>

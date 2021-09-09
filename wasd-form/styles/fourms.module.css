@@ -355,3 +355,48 @@
     padding: 0;
     margin: 0;
 }
+
+.reply_continer {
+    margin-top: 10px;
+    min-height: 100px;
+    background-color: var(--bg-lighter);
+    border-radius: 7px;
+    display: flex;
+    align-items: center;
+    padding: 0px 30px;
+}
+
+.reply_placeholder {
+    height: 50px;
+    width: 100%;
+    background-color: var(--bg-secondary);
+    border-radius: 3px;
+    cursor: text;
+}
+
+.editor_active {
+    padding: 10px 30px;
+    align-items: flex-start;
+}
+
+.reply_placeholder p {
+    padding: 0px 20px;
+    color: grey;
+}
+
+.reply_user_pfp_contianer {
+    width: auto;
+    margin-right: 10px;
+}
+
+.reply_user_pfp_contianer img {
+    height: 45px;
+    width: 45px;
+    border-radius: 3px;
+    object-fit: cover;
+}
+
+.reply_draft_editor  {
+    width: 100%;
+    height: auto;
+}

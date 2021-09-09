@@ -6,6 +6,7 @@ import fetchUser from '../../requests/getUser';
 import { IUser } from '../../interfaces';
 import { SetPostUser } from '../../stores/actions/postsAction';
 import { useDispatch } from 'react-redux';
+import getUserPermission from '../../utils/getUserPermission';
 
 const PostCard: React.FC<{ contents: string, uid: string, createdAt: string, id: string, attachments: Array<string>, user: IUser | null }> = (props) => {
 
@@ -33,7 +34,7 @@ const PostCard: React.FC<{ contents: string, uid: string, createdAt: string, id:
                 <div className={styles.post_user_container}>
                     <img src={props.user?.avatar} className={styles.pfp} />
                     <h3 className={styles.username}>{props.user?.username}</h3>
-                    <p className={styles.permission_type}>Administrator</p>
+                    <p className={styles.permission_type}>{props?.user?.permissions ? getUserPermission(props?.user?.permissions) : ""}</p>
                 </div>
                 <div className={styles.post_contet}>
                    <div dangerouslySetInnerHTML={{ __html: contents }}></div>
