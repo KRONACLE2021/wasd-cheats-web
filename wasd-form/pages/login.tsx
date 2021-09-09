@@ -4,6 +4,7 @@ import Router from 'next/router';
 import styles from '../styles/login.module.css'; 
 import { LoginUser } from '../stores/actions/userActions';
 import { useDispatch, useSelector } from 'react-redux';
+import FourmError from '../components/shared/FourmError';
 
 const Login : React.FC<any> = (props) => {
     
@@ -40,9 +41,7 @@ const Login : React.FC<any> = (props) => {
             if(res.error) {
                 setErrors(res.errors);
             }
-        } else {
-            setErrors(["Could not contact api!"]);
-        }
+        } 
 
         setSubmitting(false);
     };  
@@ -53,7 +52,10 @@ const Login : React.FC<any> = (props) => {
                 <div>
                     <h2 className={styles.login_box__header}>Login</h2>
                     <p className={styles.login_box__sml_txt}>Login to your wasd account</p>  
-
+                        { errors.length !== 0 ? ( <> 
+                                        <FourmError error={"Error!"} errorDescription={errors[0]} />
+                                        <div className={styles.spacer_top}></div> 
+                                    </> ) : "" }
                     <div className={styles.login_box__input_fields}>
                         <input placeholder={"email/username"} onChange={(e) =>  setEmail(e.target.value)} className={styles.login_input} />
                         <div className={styles.spacer_top}></div>
@@ -66,7 +68,7 @@ const Login : React.FC<any> = (props) => {
                     <div className={styles.login_box_buttons}>
                         <button className={`${styles.login_button} ${styles.discord_login}`} disabled={isSubmitting}>Login With Discord</button>
                         <div className={styles.spacer_top}></div>
-                        <button className={`${styles.login_button}`} onClick={submitForm} disabled={isSubmitting}>Login</button>
+                        <button className={`${styles.login_button}`} onClick={submitForm} disabled={isSubmitting}><span className="button_loader_text">Login</span> { isSubmitting ? ( <div className="loader_"></div> ) : "" }</button>
                         <div className={styles.spacer_top}></div>
                     </div>
                 </div>

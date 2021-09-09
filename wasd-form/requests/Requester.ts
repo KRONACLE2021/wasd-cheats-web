@@ -21,7 +21,7 @@ export default class Requester {
             headers: options.headers
         }).then(res => res.data)
         .catch((err) => {
-            if(!err.response.status) {
+            if(!err?.response?.status) {
                 return { error: true, errors: ["Could not contact WASD API"] }
             } else {
                 return err.response.data;
@@ -39,7 +39,7 @@ export default class Requester {
             headers: options.headers
         }).then(res => res.data)
         .catch((err) => {
-            if(!err.response.status) {
+            if(!err?.response?.status) {
                 return { error: true, errors: ["Could not contact WASD API"] }
             } else {
                 return err.response.data;

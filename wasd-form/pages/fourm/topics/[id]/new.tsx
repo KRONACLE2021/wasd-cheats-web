@@ -6,6 +6,8 @@ import { CreateThread } from '../../../../stores/actions/threadActions';
 import { Router, useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
 import Draft from '../../../../components/editor/draft';
+import Preloader from '../../../../components/shared/Preloader';
+import FourmError from '../../../../components/shared/FourmError';
 
 
 const NewThread: React.FC<any> = (props) => {
@@ -18,20 +20,42 @@ const NewThread: React.FC<any> = (props) => {
 
     const [title, setTitle] = useState<string>("");
     const [htmlPost, setHtmlPost] = useState<string>("");
+    const [loading, setLoading] = useState<boolean>(true);
+    const [errors, setErrors] = useState<Array<String>>([]);
+
 
     const submitForm = async () => {
         let response = await CreateThread({title, post: htmlPost, attachments: null, topic_id: id }, user.api_key, dispatch);
 
         if(!response.error){
             router.push(`/fourm/posts/${response.id}`);
+        } else {
+            setErrors(response.errors);
         }
     }
-    
+
+    useEffect(() => {
+        if(!user.username){
+            router.push("/login");
+        } else {
+            setLoading(false);
+        }
+
+    }, [user]);
+
+    if(loading == true) return <Preloader />;
+
     return (
         <div>
             <div className={styles.editor_container}>
                 <div className={styles.main_header}>
                     <h1>Create new thread</h1>
+                    { errors.length !== 0 ? <> 
+                        <FourmError error={"Error!"} errorDescription={errors[0]} />     
+                        <div className={styles.top_spacer}></div>               
+                    </> : ""
+                    }
+
                 </div>
                 <div className={styles.editor_main_container}>
                     <div>

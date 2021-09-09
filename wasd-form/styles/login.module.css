@@ -54,6 +54,7 @@
     color: white;
     font-size: 14px;
     font-weight: bold;
+    transition: all ease 0.3s;
 }
 
 .discord_login {
@@ -62,4 +63,8 @@
 
 .pink_bg {
     background-color: var(--pink);
+}
+
+.login_button:disabled {
+    background-color: var(--purple-transparent);
 }
