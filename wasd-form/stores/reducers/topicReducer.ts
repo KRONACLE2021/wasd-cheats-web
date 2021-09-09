@@ -1,4 +1,4 @@
-import { ADD_TOPIC, REMOVE_TOPIC, SET_TOPICS } from "../actions";
+import { ADD_TOPIC, REMOVE_TOPIC, SET_TOPICS, SET_TOTAL_THREADS } from "../actions";
 
 const initalState = {
     topics: [],

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from '../../../styles/fourms.module.css';
 import FourmRoot from '../../../components/fourm/FourmRoot';
 import { FetchTopicById } from '../../../stores/actions/topicActions';
@@ -6,6 +6,8 @@ import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
 import { FetchThreadsByTopic } from '../../../stores/actions/threadActions';
 import ThreadCard from '../../../components/fourm/ThreadCard';
+import Paginator from '../../../components/fourm/Paginator';
+import Requester from '../../../requests/Requester';
 
 const TopicPage : React.FC<any> = () => {
     
@@ -18,6 +20,9 @@ const TopicPage : React.FC<any> = () => {
     const topics = useSelector(state => state.topics.topics.filter((item) => (item["id"] == id)));
     const threads = useSelector(state => state.threadStore.threads.filter((item) => (item["topicId"] == id)));
 
+    const [currentPage, setCurrentPage] = useState<number>(1);
+    const [activeThreads, setActiveThreads] = useState<Array<any>>([]);
+
     const fetchTopic = async () => {
         let res = await FetchTopicById(id, dispatch);
 
@@ -27,7 +32,8 @@ const TopicPage : React.FC<any> = () => {
     }
 
     useEffect(() => {
-        FetchThreadsByTopic(id, 0, 20, dispatch);
+        FetchThreadsByTopic(id, 0, 10, dispatch);
+        setActiveThreads(threads);
     }, [id]);
 
     useEffect(() => {
@@ -36,6 +42,23 @@ const TopicPage : React.FC<any> = () => {
         }
     }, [id]);
 
+    const requestTopics = async (skip: number, limit: number) => {
+        let result = await FetchThreadsByTopic(id, skip, limit, dispatch);
+
+        setActiveThreads(result.threads);
+    }
+
+    const pagination = (page : number) => {
+        let totalposts = topics[0]?.threads?.length;
+
+        let skipAmount =  (page - 1) * 10;
+        
+        setCurrentPage(page);
+        
+        requestTopics(skipAmount, 10);
+    }
+
+    const PaginatorWithVars = <Paginator postsPerPage={10} totalPosts={ topics[0] ? topics[0].threads.length : 0 } maxPaginationNumbers={5} currentPage={currentPage} paginate={pagination} />;
 
     return (
 
@@ -54,8 +77,10 @@ const TopicPage : React.FC<any> = () => {
         }> 
             <div className={styles.fourm_container}>
                 <div className={styles.thread_container}>
+                    {PaginatorWithVars}
+                    <div className={styles.top_spacer}></div>
                     <div className={styles.bar_seporator} ></div>
-                    {threads.map((i) => {
+                    {activeThreads.map((i) => {
                         return <> 
                             <ThreadCard title={i.title} 
                                 id={i.id} 
@@ -68,6 +93,8 @@ const TopicPage : React.FC<any> = () => {
                             <div className={styles.bar_seporator} ></div>
                         </>
                     })}
+                    <div className={styles.top_spacer}></div>
+                    {PaginatorWithVars}
                 </div>
             </div>
         </FourmRoot>

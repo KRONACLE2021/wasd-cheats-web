@@ -13,9 +13,8 @@ Route.use(json());
 
 Route.get("/:id/threads", async (req, res, next) => {
 
-    let limit : any = req.query.limit;
-    let skip : any = req.query.skip;
-
+    let limit : any = parseInt(req.query.limit);
+    let skip : any = parseInt(req.query.skip);
 
     if(isNaN(limit)) limit = 20;
     if(isNaN(skip)) limit = 0;
@@ -27,9 +26,11 @@ Route.get("/:id/threads", async (req, res, next) => {
 
     if(!topic_) return res.json({ error: true, errors: ["Topic not found!"]});
 
-    let threads = await Threads.find({ id: { $in: topic_.threads } }).limit(limit).skip(skip);
 
-    return res.json(threads);
+    let threads = await Threads.find({ id: { $in: topic_.threads } }).limit(limit).skip(skip);
+    let threadAmount = await Threads.count({ id: { $in: topic_.threads } });
+
+    return res.json({ threads: threads, total: threadAmount});
 });
 
 Route.get("/:id", async (req, res, next) => {

@@ -3,15 +3,16 @@ import filterDuplicates from '../../utils/filterDuplicates';
 
 const initalState = {
     threads: [],
-    lastUpdated: new Date()
+    lastUpdated: new Date(),
+    total: 0
 }
 
 
 export default function threadReducer(state : any = initalState, action: { type: string, payload: any }) {
     switch(action.type) {
         case ADD_THREADS:
-            let threads = action.payload;
-
+            let threads = action.payload.threads || action.payload;
+            let total = action.payload.amount || 0;
             //check if threads is an array
 
             
@@ -22,6 +23,7 @@ export default function threadReducer(state : any = initalState, action: { type:
             }
 
             state.threads = filterDuplicates(state.threads, (a, b) => a.id == b.id);
+            state.total = total;
 
             return state;
             

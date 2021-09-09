@@ -26,9 +26,8 @@ const NewThread: React.FC<any> = (props) => {
 
     const submitForm = async () => {
         let response = await CreateThread({title, post: htmlPost, attachments: null, topic_id: id }, user.api_key, dispatch);
-
         if(!response.error){
-            router.push(`/fourm/posts/${response.id}`);
+            router.push(`/fourm/threads/${response.id}`);
         } else {
             setErrors(response.errors);
         }

@@ -155,6 +155,28 @@
 
 }
 
+
+.pagination_list {
+    display: inline-block;
+    list-style-type: none;
+    margin: 0;
+    padding: 5px;
+}
+  
+.pagination_list li {
+    display: inline-block;
+    padding: 5px;
+    margin-left: 5px;
+    min-width: 30px;
+    text-align: center;
+    border-radius: 7px;
+    border: 1px solid var(--bg-lighter);
+}
+
+.pagination_list .active {
+    background-color: var(--purple);
+}
+
 .topic_header {
     width: 100%;
     height: auto;

@@ -15,9 +15,8 @@ export default class Requester {
 
     async makeGetRequest(url: string, options: { queryStringParams: Array<{ name: string, value: string | number }>, headers: any  } = { queryStringParams: [], headers: {}}) {
         
-        let queryStringParams = options.queryStringParams ? options.queryStringParams.join("&") : "";
         
-        let result = await axios.get(`${this.BASE_URL}/${url}?${queryStringParams}`, {
+        let result = await axios.get(`${this.BASE_URL}/${url}?${options.queryStringParams.map((i) => `${i.name}=${i.value}&`).join("")}`, {
             headers: options.headers
         }).then(res => res.data)
         .catch((err) => {

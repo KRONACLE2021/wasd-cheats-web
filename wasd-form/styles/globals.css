@@ -121,6 +121,7 @@ a {
   animation: spin 1s linear infinite;
 }
 
+
 @keyframes loading-logo {
   0% {
     scale: 1;

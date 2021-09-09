@@ -24,7 +24,6 @@ const FourmHome: React.FC<any> = () => {
                  <h1 className={styles.header}>Fourms</h1>
             }>
                 <div className={styles.fourm_content}>
-
                     {categorys.map((c) => {
                         return <> 
                             <CategoryContainer name={c.title} id={c.id} key={c.id}>

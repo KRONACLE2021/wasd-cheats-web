@@ -12,8 +12,8 @@ Route.use(json());
 
 Route.get('/:id/posts', async (req, res, next) => {
     
-    let limit : any = req.query.limit;
-    let skip : any = req.query.skip;
+    let limit : any = parseInt(req.query.limit);
+    let skip : any = parseInt(req.query.skip);
 
 
     if(isNaN(limit)) limit = 20;
@@ -21,6 +21,7 @@ Route.get('/:id/posts', async (req, res, next) => {
 
     if(!limit) limit = 20;
     if(!skip) skip = 0;
+
 
     let thread_ = await Threads.findOne({ id: req.params.id });
 
@@ -103,6 +104,7 @@ Route.post("/create", checkAuth, async (req, res, next) => {
         title,
         topic_id: topicId,
         uid,
+        id: id,
         created_at: thread.createdAt,
         locked: false,
         posts: [

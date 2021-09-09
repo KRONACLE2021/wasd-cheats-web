@@ -3,7 +3,7 @@ import { IUser } from '../../interfaces';
 import { API, CREATE_NEW_THREAD, FETCH_THREADS, FETCH_THREAD } from '../../requests/config';
 import Requester from '../../requests/Requester';
 
-import { ADD_THREADS, CREATE_THREAD, SET_THREAD_OWNER } from '../actions';
+import { ADD_THREADS, CREATE_THREAD, SET_THREAD_OWNER, SET_TOTAL_THREADS } from '../actions';
 
 const Requester_ = new Requester(API);
 
@@ -42,13 +42,28 @@ export const CreateThread = async ({title, post, attachments, topic_id} : {title
 
 export const FetchThreadsByTopic = async (topic_id : string, skip : number, limit: number, dispatcher : any) => {
     
-    let response = await Requester_.makeGetRequest(FETCH_THREADS(topic_id))
+    let response = await Requester_.makeGetRequest(FETCH_THREADS(topic_id), { 
+        headers: {},
+        queryStringParams: [
+            {
+                name: "skip",
+                value: skip
+            },
+            {
+                name: "limit",
+                value: limit
+            }
+        ]
+    })
 
     if(!response.error) {
         dispatcher({
             type: ADD_THREADS,
-            payload: response
-        })
+            payload: { 
+                threads: response.threads,
+                amount: response.total
+            }
+        });
         return response;
     } else {
         return response;
@@ -63,7 +78,7 @@ export const FetchThreadById = async (id : string, dispatcher: any) => {
         dispatcher({
             type: CREATE_THREAD,
             payload: response 
-        })
+        });
         return response;
     } else {
         return response;
