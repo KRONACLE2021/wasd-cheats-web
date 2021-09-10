@@ -33,8 +33,6 @@ export default function categoryReducer(state : any = initalState, action : { ty
             let filteredPost = state.posts.filter((t) => (t["id"] == postId))[0];
             if(!filteredPost) return;
 
-            console.log(state.posts);
-
             let modifiedPost = filteredPost;
             modifiedPost.user = action.payload.user;
             state.posts[state.posts.indexOf(filteredPost)] = modifiedPost;

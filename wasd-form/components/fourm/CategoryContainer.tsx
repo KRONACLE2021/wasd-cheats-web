@@ -4,7 +4,7 @@ import { FetchTopicsByCategory } from '../../stores/actions/topicActions';
 import { useDispatch, useSelector } from 'react-redux';
 import TopicCard from './TopicCard';
 
-const CategoryContainer: React.FC<{name: string, id: string}> = (props) => {
+const CategoryContainer: React.FC<{name: string, id: string, isAdmin: any, toggleAddModel: any}> = (props) => {
 
     const dispatch = useDispatch();
     const topics = useSelector(state => state.topics.topics);
@@ -17,6 +17,9 @@ const CategoryContainer: React.FC<{name: string, id: string}> = (props) => {
         <div className={styles.category_container}>
             <div className={`${styles.category_top_header}`}>
                 <h1 className={styles.category_header}>{props.name}</h1>
+                {props.isAdmin ? (
+                    <button className={styles.add_topic_btn} onClick={() => props.toggleAddModel(true)}>Add Topic</button>
+                ) : ""}
             </div>
 
             <div className={styles.bar_seporator}></div>

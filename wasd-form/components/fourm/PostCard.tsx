@@ -39,6 +39,7 @@ const PostCard: React.FC<{ contents: string, uid: string, createdAt: string, id:
                 <div className={styles.post_contet}>
                    <div dangerouslySetInnerHTML={{ __html: contents }}></div>
                 </div>
+
         </div>
     )
 } 

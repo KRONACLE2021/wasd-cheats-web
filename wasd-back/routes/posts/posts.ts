@@ -17,7 +17,7 @@ Route.get("/get/:postId", async (req, res, next) => {
     let post = await PostsModel.findOne({ id: postid });
 
     if(!post) return res.json({message: "Post not found!"}).status(404);
-
+ 
     return res.json(post);
 });
 
@@ -26,7 +26,7 @@ Route.post("/create", checkAuth, async (req, res, next) => {
     let body = req.body;
     let errors : Array<string> = [];
 
-    let user : IUser = res.locals.user;
+    let user : IUser = res.locals.user; 
 
     if(!user.permissions.includes("ALLOW_POSTING") && !user.permissions.includes("ADMINISTRATOR")) return res.json({ error: true, errors: ["You're not allowed to post!"] }); 
 
@@ -35,11 +35,12 @@ Route.post("/create", checkAuth, async (req, res, next) => {
     let id = uuid();
     let threadId = body.thread_id;
 
-    console.log(contents);
 
     //provide attachment checking
 
-    if(!contents) errors.push("You must provide the contents of what you want to post!");
+    console.log(contents.replace(/\s/g, '').length);
+
+    if(!contents || contents == "" || contents.replace(/\s/g, '').length == 0) errors.push("You must provide the contents of what you want to post!");
     if(!threadId) errors.push("There must be a thread to attach this post too!! What are you some sort of maniac who dosent use threads, come on now come get this man.")
 
     let thread = await Threads.findOne({ id: threadId });

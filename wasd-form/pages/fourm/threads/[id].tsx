@@ -12,6 +12,7 @@ import PostCard from '../../../components/fourm/PostCard';
 import Preloader from '../../../components/shared/Preloader';
 import FullPageError from '../../../components/shared/FullpageError';
 import Draft from '../../../components/editor/draft';
+import ReplyContainer from '../../../components/fourm/ReplyContainer';
 
 const ThreadPage: React.FC<any> = (props) => {
     
@@ -108,20 +109,7 @@ const ThreadPage: React.FC<any> = (props) => {
                                 attachments={i.attachments} 
                     /> 
         })}
-        <div className={`${styles.reply_continer} ${editorIsActive ? styles.editor_active : ""}`}>
-            <div className={styles.reply_user_pfp_contianer}>
-                <img src={getAvatar(userStore)} />
-            </div>
-            {editorIsActive == false ? <div onClick={() => spawnEditor()} className={styles.reply_placeholder}>
-                <p>Reply to this topic!</p>
-            </div> : ( 
-                <div style={{width: "100%"}}>
-                    <div className={styles.reply_draft_editor}> <Draft output={setEditorOutput} /> </div> 
-                    <div className={styles.top_spacer}></div>
-                    <button className={styles.post_thread_btn} onClick={() => createPost_()}>Post</button>
-                </div>
-            )} 
-        </div>
+        <ReplyContainer user={userStore} topic_id={id} />
         </FourmRoot>
     )
 }
