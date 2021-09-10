@@ -3,11 +3,12 @@ import { v4 as uuid } from 'uuid';
 import PostsModel from '../../models/Posts';
 import CreatePost from './functions/createPost';
 import Threads from '../../models/Threads';
+import checkAuth from '../../middleware/checkAuth';
 import { IUser } from '../../models/Users';
 
 let Route = Router();
 
-Route.use(json);
+Route.use(json());
 
 Route.get("/get/:postId", async (req, res, next) => {
     
@@ -20,7 +21,7 @@ Route.get("/get/:postId", async (req, res, next) => {
     return res.json(post);
 });
 
-Route.post("/create", async (req, res, next) => {
+Route.post("/create", checkAuth, async (req, res, next) => {
 
     let body = req.body;
     let errors : Array<string> = [];
@@ -33,6 +34,8 @@ Route.post("/create", async (req, res, next) => {
     let contents = body.contents;
     let id = uuid();
     let threadId = body.thread_id;
+
+    console.log(contents);
 
     //provide attachment checking
 

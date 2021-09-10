@@ -7,7 +7,7 @@ import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
 import { FetchThreadById, SetOwner } from '../../../stores/actions/threadActions';
 import { API, FETCH_USER } from '../../../requests/config';
-import { FetchPostsByThreadId } from '../../../stores/actions/postsAction';
+import { FetchPostsByThreadId, CreatePost } from '../../../stores/actions/postsAction';
 import PostCard from '../../../components/fourm/PostCard';
 import Preloader from '../../../components/shared/Preloader';
 import FullPageError from '../../../components/shared/FullpageError';
@@ -41,7 +41,6 @@ const ThreadPage: React.FC<any> = (props) => {
         }
 
         if(!data) {
-            console.log("uwu");
             setError("Could not contact API");
         }
     }
@@ -71,8 +70,9 @@ const ThreadPage: React.FC<any> = (props) => {
     }, [id]);
 
 
-    const createPost = async () => {
-      
+    const createPost_ = async () => {
+        CreatePost(editorOutput, [], id, userStore.api_key, dispatch);
+        setActiveEditor(false);
     }
 
 
@@ -118,7 +118,7 @@ const ThreadPage: React.FC<any> = (props) => {
                 <div style={{width: "100%"}}>
                     <div className={styles.reply_draft_editor}> <Draft output={setEditorOutput} /> </div> 
                     <div className={styles.top_spacer}></div>
-                    <button className={styles.post_thread_btn}>Post</button>
+                    <button className={styles.post_thread_btn} onClick={() => createPost_()}>Post</button>
                 </div>
             )} 
         </div>

@@ -1,9 +1,9 @@
 import axios from 'axios';
 import { IUser } from '../../interfaces';
 
-import { API, FETCH_POSTS_BY_THREAD } from '../../requests/config';
+import { API, FETCH_POSTS_BY_THREAD, CREATE_NEW_POST } from '../../requests/config';
 import Requester from '../../requests/Requester';
-import  { ADD_POSTS, SET_POST_OWNER } from '../actions';
+import  { ADD_POSTS, CREATE_POST, SET_POST_OWNER } from '../actions';
 
 const Requester_ = new Requester(API);
 
@@ -23,6 +23,32 @@ export const FetchPostsByThreadId = async (id: string, limit: number = 20, skip:
     });
 
 }
+
+export const CreatePost = async (contents: any, attachments: Array<string>, thread_id: string, api_key: string, dispatcher: any) => {
+
+    let response = await Requester_.makePostRequest(CREATE_NEW_POST, {
+        contents: contents,
+        attachments: attachments,
+        thread_id: thread_id
+    }, {
+        headers: {
+            authorization: api_key
+        },
+        queryStringParams: []
+    });
+
+    if(response.error){
+        return response;
+    }
+
+    dispatcher({
+        type: CREATE_POST,
+        payload: response
+    })
+
+    return response;
+}
+
 export const SetPostUser = (id: string, user: IUser) => {
     return {
         type: SET_POST_OWNER,
