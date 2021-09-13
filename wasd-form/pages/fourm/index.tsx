@@ -24,10 +24,6 @@ const FourmHome: React.FC<any> = () => {
 
     return (
         <>
-            <ModelContainer isActive={modelIsActive}>
-                <h1>Create a new topic</h1>
-
-            </ModelContainer>
 
             <FourmRoot header={
                  <h1 className={styles.header}>Fourms</h1>

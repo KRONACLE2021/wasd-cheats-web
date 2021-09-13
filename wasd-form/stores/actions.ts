@@ -7,6 +7,7 @@ export const FETCH_USER = "FETCH_USER";
 export const ADD_TOPIC = "ADD_TOPIC";
 export const REMOVE_TOPIC = "REMOVE_TOPIC";
 export const SET_TOPICS = "SET_TOPICS";
+export const CREATE_TOPICS = "CREATE_TOPICS";
 export const FILTER_TOPICS = "FILTER_TOPICS";
 
 /* FOURM CATEGORY ACTIONS */
