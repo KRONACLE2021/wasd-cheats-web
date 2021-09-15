@@ -92,9 +92,8 @@
     height: auto;
     min-height: 50px;
     background-color: var(--bg-secondary);
-    border-radius: 5px;
-    /* border: 2px solid var(--bg-lighter); */ 
-    padding: 1px 0px;
+    border-radius: 7px;
+    padding: 3px 0px;
 }
 
 .category_top_header {
@@ -423,6 +422,7 @@
     position: absolute;
     top: 50%;
     left: 50%;
+    z-index: 4;
     transform: translate(-50%, -50%);
     height: auto;
     min-height: 300px;
@@ -432,10 +432,20 @@
 }
 
 .model_popup_greyed {
-    position: absolute;
+    position: fixed;
     top: 0%;
     left: 0%;
     width: 100%;
     height: 100%;
     background-color: rgba(0,0,0,0.8);
+}
+
+.input {
+    padding: 10px 10px;
+    border: 2px solid var(--bg-lighter);
+    border-radius: 5px;
+    background-color: transparent;
+    color: white;
+    font-family: "Roboto", sans-serif;
+    width: 100%;
 }

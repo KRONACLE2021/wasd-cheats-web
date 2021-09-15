@@ -4,27 +4,41 @@ import { FetchTopicsByCategory } from '../../stores/actions/topicActions';
 import { useDispatch, useSelector } from 'react-redux';
 import TopicCard from './TopicCard';
 import ModelContainer from '../models/ModelContainer';
+import FileUploader from './FileUploader';
 
 const CategoryContainer: React.FC<{name: string, id: string, isAdmin: any, toggleAddModel: any}> = (props) => {
 
     const dispatch = useDispatch();
     const [modelIsActive, setModelActive] = useState<boolean>(false);
+    const [topicCreateData, setTopicCreateData] = useState({});
     const topics = useSelector(state => state.topics.topics);
 
     useEffect(() => {
         FetchTopicsByCategory(props.id, dispatch);
-    }, [])
+    }, []);
+
+    const adminCreateTopic = () => {
+
+    }
 
     return (
         <>
-            <ModelContainer isActive={modelIsActive}>
+            <ModelContainer isActive={modelIsActive} setModelActive={setModelActive}>
                 <h1>Create a new topic</h1>
                 <div>
-                    <p>Topic name</p>
-                    <input placeholder={"Topic Name"}></input>
-                    <p>Topic description</p>
-                    <input placeholder={"Topic Name"}></input>
-                    <button>Create Topic</button>
+                    <div>
+                        <p>Topic name</p>
+                        <input className={styles.input} placeholder={"Topic Name"} onChange={(e) => setTopicCreateData({...topicCreateData, name: e.target.value})}></input>
+                    </div>
+                    <div>
+                        <p>Topic description</p>
+                        <input className={styles.input} placeholder={"Topic Description"} onChange={(e) => setTopicCreateData({...topicCreateData, description: e.target.value})}></input>
+                    </div>
+                    
+                    <div className={styles.top_spacer}></div>
+                    <FileUploader reccomended_size={"50x50"} uploadType={"icon"} />
+                    <button className={styles.add_topic_btn} onClick={() => adminCreateTopic}>Create Topic</button>
+                    <div className={styles.top_spacer}></div>
                 </div>
             </ModelContainer>
             <div className={styles.category_container}>
