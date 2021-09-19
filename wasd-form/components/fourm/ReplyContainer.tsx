@@ -17,7 +17,7 @@ const ReplyContainer: React.FC<{user: any, topic_id: string}> = ({ user, topic_i
     const dispatch = useDispatch();
 
     useEffect(() => {
-        if(user.id){
+        if(user.uid){
             setFillerText("Reply to this conversation.");
         }
     }, [user]);
@@ -58,7 +58,7 @@ const ReplyContainer: React.FC<{user: any, topic_id: string}> = ({ user, topic_i
                 <p>{fillerText}</p>
             </div> : ( 
                 <div style={{width: "100%"}}>
-                    <FourmError error={"Error!"} errorDescription={error[0]} />
+                    { error.length !== 0 ? <FourmError error={"Error!"} errorDescription={error[0]} /> : "" }
                     <div className={styles.reply_draft_editor}> <Draft output={setEditorOutput} /> </div> 
                     <div className={styles.top_spacer}></div>
                     <button className={styles.post_thread_btn} onClick={() => createPost_()}>Post</button>

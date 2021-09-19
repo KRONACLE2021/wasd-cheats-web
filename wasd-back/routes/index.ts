@@ -7,6 +7,7 @@ import AuthRoute from './auth';
 import Categorys from './posts/categorys';
 import StoreAdmin from './store/admin';
 import UserRoutes from './user';
+import UploadRoute from './upload';
 
 let Route = Router();
 
@@ -23,6 +24,7 @@ Route.use("/api/v1/topics", TopicsRoute);
 Route.use("/api/v1/categorys", Categorys);
 Route.use("/api/v1/threads", ThreadsRoute);
 Route.use('/api/v1/posts', PostsRoute);
+Route.use("/api/v1/upload", UploadRoute);
 
 /* User Routes */
 Route.use("/api/v1/users", UserRoutes);

@@ -11,7 +11,7 @@ const Navbar : React.FC<any> = (props) => {
 
     return (
         <div className={styles.navbar_container}>
-            <img src={"/logo.png"} className={styles.logo}/>
+            <Link href={"/"}><img src={"/logo.png"} className={styles.logo}/></Link>
             <nav>
                 <ul className={styles.nav_links}>
                     <li><Link href={"/fourm"}>Fourms</Link></li>
@@ -32,7 +32,7 @@ const Navbar : React.FC<any> = (props) => {
                             </div>
                             <ul className={styles.drop_down_list}>
                                 <li><Link href={"/logout"}>Logout</Link></li>
-                                <li><Link href={"/user"}>Profile</Link></li>
+                                <li><Link href={"/users/me"}>Profile</Link></li>
                                 <li><Link href={"/user/settings"}>Settings</Link></li>
                                 {userStore.username !== undefined ? (userStore.permissions.includes("ADMINISTRATOR") ? (
                                     <>

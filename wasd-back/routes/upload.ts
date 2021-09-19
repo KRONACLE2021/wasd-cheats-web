@@ -9,15 +9,15 @@ let Route = Router();
 Route.use(json());
 
 var s3 = new aws.S3({
-    region: 'us-west',
-    accessKeyId: "AKIA4CDI7M67XTH5LKRG",
-    secretAccessKey: "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"
+    endpoint: "nyc3.digitaloceanspaces.com",
+    accessKeyId: "V6GERMXDHGD6PTQWZWKQ",
+    secretAccessKey: "uiuzAXd3BMehHHeK8qCsf2cdNFBRGshBD+bhRj1Dghg"
 });
 
 var upload = multer({
     storage: multerS3({
       s3: s3,
-      bucket: 'wasdusercontent',
+      bucket: 'wasd',
       acl: 'public-read',
       metadata: function (req, file, cb) {
         cb(null, {fieldName: file.fieldname});
@@ -29,7 +29,7 @@ var upload = multer({
 })
 
 
-Route.get("/usercontent", CheckAuth, upload.single('image'), (req, res, next) => {
+Route.post("/usercontent", CheckAuth, upload.single('file'), (req, res, next) => {
 
     console.log(req.file);
     

@@ -3,11 +3,15 @@ import UserModel from '../models/Users';
 import { isEmailBurner } from "burner-email-providers";
 import { v4 as uuid } from 'uuid';
 import bcrypt from 'bcrypt';
+import DiscordOauth from './discord_oauth';
 
 let Route = Router();
 
 
 Route.use(json());
+
+
+Route.use("/discord", DiscordOauth);
 
 Route.post("/register", async (req, res, next) => {
 

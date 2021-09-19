@@ -1,5 +1,8 @@
 import React, { useState } from 'react'
-import { JsxChild, JsxElement } from 'typescript';
+import axios from 'axios';
+import { API, USER_FILE_UPLOAD } from '../../requests/config';
+import { useSelector } from 'react-redux';
+
 
 let allowedFileTypes = [
     "image/png", 
@@ -14,6 +17,8 @@ const FileUploader : React.FC<any> = ({ reccomended_size, uploadType, data })  =
     const [file, setFile] = useState<{selectedFile: null | File }>({ selectedFile: null });
     const [fileUrl, setFileUrl] = useState<any>("");
 
+    const user = useSelector(state => state.user);
+
     const onFileChange = e => {
         console.log("[WASD Uploader] Got file user wants to upload");
         if(!allowedFileTypes.includes(e.target.files[0].type)){
@@ -23,13 +28,32 @@ const FileUploader : React.FC<any> = ({ reccomended_size, uploadType, data })  =
         } else {
             setFile({ selectedFile: e.target.files[0] });
             setFileUrl(URL.createObjectURL(e.target.files[0]))
+            uploadFile(e.target.files[0]);
         }
     
     };
 
-    const uploadFile = () => {
-        console.log("[WASD Uploader] Uploading file..");
+    const uploadFile = async (file_: any) => {
+        
+        const formData = new FormData();
 
+        formData.append("file", 
+            file_, 
+            file_.name);
+
+        let result = await axios.post(`${API}/${USER_FILE_UPLOAD}`, formData, {
+            headers: {
+                authorization: user.api_key
+            }
+        }).then((res) => res)
+        .catch((err) => err.response);
+
+
+        if(result.error == true) {
+            alert("[AXIOS] Error uploading file: " + result.errors);
+        } else {
+            console.log(result);
+        }
     }
     
     return (
