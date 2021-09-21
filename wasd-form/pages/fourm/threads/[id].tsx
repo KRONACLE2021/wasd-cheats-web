@@ -13,6 +13,7 @@ import Preloader from '../../../components/shared/Preloader';
 import FullPageError from '../../../components/shared/FullpageError';
 import Draft from '../../../components/editor/draft';
 import ReplyContainer from '../../../components/fourm/ReplyContainer';
+import { SpawnNewInstacne } from '../../../stores/actions/textEditorActions';
 
 const ThreadPage: React.FC<any> = (props) => {
     
@@ -29,6 +30,7 @@ const ThreadPage: React.FC<any> = (props) => {
 
     const [editorIsActive, setActiveEditor] = useState<boolean>(false);
     const [editorOutput, setEditorOutput] = useState("");
+
 
     const fetchUser = async (uid: string) => {
         let response = await axios.get(`${API}/${FETCH_USER(uid)}`)
@@ -54,6 +56,9 @@ const ThreadPage: React.FC<any> = (props) => {
             }
 
             FetchPostsByThreadId(id, 20, 0, dispatch);
+
+            //clear text editor
+            dispatch(SpawnNewInstacne({ therad_id: id, state: "" }));
 
             setLoading(false);
         }
@@ -99,6 +104,7 @@ const ThreadPage: React.FC<any> = (props) => {
                 </div>
             </div>
         </>}>
+
         {posts.map((i) => { 
             return <PostCard    key={i.id} 
                                 id={i.id}
@@ -109,7 +115,9 @@ const ThreadPage: React.FC<any> = (props) => {
                                 attachments={i.attachments} 
                     /> 
         })}
+
         <ReplyContainer user={userStore} topic_id={id} />
+
         </FourmRoot>
     )
 }

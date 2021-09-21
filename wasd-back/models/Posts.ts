@@ -6,6 +6,7 @@ export interface IPost {
     attachments: Array<string>;
     uid: string;
     threadId: string;
+    refrenced_post_id: string | null;
 }
 
 
@@ -14,7 +15,8 @@ const PostsSchema = new Schema<IPost>({
     contents: String,
     uid: String,
     threadId: String,
-    attachments: Array
+    attachments: Array,
+    refrenced_post_id: String 
 });
 
 

@@ -48,6 +48,23 @@ export default class Requester {
         return result;
     }
 
+    async makeDeleteRequest(url: string, options: { queryStringParams: Array<{ name: string, value: string | number }>, headers: any  }) {
+        let queryStringParams = options.queryStringParams ? options.queryStringParams.join("&") : "";
+
+        let result = await axios.delete(`${this.BASE_URL}/${url}?${queryStringParams}`, {
+            headers: options.headers
+        }).then(res => res.data)
+        .catch((err) => {
+            if(!err?.response?.status) {
+                return { error: true, errors: ["Could not contact WASD API"] }
+            } else {
+                return err.response.data;
+            }
+        });
+
+        return result;
+    }
+
     changeBaseURL(base: string) {
         this.BASE_URL = base;
     }

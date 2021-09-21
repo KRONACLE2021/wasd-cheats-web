@@ -4,7 +4,7 @@ import { IUser } from '../../interfaces';
 import { CreatePost } from '../../stores/actions/postsAction';
 import styles from '../../styles/fourms.module.css';
 import getAvatar from '../../utils/getAvatar';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Draft from '../editor/draft';
 import FourmError from '../shared/FourmError';
 
@@ -16,11 +16,23 @@ const ReplyContainer: React.FC<{user: any, topic_id: string}> = ({ user, topic_i
     const [error, setErrors] = useState<Array<string>>([]);
     const dispatch = useDispatch();
 
+    const editorState = useSelector(state => state.editorStore); 
+
     useEffect(() => {
         if(user.uid){
             setFillerText("Reply to this conversation.");
         }
     }, [user]);
+
+    useEffect(() => {
+        if(editorState.replying_to.length !== 0){
+
+        }
+    }, [editorState.replying_to])
+
+    useEffect(() => {
+        setActiveEditor(editorState.isFocused);
+    }, [editorState.isFocused])
 
     const spawnEditor = () => {
 
@@ -59,7 +71,7 @@ const ReplyContainer: React.FC<{user: any, topic_id: string}> = ({ user, topic_i
             </div> : ( 
                 <div style={{width: "100%"}}>
                     { error.length !== 0 ? <FourmError error={"Error!"} errorDescription={error[0]} /> : "" }
-                    <div className={styles.reply_draft_editor}> <Draft output={setEditorOutput} /> </div> 
+                    <div className={styles.reply_draft_editor}> <Draft  output={setEditorOutput} /> </div> 
                     <div className={styles.top_spacer}></div>
                     <button className={styles.post_thread_btn} onClick={() => createPost_()}>Post</button>
                 </div>

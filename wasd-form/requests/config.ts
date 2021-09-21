@@ -19,6 +19,7 @@ export const FETCH_THREAD = (id: string) => `api/v1/threads/${id}`;
 export const FETCH_POSTS_BY_THREAD = (thread_id: string) => `api/v1/threads/${thread_id}/posts`;
 export const CREATE_NEW_POST = `api/v1/posts/create`
 export const CREATE_NEW_TOPIC = `api/v1/topics/create`;
+export const DELETE_POST = (id: string) => `api/v1/posts/delete/${id}`;
 
 /* File upload routes */
 export const USER_FILE_UPLOAD = `api/v1/upload/usercontent`;

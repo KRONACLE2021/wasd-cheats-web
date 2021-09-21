@@ -9,6 +9,7 @@ import ThreadCard from '../../../components/fourm/ThreadCard';
 import Paginator from '../../../components/fourm/Paginator';
 import Requester from '../../../requests/Requester';
 
+
 const TopicPage : React.FC<any> = () => {
     
 
@@ -68,6 +69,18 @@ const TopicPage : React.FC<any> = () => {
                     <div className={styles.topic_header}>
                         <h1 className={styles.header}>{topics[0].title}</h1>
                         <p>{topics[0].description}</p>
+
+                        <div className={styles.content_actions}>
+                            <ul>
+                                <li><img src={"/edit.png"} alt={"edit"} /></li>
+                                <li><img src={"/lock.png"} alt={"lock topic"} /></li>
+                                
+                                {true == true ? (
+                                    <li onClick={() => setDeleteModelActive(true)}><img src={"/delete.png"} alt={"delete"}/></li>
+                                ) : ""}        
+                            </ul>
+
+                        </div>
                     </div>
                     <div className={styles.thread_create_container}>
                             <button className={styles.thread_create} onClick={() => router.push(`/fourm/topics/${topics[0].id}/new`)}>Start a Thread</button>

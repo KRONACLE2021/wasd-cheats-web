@@ -114,6 +114,11 @@
     font-family: "Roboto", sans-serif;
     font-size: 15px;
     border-radius: 7px;
+    margin-left: 10px;
+}
+
+.topic_actions_container {
+    margin-left: auto;
 }
 
 .category_topics_container {
@@ -420,15 +425,16 @@
 
 .model_popup_container {
     position: absolute;
+    border-radius: 7px;
     top: 50%;
     left: 50%;
     z-index: 4;
     transform: translate(-50%, -50%);
     height: auto;
-    min-height: 300px;
+    min-height: 100px;
     width: 50%;
     background-color: var(--bg-secondary);
-    padding: 10px 25px;
+    padding: 0px;
 }
 
 .model_popup_greyed {
@@ -450,7 +456,7 @@
     width: 100%;
 }
 
-.post_actions {
+.content_actions {
     border-top: 2px solid rgb(80, 79, 79);
     width: 100%;
     padding: 11px 0px;
@@ -459,12 +465,12 @@
     align-self: flex-end;
 }
 
-.post_actions ul {
+.content_actions ul {
     margin: 0 !important;
     padding: 0 !important;
 }
 
-.post_actions ul li {
+.content_actions ul li {
     padding: 0px 10px;
     display: inline-block;
 }
@@ -477,6 +483,31 @@
     min-height: 100%;
 }
 
-.post_actions ul li img {
+.content_actions ul li img {
     height: 25px;
+}
+
+.delete_button_container {
+    background-color: var(--bg-lighter);
+    height: 75px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    padding: 0px 20px;
+    border-bottom-left-radius: 7px;
+    border-bottom-right-radius: 7px;
+}
+
+.delete_button{
+    padding: 10px 20px;
+    font-family: "Roboto", sans-serif;
+    border: none;
+    border-radius: 7px;
+    background-color: var(--pink);
+    color: white;
+    margin-right: 10px;
+}
+
+.delete_button_red {
+    background-color: red !important;
 }

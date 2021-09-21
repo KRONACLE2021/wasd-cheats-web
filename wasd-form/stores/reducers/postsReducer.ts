@@ -1,4 +1,4 @@
-import { ADD_POSTS, CREATE_POST, SET_POST_OWNER } from "../actions";
+import { ADD_POSTS, CREATE_POST, SET_POST_OWNER, POST_DELETE } from "../actions";
 import filterDuplicates from '../../utils/filterDuplicates';
 
 const initalState = {
@@ -7,6 +7,7 @@ const initalState = {
 };
 
 export default function categoryReducer(state : any = initalState, action : { type: string, payload: any }) {
+
     switch(action.type){
         case ADD_POSTS:
             let posts = action.payload;
@@ -38,7 +39,21 @@ export default function categoryReducer(state : any = initalState, action : { ty
             state.posts[state.posts.indexOf(filteredPost)] = modifiedPost;
         
             return state;
+       
+        case POST_DELETE: 
+            let filteredPost_ = state.posts.filter((t) => (t["id"] == action.payload.post_id))[0];
+            let postIndex = state.posts.indexOf(filteredPost_);
+
+            console.log(postIndex);
+
+            if(!filteredPost_) return state;
+
+            state.posts.splice(postIndex, 1);
+
+            return state;
+
         default: 
             return state;
     }
 }
+

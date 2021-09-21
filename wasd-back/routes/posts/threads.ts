@@ -93,7 +93,7 @@ Route.post("/create", checkAuth, async (req, res, next) => {
         id 
     });
 
-    let createdPost = await CreatePost(post.attachments, post.contents, uid, id);
+    let createdPost = await CreatePost(post.attachments, post.contents, uid, id, "");
 
     topic.threads.push(id);
     await topic.save();

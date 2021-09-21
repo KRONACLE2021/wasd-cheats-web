@@ -2,7 +2,7 @@ import Posts from "../../../models/Posts";
 import Threads from "../../../models/Threads";
 import { v4 as uuid } from 'uuid';
 
-export default async function CreatePost(attachments: Array<string> | null, contents: string, uid: string, threadId: string) {
+export default async function CreatePost(attachments: Array<string> | null, contents: string, uid: string, threadId: string, refrenced_post_id: string | null) {
     
     let id : string = "";
 
@@ -25,7 +25,8 @@ export default async function CreatePost(attachments: Array<string> | null, cont
         id,
         contents,
         uid,
-        threadId
+        threadId,
+        refrenced_post_id
     });
 
     thread.posts.push(id);

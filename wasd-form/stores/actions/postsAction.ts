@@ -1,9 +1,9 @@
 import axios from 'axios';
 import { IUser } from '../../interfaces';
 
-import { API, FETCH_POSTS_BY_THREAD, CREATE_NEW_POST } from '../../requests/config';
+import { API, FETCH_POSTS_BY_THREAD, CREATE_NEW_POST, DELETE_POST } from '../../requests/config';
 import Requester from '../../requests/Requester';
-import  { ADD_POSTS, CREATE_POST, SET_POST_OWNER } from '../actions';
+import  { ADD_POSTS, CREATE_POST, SET_POST_OWNER, POST_DELETE} from '../actions';
 
 const Requester_ = new Requester(API);
 
@@ -56,5 +56,28 @@ export const SetPostUser = (id: string, user: IUser) => {
             post_id: id,
             user: user
         }
+    }
+}
+
+
+export const DeletePost = async (id: string, api_key: string, dispatcher: any) => {
+    let response = await Requester_.makeDeleteRequest(DELETE_POST(id), { 
+        headers: {
+            authorization: api_key
+        },
+        queryStringParams: []
+    });
+
+    console.log(response);
+
+    if(response.done) {
+        dispatcher({
+            type: POST_DELETE,
+            payload: {
+                post_id: id
+            }
+        })
+    } else {
+        return response;
     }
 }

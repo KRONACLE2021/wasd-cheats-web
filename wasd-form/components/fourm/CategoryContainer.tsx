@@ -45,7 +45,11 @@ const CategoryContainer: React.FC<{name: string, id: string, isAdmin: any, toggl
                 <div className={`${styles.category_top_header}`}>
                     <h1 className={styles.category_header}>{props.name}</h1>
                     {props.isAdmin ? (
-                        <button className={styles.add_topic_btn} onClick={() => setModelActive(true)}>Add Topic</button>
+                        <div className={styles.topic_actions_container}>
+                            <button className={styles.add_topic_btn} onClick={() => setModelActive(true)}>Add Topic</button>
+                            <button className={styles.add_topic_btn} onClick={() => setModelActive(true)}>Delete Topic</button>
+                            <button className={styles.add_topic_btn} onClick={() => setModelActive(true)}>Edit Topic</button>
+                        </div>
                     ) : ""}
                 </div>
 
