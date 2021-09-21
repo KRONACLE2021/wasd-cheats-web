@@ -1,26 +1,44 @@
 .header_container { 
   position: relative;
-  height: 400px;
+  height:600px;
+  padding: 75px 20%;
   z-index: 2;
+  background-color: rgba(0, 0, 0, 0.76);
   width: 100%;
-  background-color: var(--bg-secondary);
   display: flex; 
 }
 
 .header_wasd {
-    font-size: 80px;
-    height: 45px;
-}
+    font-size: 64px;
+    width: 400px;
+    margin-bottom: 10px;;
+}   
 
+.header_slogan {
+
+}
 
 .header_left {
     position: relative;
-    padding: 50px;
     z-index: 2;
     width: 100%;
-    text-align: center;
+    text-align: left;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.76);
+    float: left;
+
+}
+
+.header_right {
+    float: left;
+}
+
+.header_right img {
+    position: relative;
+    margin: -50px;
+    z-index: 0 !important;
+    height: 650px;
+    width: 500px;
+    object-fit: cover;
 }
 
 .header_video {
@@ -37,12 +55,13 @@
 
 .header_button {
     border: none;
-    border-radius: 7px;
+    border-radius: 10px;
     background-color: var(--purple);
-    padding: 10px 15px;
+    padding: 15px 20px;
     color: var(--white);
     font-family: "Roboto", sans-serif;
-    font-size: 14px;
+    font-size: 15px;
+    font-weight: bold;
 }
 
 .header_button:nth-child(2) {
@@ -54,6 +73,8 @@
 }
 
 .pricing_container {
+    position: relative;
+    z-index: 9 !important;
     display: flex;
     background: linear-gradient(to bottom right, var(--bg-purple), var(--bg-pink));
     justify-content: center;

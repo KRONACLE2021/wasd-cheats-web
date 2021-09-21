@@ -8,6 +8,9 @@ import { FetchThreadsByTopic } from '../../../stores/actions/threadActions';
 import ThreadCard from '../../../components/fourm/ThreadCard';
 import Paginator from '../../../components/fourm/Paginator';
 import Requester from '../../../requests/Requester';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEdit, faLock, faTrash } from '@fortawesome/free-solid-svg-icons';
+
 
 
 const TopicPage : React.FC<any> = () => {
@@ -23,6 +26,27 @@ const TopicPage : React.FC<any> = () => {
 
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [activeThreads, setActiveThreads] = useState<Array<any>>([]);
+
+    let adminActions = [
+        {
+            name: "Edit",
+            fasIcon: faEdit,
+            fasSize: "lg",
+            eventHandeler: () => {}
+        },
+        {
+            name: "Lock",
+            fasIcon: faLock,
+            fasSize: "lg",
+            eventHandeler: () => {}
+        },
+        {
+            name: "Delete",
+            fasIcon: faTrash,
+            fasSize: "lg",
+            eventHandeler: () => {}
+        },
+    ]
 
     const fetchTopic = async () => {
         let res = await FetchTopicById(id, dispatch);
@@ -72,12 +96,9 @@ const TopicPage : React.FC<any> = () => {
 
                         <div className={styles.content_actions}>
                             <ul>
-                                <li><img src={"/edit.png"} alt={"edit"} /></li>
-                                <li><img src={"/lock.png"} alt={"lock topic"} /></li>
-                                
-                                {true == true ? (
-                                    <li onClick={() => setDeleteModelActive(true)}><img src={"/delete.png"} alt={"delete"}/></li>
-                                ) : ""}        
+                                {adminActions.map((item) => {
+                                    return <li onClick={item.eventHandeler}><FontAwesomeIcon size={item.fasSize} icon={item.fasIcon} /> <span className={styles.content_acitons_name}>{item.name}</span></li>
+                                })}
                             </ul>
 
                         </div>

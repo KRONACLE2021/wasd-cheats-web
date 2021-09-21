@@ -475,16 +475,16 @@
     display: inline-block;
 }
 
+.content_acitons_name {
+    margin-left: 5px;
+}
+
 .post_content {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     width: 100%;
     min-height: 100%;
-}
-
-.content_actions ul li img {
-    height: 25px;
 }
 
 .delete_button_container {
@@ -511,3 +511,4 @@
 .delete_button_red {
     background-color: red !important;
 }
+
