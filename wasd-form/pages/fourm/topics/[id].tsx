@@ -10,6 +10,7 @@ import Paginator from '../../../components/fourm/Paginator';
 import Requester from '../../../requests/Requester';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faLock, faTrash } from '@fortawesome/free-solid-svg-icons';
+import ActionsBar from '../../../components/fourm/ActionsBar';
 
 
 
@@ -23,6 +24,7 @@ const TopicPage : React.FC<any> = () => {
 
     const topics = useSelector(state => state.topics.topics.filter((item) => (item["id"] == id)));
     const threads = useSelector(state => state.threadStore.threads.filter((item) => (item["topicId"] == id)));
+    const userStore = useSelector(state => state.user);
 
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [activeThreads, setActiveThreads] = useState<Array<any>>([]);
@@ -32,19 +34,22 @@ const TopicPage : React.FC<any> = () => {
             name: "Edit",
             fasIcon: faEdit,
             fasSize: "lg",
-            eventHandeler: () => {}
+            eventHandeler: () => {},
+            permission: userStore?.permissions?.includes("MODERATOR")
         },
         {
             name: "Lock",
             fasIcon: faLock,
             fasSize: "lg",
-            eventHandeler: () => {}
+            eventHandeler: () => {},
+            permission: userStore?.permissions?.includes("MODERATOR")
         },
         {
             name: "Delete",
             fasIcon: faTrash,
             fasSize: "lg",
-            eventHandeler: () => {}
+            eventHandeler: () => {},
+            permission: userStore?.permissions?.includes("MODERATOR")
         },
     ]
 
@@ -92,16 +97,9 @@ const TopicPage : React.FC<any> = () => {
                 <>
                     <div className={styles.topic_header}>
                         <h1 className={styles.header}>{topics[0].title}</h1>
-                        <p>{topics[0].description}</p>
+                        <p style={{ marginBottom: "0px"}}>{topics[0].description}</p>
 
-                        <div className={styles.content_actions}>
-                            <ul>
-                                {adminActions.map((item) => {
-                                    return <li onClick={item.eventHandeler}><FontAwesomeIcon size={item.fasSize} icon={item.fasIcon} /> <span className={styles.content_acitons_name}>{item.name}</span></li>
-                                })}
-                            </ul>
-
-                        </div>
+                        {userStore?.permissions?.includes("MODERATOR") ? <ActionsBar actions={adminActions}></ActionsBar> : "" }
                     </div>
                     <div className={styles.thread_create_container}>
                             <button className={styles.thread_create} onClick={() => router.push(`/fourm/topics/${topics[0].id}/new`)}>Start a Thread</button>

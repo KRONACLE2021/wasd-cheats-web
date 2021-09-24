@@ -44,12 +44,19 @@ const FourmHome: React.FC<any> = () => {
         <>
 
             <FourmRoot header={
-                 <h1 className={styles.header}>Fourms</h1>
+                 <h1 className={styles.header}>Home</h1>
             }>
                 <div className={styles.fourm_content}>
                     {categorys.map((c) => {
                         return <> 
-                            <CategoryContainer toggleAddModel={setModelActive} isAdmin={userStore.permissions ? userStore.permissions.includes("MODERATOR") : false} name={c.title} id={c.id} key={c.id} />
+                            <CategoryContainer 
+                                toggleAddModel={setModelActive} 
+                                isAdmin={userStore.permissions ? userStore.permissions.includes("MODERATOR") : false} 
+                                name={c.title} 
+                                id={c.id} 
+                                key={c.id} 
+                            />
+
                             <div className={styles.top_spacer}></div>
                         </>
                     })}

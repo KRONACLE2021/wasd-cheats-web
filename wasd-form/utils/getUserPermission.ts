@@ -1,4 +1,7 @@
 export default function getUserPermission(permissionSet: Array<string>) {
+    
+    if(!permissionSet) return "Member";
+
     let highestPermission = 4;
 
     for(var i of permissionSet) {

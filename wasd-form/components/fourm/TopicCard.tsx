@@ -14,6 +14,16 @@ const PostCard: React.FC<{ title: string, description: string, imgUrl: string, i
                 <h2 className={styles.topic_title}>{props.title}</h2>
                 <p className={styles.topic_description}>{props.description}</p>
             </div>
+            <div className={styles.topic_stats_container}>
+                <div className={styles.topic_stats}>
+                    <h3>44</h3>
+                    <h4>Topics</h4>
+                </div>
+                <div className={styles.topic_stats}>
+                    <h3>106</h3>
+                    <h4>Posts</h4>
+                </div>
+            </div>
         </div>
     )
 } 

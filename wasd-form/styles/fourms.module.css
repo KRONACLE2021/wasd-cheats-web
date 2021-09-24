@@ -1,9 +1,35 @@
 .main_container {
     display: flex;
-    max-width: 1564px;
-    padding: 40px 0px;
+    max-width: 100%;
+    padding: 0px 0px;
     margin: 0 auto;
+    flex-direction: column;
+    align-items: center;
 
+}
+
+.fourm_master_header {
+    display: flex;
+    width: 100%;
+    height: 220px;
+    background: linear-gradient(to right, var(--pink), var(--purple));
+    align-items: center;
+    justify-content: center;
+}
+
+.fourm_master_header_logos {
+    text-align: center;
+}
+
+.fourm_master_header h1 {
+    font-size: 64px;
+    letter-spacing: 2px;
+    font-weight: 400;
+    margin-bottom: 0;
+}
+
+.fourm_master_header p {
+    margin-top: 0;
 }
 
 .editor_container {
@@ -52,13 +78,14 @@
 }
 
 .main_header {
-    margin-top: 70px;
+    margin-top: 30px;
     width: 100%;
     
 }
 
 .fourm_main_cotent {
-    width: 1230px !important;
+    width: 100% !important;
+    max-width: 1564px;
     padding: 0px 30px;
 }
 
@@ -143,11 +170,39 @@
 
 .topic_card_container {
     display: flex;
+    border-left: 5px solid var(--pink);
     align-items: center;
     cursor: pointer;
-    padding: 15px 10px;
+    padding: 2px 20px;
+    transition: all 0.3s ease;
+    width: 100%;
 }
 
+.topic_card_container:hover {
+    background-color: rgba(0, 0, 0, 0.5);
+    border-left: 1px solid var(--purple);
+}
+
+.topic_stats_container {
+    margin-left: auto;
+    display: flex;
+}
+
+.topic_stats {
+    text-align: center;
+    margin-right: 20px;
+}
+
+.topic_stats h3 {
+    margin-bottom: 0px;
+}
+
+.topic_stats h4 {
+    color: grey;
+    text-transform: uppercase;
+    font-weight: 400;
+    margin-top: 5px;
+}
 
 .topic_card_container .topic_title {
     font-size: 19px;
@@ -201,14 +256,15 @@
 .topic_header {
     width: 100%;
     height: auto;
-    background-color: var(--bg-secondary);
     border-radius: 0px;
-    padding: 10px 30px;
+    padding: 10px 0px;
 }
 
 .topic_header .header {
     font-size: 22px;
     font-weight: bold;
+    margin-bottom: 5px;
+    font-weight: 400;
 }
 
 .thread_create {
@@ -225,7 +281,6 @@
 .thread_create_container {
     margin-top: 10px;
     margin-bottom: 10px;
-    float: right;
 }
 
 .editor_main_container {
@@ -457,7 +512,6 @@
 }
 
 .content_actions {
-    border-top: 2px solid rgb(80, 79, 79);
     width: 100%;
     padding: 11px 0px;
     height: auto;
@@ -512,3 +566,50 @@
     background-color: red !important;
 }
 
+.fourm_user_page_container {
+    padding: 100px 0px;
+    width: var(--max-width);
+}
+
+.user_banner {
+    width: 100%;
+    height: 175px;
+    object-fit: cover;
+}
+
+
+.user_stats_container .user_avatar {
+    height: 100px !important;
+    width: 100px !important;
+    border-radius: 50px;
+}
+
+.user_stats_container {
+    height: auto;
+    min-height: 300px;
+    width: 100%;
+    background-color: var(--bg-secondary);
+
+}
+
+.user_stats_items {
+    padding: 0px 20px;
+}
+
+.user_stats_items h1 {
+    margin: 0;
+    margin-top: 10px;
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+.user_stats_items p {
+    margin: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+
+}
+
+.user_info_flex {
+    display: flex;
+    margin-top: -75px;
+    padding: 0px 20px;
+}

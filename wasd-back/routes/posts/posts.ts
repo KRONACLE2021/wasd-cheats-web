@@ -32,8 +32,18 @@ Route.delete("/delete/:id", checkAuth, async (req, res, next) => {
 
     if(post_.uid !== res.locals.user.uid && !res.locals.user.permissions.includes("MODERATOR")) return res.json({ error: true, errors: ["You do not have permission to modify this content!"] });
 
-    await Posts.deleteOne({ id: postId });
+    let thread = await Threads.findOne({ id: post_.threadId });
 
+    if(!thread) return res.json({ error: true, errors: ["This post could not be deleted because its not attached to any thread! Thats weird..."]})
+
+    thread.posts.splice(thread.posts.indexOf(post_), 1);
+
+    await thread.save();
+
+    if(thread.posts.length == 0) await Threads.deleteOne({ id: thread.id });
+    
+    await Posts.deleteOne({ id: postId });
+ 
     return res.json({ done: true, message: "Post has been deleted." });
 });
 
