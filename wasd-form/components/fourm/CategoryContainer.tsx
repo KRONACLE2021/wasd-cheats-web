@@ -10,7 +10,7 @@ const CategoryContainer: React.FC<{name: string, id: string, isAdmin: any, toggl
 
     const dispatch = useDispatch();
     const [modelIsActive, setModelActive] = useState<boolean>(false);
-    const [topicCreateData, setTopicCreateData] = useState({});
+    const [topicCreateData, setTopicCreateData] = useState({ category: props.id });
     const topics = useSelector(state => state.topics.topics);
 
     useEffect(() => {
@@ -18,27 +18,29 @@ const CategoryContainer: React.FC<{name: string, id: string, isAdmin: any, toggl
     }, []);
 
     const adminCreateTopic = () => {
-
+        console.log(topicCreateData);
     }
 
     return (
         <>
             <ModelContainer isActive={modelIsActive} setModelActive={setModelActive}>
-                <h1>Create a new topic</h1>
-                <div>
+                <div className={styles.topic_create_model}>
+                    <h1>Create a new topic</h1>
                     <div>
-                        <p>Topic name</p>
-                        <input className={styles.input} placeholder={"Topic Name"} onChange={(e) => setTopicCreateData({...topicCreateData, name: e.target.value})}></input>
+                        <div>
+                            <p>Topic name</p>
+                            <input className={styles.input} placeholder={"Topic Name"} onChange={(e) => setTopicCreateData({...topicCreateData, name: e.target.value})}></input>
+                        </div>
+                        <div>
+                            <p>Topic description</p>
+                            <input className={styles.input} placeholder={"Topic Description"} onChange={(e) => setTopicCreateData({...topicCreateData, description: e.target.value})}></input>
+                        </div>
+                        
+                        <div className={styles.top_spacer}></div>
+                        <FileUploader reccomended_size={"50x50"} uploadType={"icon"} output={(attachmentId: string) => {setTopicCreateData({ ...topicCreateData, attachmentId})}} />
+                        <button className={styles.add_topic_btn} onClick={() => adminCreateTopic()}>Create Topic</button>
+                        <div className={styles.top_spacer}></div>
                     </div>
-                    <div>
-                        <p>Topic description</p>
-                        <input className={styles.input} placeholder={"Topic Description"} onChange={(e) => setTopicCreateData({...topicCreateData, description: e.target.value})}></input>
-                    </div>
-                    
-                    <div className={styles.top_spacer}></div>
-                    <FileUploader reccomended_size={"50x50"} uploadType={"icon"} />
-                    <button className={styles.add_topic_btn} onClick={() => adminCreateTopic}>Create Topic</button>
-                    <div className={styles.top_spacer}></div>
                 </div>
             </ModelContainer>
             <div className={styles.category_container}>
@@ -47,8 +49,6 @@ const CategoryContainer: React.FC<{name: string, id: string, isAdmin: any, toggl
                     {props.isAdmin ? (
                         <div className={styles.topic_actions_container}>
                             <button className={styles.add_topic_btn} onClick={() => setModelActive(true)}>Add Topic</button>
-                            <button className={styles.add_topic_btn} onClick={() => setModelActive(true)}>Delete Topic</button>
-                            <button className={styles.add_topic_btn} onClick={() => setModelActive(true)}>Edit Topic</button>
                         </div>
                     ) : ""}
                 </div>

@@ -45,6 +45,7 @@ export default function UserPage() {
                             <h1>{userStore?.username}</h1>
                             <p>{getUserPermission(userStore?.permissions)}</p>
                         </div>
+                        <p></p>
                     </div>
                 </div>
                 

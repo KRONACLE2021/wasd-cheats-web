@@ -7,7 +7,7 @@ import Router from 'next/router';
 
 const Navbar : React.FC<any> = (props) => {
     
-    let userStore = useSelector(state => state.user);
+    let userStore = useSelector(state => state.user.user);
 
     return (
         <div className={styles.navbar_container}>

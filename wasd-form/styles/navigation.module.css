@@ -1,6 +1,7 @@
 .navbar_container {
     position: absolute;
     z-index: 4;
+    top: 0;
     width: 100%;
     display: flex;
     justify-content: flex-end;

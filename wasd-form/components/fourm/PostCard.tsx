@@ -43,9 +43,9 @@ const PostCard: React.FC<{ contents: string, uid: string, createdAt: string, id:
     }
 
     const deletePost = async () => {
-        if(!userStore.api_key) return;
+        if(!userStore.user.api_key) return;
 
-        const res = await DeletePost(props.id, userStore.api_key, dispatch);
+        const res = await DeletePost(props.id, userStore.user.api_key, dispatch);
         
         if(res?.error){
             console.log(res.error);
@@ -61,7 +61,7 @@ const PostCard: React.FC<{ contents: string, uid: string, createdAt: string, id:
             fasIcon: faEdit,
             fasSize: "lg",
             eventHandeler: () => {},
-            permission: props.uid == userStore.uid
+            permission: props.uid == userStore.user.uid
         },
         {
             name: "Report",
@@ -75,7 +75,7 @@ const PostCard: React.FC<{ contents: string, uid: string, createdAt: string, id:
             fasIcon: faTrash,
             fasSize: "lg",
             eventHandeler: () => setDeleteModelActive(true),
-            permission: props.uid == userStore.uid || userStore?.permissions?.includes("MODERATOR")
+            permission: props.uid == userStore.user.uid || userStore?.user?.permissions?.includes("MODERATOR")
         },
     ]
 
@@ -102,7 +102,7 @@ const PostCard: React.FC<{ contents: string, uid: string, createdAt: string, id:
                     </div>
                     <div className={styles.post_content}>
                     <div dangerouslySetInnerHTML={{ __html: contents }}></div>
-                    
+                        
                        <ActionsBar actions={userActions} />
                     </div>
             </div>

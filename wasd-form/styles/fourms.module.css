@@ -613,3 +613,8 @@
     margin-top: -75px;
     padding: 0px 20px;
 }
+
+.topic_create_model {
+    width: 600px;
+    padding: 20px;
+}

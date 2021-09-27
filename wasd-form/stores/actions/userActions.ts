@@ -1,6 +1,12 @@
-import { API, LOGIN_ROUTE, REGISTER_ROUTE, GET_CURRENT_USER } from '../../requests/config';
+import { IUser } from '../../interfaces';
+import { 
+    API, 
+    LOGIN_ROUTE, 
+    REGISTER_ROUTE, 
+    GET_CURRENT_USER 
+} from '../../requests/config';
 import Requester from '../../requests/Requester';
-import { SET_USER } from '../actions';
+import { FETCH_USER_PENDING, FETCH_USER_SUCCESS, SET_USER } from '../actions';
 
 const Requester_ = new Requester(API);
 
@@ -11,36 +17,52 @@ export const SetUser = (user: any) => {
     }
 };
 
-export const RefreshUser = async (dispatch: any) => {
-    if(typeof window !== "undefined"){
+export const FetchUserPending = () => {
+    return {
+        type: FETCH_USER_PENDING
+    }
+}
 
-        console.log("[AUTH MANAGER] Trying to refresh previous session.")
+export const FetchUserSuccess = (user: any) => {
+    return {
+        type: FETCH_USER_SUCCESS,
+        payload: user
+    }
+}
 
-        let api_key = localStorage.getItem("_wasd_api");
 
-        if(!api_key) {
-            console.log("[AUTH MANAGER] No Previous user has logged in.")
-            return;
-        };
+export const RefreshUser = () => {
+    return (dispatch) => {
+        if(typeof window !== "undefined"){
 
-        let result = await Requester_.makeGetRequest(GET_CURRENT_USER, {
-            headers: {
-                authorization: `${api_key}`
-            },
-            queryStringParams: []
-        });
+            dispatch(FetchUserPending());
 
-        if(!result.error){
-            if(result.username){
-                dispatch({
-                    type: SET_USER,
-                    payload: result
-                })
-            }
-        } else {
-            console.log("[AUTH MANAGER] Failed to refresh users session");
+            console.log("[AUTH MANAGER] Trying to refresh previous session.")
+    
+            let api_key = localStorage.getItem("_wasd_api");
+    
+            if(!api_key) {
+                console.log("[AUTH MANAGER] No Previous user has logged in.")
+                return;
+            };
+    
+            Requester_.makeGetRequest(GET_CURRENT_USER, {
+                headers: {
+                    authorization: `${api_key}`
+                },
+                queryStringParams: []
+            }).then((res) => {
+                if(!res.error){
+                    dispatch(FetchUserSuccess(res));
+                }
+            }).catch((err) => {
+                console.log("[AUTH MANAGER] Failed to refresh users session");
+            });
+    
+    
         }
     }
+
 }
 
 export const LoginUser = async (login: {username: string, password: string}, dispatch : any) => {

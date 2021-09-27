@@ -53,42 +53,35 @@ const TopicPage : React.FC<any> = () => {
         },
     ]
 
-    const fetchTopic = async () => {
-        let res = await FetchTopicById(id, dispatch);
-
-        if(res.error) { 
-            console.log(res);
-        }
-    }
-
-    useEffect(() => {
-        requestTopics(0, 10);
-    }, [id]);
-
-
     useEffect(() => {
         if(topics.length == 0) {
-            fetchTopic();
+            dispatch(FetchTopicById(id));
+        }
+
+        if(id !== undefined){
+            dispatch(FetchThreadsByTopic(id, 0, 20));
         }
     }, [id]);
 
-    const requestTopics = async (skip: number, limit: number) => {
-        let result = await FetchThreadsByTopic(id, skip, limit, dispatch);
-
-        setActiveThreads(result.threads);
-    }
+    useEffect(() => {
+        const current = threads.slice((currentPage - 1) * 10, threads.length < 10 ? 10 : threads.length);
+        setActiveThreads(current);
+    }, [currentPage, threads.length]);
 
     const pagination = (page : number) => {
         let totalposts = topics[0]?.threads?.length;
 
-        let skipAmount =  (page - 1) * 10;
+        let skipAmount = (page - 1) * 10;
         
         setCurrentPage(page);
 
-        requestTopics(skipAmount, 10);
+        dispatch(FetchThreadsByTopic(id, skipAmount, 20));     
+ 
     }
 
     const PaginatorWithVars = <Paginator postsPerPage={10} totalPosts={ topics[0] ? topics[0].threads.length : 0 } maxPaginationNumbers={5} currentPage={currentPage} paginate={pagination} />;
+ 
+   
 
     return (
 

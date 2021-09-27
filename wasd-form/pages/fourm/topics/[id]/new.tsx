@@ -25,7 +25,7 @@ const NewThread: React.FC<any> = (props) => {
 
 
     const submitForm = async () => {
-        let response = await CreateThread({title, post: htmlPost, attachments: null, topic_id: id }, user.api_key, dispatch);
+        let response = await CreateThread({title, post: htmlPost, attachments: null, topic_id: id }, user.user.api_key, dispatch);
         if(!response.error){
             router.push(`/fourm/threads/${response.id}`);
         } else {
@@ -34,7 +34,7 @@ const NewThread: React.FC<any> = (props) => {
     }
 
     useEffect(() => {
-        if(!user.username){
+        if(!user.user.username){
             router.push("/login");
         } else {
             setLoading(false);

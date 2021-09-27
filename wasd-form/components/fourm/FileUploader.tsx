@@ -13,11 +13,11 @@ let allowedFileTypes = [
     "image/x-icon"
 ];
 
-const FileUploader : React.FC<any> = ({ reccomended_size, uploadType, data })  => {
+const FileUploader : React.FC<{ reccomended_size: string, uploadType: "icon" | "image", output: (arg: string) => void}> = ({ reccomended_size, uploadType, output })  => {
     const [file, setFile] = useState<{selectedFile: null | File }>({ selectedFile: null });
     const [fileUrl, setFileUrl] = useState<any>("");
 
-    const user = useSelector(state => state.user);
+    const userStore = useSelector(state => state.user);
 
     const onFileChange = e => {
         console.log("[WASD Uploader] Got file user wants to upload");
@@ -43,7 +43,7 @@ const FileUploader : React.FC<any> = ({ reccomended_size, uploadType, data })  =
 
         let result = await axios.post(`${API}/${USER_FILE_UPLOAD}`, formData, {
             headers: {
-                authorization: user.api_key
+                authorization: userStore.user.api_key
             }
         }).then((res) => res)
         .catch((err) => err.response);
@@ -52,7 +52,7 @@ const FileUploader : React.FC<any> = ({ reccomended_size, uploadType, data })  =
         if(result.error == true) {
             alert("[AXIOS] Error uploading file: " + result.errors);
         } else {
-            console.log(result);
+            output(result.id);
         }
     }
     

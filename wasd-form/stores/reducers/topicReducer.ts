@@ -1,7 +1,10 @@
-import { ADD_TOPIC, REMOVE_TOPIC, SET_TOPICS, SET_TOTAL_THREADS } from "../actions";
+import { ADD_TOPIC, FETCH_TOPICS_FAILED, FETCH_TOPICS_PENDING, FETCH_TOPICS_SUCCESS, REMOVE_TOPIC, SET_TOPICS, SET_TOTAL_THREADS } from "../actions";
 
 const initalState = {
     topics: [],
+    loading: true,
+    error: false,
+    errors: [],
     lastUpdated: new Date()
 };
 
@@ -18,7 +21,18 @@ export default function topicReducer(state : any = initalState, action : { type:
                 state.topics.push(action.payload);
             }
             return state;
-            
+        case FETCH_TOPICS_PENDING:
+            state.loading = true;
+            return state;
+        case FETCH_TOPICS_SUCCESS:
+            state.topics.push(action.payload);
+            state.loading = false;
+            return state;
+        case FETCH_TOPICS_FAILED:
+            state.loading = false;
+            state.error = true;
+            state.errors = action.payload;
+            return state;
         case REMOVE_TOPIC:
             for(var i in state.topics) {
                 if(state.topics[i].id == action.payload){
