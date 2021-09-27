@@ -113,6 +113,7 @@ const ThreadPage: React.FC<any> = (props) => {
                                 user={i.user}
                                 createdAt={i.createdAt}
                                 attachments={i.attachments} 
+                                thread={thread}
                     /> 
         })}
 

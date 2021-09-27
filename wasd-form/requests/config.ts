@@ -1,6 +1,5 @@
 const development = true;
 
-
 export const API = development ? "http://localhost:8080" : "https://api.wasdcheats.cc";
 export const API_STATUS_CHECK = "api/status";
 
@@ -20,6 +19,9 @@ export const FETCH_POSTS_BY_THREAD = (thread_id: string) => `api/v1/threads/${th
 export const CREATE_NEW_POST = `api/v1/posts/create`
 export const CREATE_NEW_TOPIC = `api/v1/topics/create`;
 export const DELETE_POST = (id: string) => `api/v1/posts/delete/${id}`;
+
+/* Store Routes */
+export const GET_STORE_ITEMS = `api/v1/shop/items`;
 
 /* File upload routes */
 export const USER_FILE_UPLOAD = `api/v1/upload/usercontent`;

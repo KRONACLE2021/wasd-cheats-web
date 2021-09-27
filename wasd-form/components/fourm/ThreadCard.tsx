@@ -9,10 +9,7 @@ const ThreadCard: React.FC<IThread> = (props) => {
 
     
     let user = useUserRequest(props.uid);
-
-    console.log(user);
-
-
+    
     return (
         <div onClick={() => Router.push(`/fourm/threads/${props.id}`)} className={styles.thread_card}>
             <div className={styles.thread_info}>

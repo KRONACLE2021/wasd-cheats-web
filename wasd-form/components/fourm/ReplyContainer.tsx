@@ -19,10 +19,10 @@ const ReplyContainer: React.FC<{user: any, topic_id: string}> = ({ user, topic_i
     const editorState = useSelector(state => state.editorStore); 
 
     useEffect(() => {
-        if(user.uid){
+        if(user.user.uid){
             setFillerText("Reply to this conversation.");
         }
-    }, [user]);
+    }, [user.loading]);
 
     useEffect(() => {
         if(editorState.replying_to.length !== 0){

@@ -23,7 +23,7 @@ const Login : React.FC<any> = (props) => {
     
     useEffect(() => {
         if(userStore){
-            if(userStore.username){
+            if(userStore.user.username){
                 Router.push("/fourm");
             }
         }

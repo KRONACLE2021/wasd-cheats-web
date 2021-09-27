@@ -4,6 +4,7 @@ import Topics from '../../models/Topics';
 import Categorys from '../../models/Categorys';
 import checkAuth from '../../middleware/checkAuth';
 import Threads from '../../models/Threads';
+import Attachments from '../../models/Attachments';
 
 let Route = Router();
 
@@ -13,8 +14,12 @@ Route.use(json());
 
 Route.get("/:id/threads", async (req, res, next) => {
 
-    let limit : any = parseInt(req.query.limit);
-    let skip : any = parseInt(req.query.skip);
+
+    let queryLimit : string = req.query.limit as string;
+    let querySkip : string = req.query.skip as string;
+
+    let limit : any = parseInt(queryLimit);
+    let skip : any = parseInt(querySkip);
 
     if(isNaN(limit)) limit = 20;
     if(isNaN(skip)) limit = 0;
@@ -64,14 +69,16 @@ Route.post("/create", checkAuth, async (req, res, next) => {
     let title = body.title;
     let description = body.description;
     let category = body.category;
-    let imgUrl = body.imgUrl;
+    let attachmentId = body.attachmentId;
 
     let errors : Array<string> = [];
 
+    let attachment = await Attachments.findOne({ id: attachmentId });
+
+    if(!attachment) errors.push("That attachment id is invalid, please upload a image!");
     if(!title) errors.push("The topic you want to create must have a title!");
     if(!description) errors.push("The topic you want to create must have a description!");
     if(!category) errors.push("The topic you want to create must have a category id!");
-    if(!imgUrl) errors.push("The topic you want to create must have a image!");
 
     let Category = await Categorys.findOne({ id: category });
 
@@ -81,7 +88,10 @@ Route.post("/create", checkAuth, async (req, res, next) => {
 
     let id = uuid();
 
-    let topic = await Topics.create({ id, description, category, imgUrl, threads: [], title });
+    let topic = await Topics.create({ id, description, category, imgUrl: attachment.url, threads: [], title });
+
+    attachment.attachedTo = id;
+    attachment?.save();
 
     Category?.topics.push(id);
 

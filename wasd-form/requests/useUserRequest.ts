@@ -10,7 +10,6 @@ export default function useUserRequest(id: string) {
     
     const startFetch = async () => {
         axios.get(`${API}/${FETCH_USER(id)}`).then((res) => {
-            console.log(res);
             setUser(res.data);
         }).catch((err) => setUser({ error: true, errors: err.response.data.errors}));
     }

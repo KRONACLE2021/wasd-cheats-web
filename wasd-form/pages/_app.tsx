@@ -1,7 +1,8 @@
 import { AppProps } from 'next/app';
+import { useEffect } from 'react';
 import Store from '../stores/store';
 import Navbar from '../components/shared/Navbar';
-import { Provider } from 'react-redux';
+import { Provider, useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import '../styles/globals.css';
 import "../styles/vars.css";
@@ -13,8 +14,11 @@ import { createWrapper } from 'next-redux-wrapper';
 function MyApp({ Component, pageProps }: AppProps) {
 
   let dispatch = useDispatch();
+  let userStore = useSelector(state => state.user);
 
-  RefreshUser(dispatch);
+  useEffect(() => {
+    dispatch(RefreshUser());
+  }, [userStore]);
 
   return <>
     <Provider store={Store}>

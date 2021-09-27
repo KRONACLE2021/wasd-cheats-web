@@ -1,8 +1,11 @@
-import { ADD_THREADS, CREATE_THREAD, SET_THREAD_OWNER } from '../actions';
+import { ADD_THREADS, CREATE_THREAD, FETCH_THREADS_FAILED, FETCH_THREADS_PENDING, FETCH_THREADS_SUCCESS, SET_THREAD_OWNER } from '../actions';
 import filterDuplicates from '../../utils/filterDuplicates';
 
 const initalState = {
     threads: [],
+    loading: false,
+    error: false,
+    errors: [],
     lastUpdated: new Date(),
     total: 0
 }
@@ -26,7 +29,36 @@ export default function threadReducer(state : any = initalState, action: { type:
             state.total = total;
 
             return state;
+        case FETCH_THREADS_SUCCESS: 
+            state.loading = false;
+            state.error = false;
+            state.errors = [];
             
+            let threads_ = action.payload.threads || action.payload;
+            let total_ = action.payload.amount || 0;
+            //check if threads is an array
+
+            console.log(threads_);
+            
+            if(threads_.length) {
+                state.threads = state.threads.concat(threads_); 
+            } else {
+                state.threads.push(threads_);
+            }
+
+            state.threads = filterDuplicates(state.threads, (a, b) => a.id == b.id);
+            state.total = total_;
+
+            return state;
+        case FETCH_THREADS_PENDING:
+            state.loading = true;
+            return state;
+        case FETCH_THREADS_FAILED:
+            state.error = true;
+            state.loading = false;
+            state.errors = action.payload;
+            state.threads = [];
+            return state;
         case CREATE_THREAD: 
             let thread = action.payload;
 

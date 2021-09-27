@@ -36,6 +36,9 @@ Route.post("/register", async (req, res, next) => {
     if(usernameCheck) return res.json({error: true, errors: ["That username already exsists!"]}).status(300);
     if(emailCheck) return res.json({error: true, errors: ["An account with that email is already registered."]}).status(300);
 
+    
+    if(/[!/\\=+<> ]/.test(body.username)) return res.json({ error: true, errors: ["This username contains invalid characters such as '!/\\=+<>'"]}) 
+
     const generateRandomString = (length=6) => Math.random().toString(20).substr(2, length)
 
     bcrypt.hash(body.password, 10,  async (err, hash) => {

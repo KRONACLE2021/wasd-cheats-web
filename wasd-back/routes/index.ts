@@ -8,6 +8,7 @@ import Categorys from './posts/categorys';
 import StoreAdmin from './store/admin';
 import UserRoutes from './user';
 import UploadRoute from './upload';
+import ItemRoutes from './store/items';
 
 let Route = Router();
 
@@ -30,6 +31,7 @@ Route.use("/api/v1/upload", UploadRoute);
 Route.use("/api/v1/users", UserRoutes);
 
 /* Store Routes */
+Route.use("/api/v1/shop/items", ItemRoutes);
 Route.use("/api/v1/shop/admin", StoreAdmin);
 
 

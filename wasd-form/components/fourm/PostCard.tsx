@@ -9,8 +9,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import getUserPermission from '../../utils/getUserPermission';
 import { QuoteUser, SetEditorFocused } from '../../stores/actions/textEditorActions';
 import ModelContainer from '../models/ModelContainer';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEdit, faTrash, faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
+import ActionsBar from './ActionsBar';
 
-const PostCard: React.FC<{ contents: string, uid: string, createdAt: string, id: string, attachments: Array<string>, user: IUser | null, replyToPost: Function}> = (props) => {
+
+const PostCard: React.FC<{ contents: string, uid: string, createdAt: string, id: string, attachments: Array<string>, user: IUser | null, replyToPost: Function, thread: any}> = (props) => {
 
     const [contents, setContents] = useState<string | null>(null);
     const [deleteModelActive, setDeleteModelActive] = useState(false);
@@ -39,9 +43,9 @@ const PostCard: React.FC<{ contents: string, uid: string, createdAt: string, id:
     }
 
     const deletePost = async () => {
-        if(!userStore.api_key) return;
+        if(!userStore.user.api_key) return;
 
-        const res = await DeletePost(props.id, userStore.api_key, dispatch);
+        const res = await DeletePost(props.id, userStore.user.api_key, dispatch);
         
         if(res?.error){
             console.log(res.error);
@@ -50,13 +54,38 @@ const PostCard: React.FC<{ contents: string, uid: string, createdAt: string, id:
         }
     }
 
+
+    let userActions = [
+        {
+            name: "Edit",
+            fasIcon: faEdit,
+            fasSize: "lg",
+            eventHandeler: () => {},
+            permission: props.uid == userStore.user.uid
+        },
+        {
+            name: "Report",
+            fasIcon: faExclamationTriangle,
+            fasSize: "lg",
+            eventHandeler: () => {},
+            permission: true
+        },
+        {
+            name: "Delete",
+            fasIcon: faTrash,
+            fasSize: "lg",
+            eventHandeler: () => setDeleteModelActive(true),
+            permission: props.uid == userStore.user.uid || userStore?.user?.permissions?.includes("MODERATOR")
+        },
+    ]
+
     return (
         <>
             {userStore?.permissions?.includes("MODERATOR") ? (
                 <ModelContainer isActive={deleteModelActive} width={"500px"} height={"auto"} setModelActive={setDeleteModelActive}>
                     <div style={{ padding: "10px 25px"}}>
                         <h2>Delete this post?</h2>
-                        <p style={{fontWeight: "bolder"}}>You cannot undelete a post! Once its deleted its gone, are you really sure you want to delete this?</p>
+                        <p style={{fontWeight: "bolder"}}>{props.thread?.posts?.length() == 1 ? "You cannot undelete a post! Once its deleted its gone, are you really sure you want to delete this?" : "Since this is the last post in the thread, if you delete this the thread will be deleted. Are you sure you want to delete this?"}</p>
                     </div>
                     <div className={styles.delete_button_container}>
                         <button className={styles.delete_button} onClick={() => setDeleteModelActive(false)}>Cancel</button>
@@ -73,18 +102,8 @@ const PostCard: React.FC<{ contents: string, uid: string, createdAt: string, id:
                     </div>
                     <div className={styles.post_content}>
                     <div dangerouslySetInnerHTML={{ __html: contents }}></div>
-                    
-                    <div className={styles.content_actions}>
-                            <ul>
-                                <li onClick={() => ReplyToPost()}><img src={"/reply-all.png"} alt={"reply"} /></li>
-                                <li><img src={"/warning.png"} alt={"report"} /></li>
-                                
-                                {userStore?.permissions?.includes("MODERATOR") ? (
-                                    <li onClick={() => setDeleteModelActive(true)}><img src={"/delete.png"} alt={"delete"}/></li>
-                                ) : ""}        
-                            </ul>
-
-                        </div>
+                        
+                       <ActionsBar actions={userActions} />
                     </div>
             </div>
         </>
