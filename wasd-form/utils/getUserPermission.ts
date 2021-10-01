@@ -31,3 +31,24 @@ export const permissions : { [unit: number]: string } = {
     3: "Trial moderator",
     4: "Member"
 }
+
+export const colorPermissionTable : { [unit: string]: string} = {
+    SUPERUSER: "perm-su",
+    ADMINISTRATOR: "perm-admin",
+    MODERATOR: "perm-mod",
+    TRIAL_MOD: "perm-trial",
+    ALLOW_POSTING: "perm-member",
+}
+
+export function getPermissionColor(permissionSet: Array<string>){
+    if(!permissionSet) return "perm-member";
+
+    let highestPermission = 4;
+    let color = "perm-member";
+
+    for(var i of permissionSet) {
+        if(permissionTable[i] < highestPermission) color = colorPermissionTable[i];
+    }
+
+    return color;
+} 

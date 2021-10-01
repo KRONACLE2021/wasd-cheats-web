@@ -51,3 +51,5 @@ export const FOCUS_EDITOR = "FOCUS_EDITOR";
 
 /* SHOP ROUTES */
 export const SET_SHOP_ITEMS = "SET_SHOP_ITEMS";
+export const GET_ITMES_PENDING = "GET_ITEMS_PENDING";
+export const GET_ITEMS_FAILED = "GET_ITEMS_FAILED";

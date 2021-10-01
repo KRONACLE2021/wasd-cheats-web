@@ -1,0 +1,66 @@
+.navbar_root {
+    height: 100%;
+    width: 250px;
+    position: absolute;
+    left: 0;
+    background-color: var(--bg-secondary);
+}
+
+.admin_root {
+    position: absolute;
+    left: 250px;
+    top: 50px;
+}
+
+.logged_in_user {
+    text-align: center;
+    margin-top: 75px;
+}
+
+.logged_in_user .pfp {
+    height: 75px;
+    width: 75px;
+    object-fit: cover;
+    border-radius: 50%;   
+}
+
+.logged_in_user h3 {
+    margin-top: 5px;
+    margin-bottom: 0px;
+}
+
+.logged_in_user p {
+    margin-top: 10px;
+}
+
+.navbar_items ul {
+    list-style-type: none;
+    padding: 0px 20px;
+}
+
+.navbar_items ul li {
+    padding: 5px;
+    cursor: pointer;
+}
+
+.navbar_items ul li span {
+    margin-left: 10px;
+    font-size: 16px;
+}
+
+.dashboard_container {
+    padding: 10px 30px;
+}
+
+.dash_items_container {
+    display: flex;
+
+}
+
+.dashboard_card_container {
+    min-width: 400px;
+    min-height: 160px;
+    padding: 0px 20px;
+    background-color: var(--bg-secondary);
+    margin-left: 20px;
+}

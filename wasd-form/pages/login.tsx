@@ -40,6 +40,8 @@ const Login : React.FC<any> = (props) => {
         if(res) {
             if(res.error) {
                 setErrors(res.errors);
+            } else {
+                Router.push("/fournm");
             }
         } 
 

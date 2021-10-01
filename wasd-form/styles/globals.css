@@ -168,3 +168,24 @@ a {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
+
+.perm-su {
+  color: rgb(140, 0, 255); 
+}
+
+.perm-admin {
+  color: rgb(0, 153, 255);
+}
+
+.perm-mod {
+  color: rgb(255, 0, 119);
+}
+
+.perm-trial {
+  color: rgba(255, 0, 119, 0.63);
+}
+
+.member {
+  color: grey;
+}
+
