@@ -1,8 +1,9 @@
-import { SET_USER, FETCH_USER_PENDING, FETCH_USER_SUCCESS, UNSET_USER } from "../actions";
+import { SET_USER, FETCH_USER_PENDING, FETCH_USER_SUCCESS, UNSET_USER, FETCH_USER_POSTS_PENDING, FETCH_USER_POSTS_SUCCESS } from "../actions";
 
 const initalState = {
     loading: false,
-    user: {}
+    user: {},
+    otherCachedUsers: []
 };
 
 export default function userReducer(state : any = initalState, action : { type: string, payload: any}) {
@@ -17,6 +18,14 @@ export default function userReducer(state : any = initalState, action : { type: 
         case SET_USER:
             state.user = action.payload
             return state;
+        case FETCH_USER_POSTS_SUCCESS:
+            if(action.payload.id == state?.user?.uid){
+                state.user.posts = action.payload.posts
+            } else {
+                if(state.otherCachedUsers.filter(i => i["uid"] == action.payload.id).length !== 0){
+                    state.otherCachedUsers[state.otherCachedUsers.indexOf(state.otherCachedUsers.filter(i => i["uid"] == action.payload.id)[0])].posts = action.payload.posts;
+                }
+            }
         default:
             return state;
     }

@@ -427,7 +427,6 @@
 }
 
 .post_user_container .permission_type {
-    color: rgb(255, 0, 157);
     padding: 0;
     margin: 0;
 }
@@ -617,4 +616,27 @@
 .topic_create_model {
     width: 600px;
     padding: 20px;
+}
+
+.user_page_content {
+    display: flex;
+    padding: 0px 30px; 
+}
+
+.user_about_text {
+    color: grey;
+}
+
+.about_user {
+    min-width: 250px;
+}
+
+.user_post_cards .fourm_post_container{
+    border-radius: 7px;
+    background-color: var(--bg-lighter) !important;
+}
+
+.user_posts {
+    width: 100%;
+    padding: 0px 20px;
 }

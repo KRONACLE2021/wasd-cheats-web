@@ -28,3 +28,4 @@ export const USER_FILE_UPLOAD = `api/v1/upload/usercontent`;
 
 /* USER ROUTES */
 export const GET_CURRENT_USER = `api/v1/users/me`;
+export const GET_USER_POSTS = (id: string) => `api/v1/users/${id}/posts`;

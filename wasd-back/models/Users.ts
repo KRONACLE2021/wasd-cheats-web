@@ -11,6 +11,8 @@ export interface IUser {
     permissions: Array<string>;
     api_key: string;
     created_at: Date;
+    banned: boolean;
+    banId: string | null;
 }
 
 
@@ -23,7 +25,8 @@ const UserSchema = new Schema<IUser>({
     created_at: { type: Date, required: true, default: () => new Date() },
     api_key: String,
     posts: Array,
-    uid: String 
+    uid: String ,
+    banned: { type: Boolean, default: false },
 });
 
 

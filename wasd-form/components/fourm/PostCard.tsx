@@ -14,7 +14,7 @@ import { faEdit, faTrash, faExclamationTriangle } from '@fortawesome/free-solid-
 import ActionsBar from './ActionsBar';
 
 
-const PostCard: React.FC<{ contents: string, uid: string, createdAt: string, id: string, attachments: Array<string>, user: IUser | null, replyToPost: Function, thread: any}> = (props) => {
+const PostCard: React.FC<{ contents: string, uid: string | null, createdAt: string, id: string, attachments: Array<string>, user: IUser | null, replyToPost: Function, thread: any}> = (props) => {
 
     const [contents, setContents] = useState<string | null>(null);
     const [deleteModelActive, setDeleteModelActive] = useState(false);
@@ -29,7 +29,6 @@ const PostCard: React.FC<{ contents: string, uid: string, createdAt: string, id:
 
 
     useEffect(async () => {
-        
         if(props.uid){
             let res = await fetchUser(props.uid);
             

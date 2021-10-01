@@ -1,12 +1,20 @@
-import { IUser } from '../../interfaces';
+import { Dispatch } from 'redux';
+import { IPost, IUser } from '../../interfaces';
 import { 
     API, 
     LOGIN_ROUTE, 
     REGISTER_ROUTE, 
-    GET_CURRENT_USER 
+    GET_CURRENT_USER, 
+    GET_USER_POSTS
 } from '../../requests/config';
 import Requester from '../../requests/Requester';
-import { FETCH_USER_PENDING, FETCH_USER_SUCCESS, SET_USER } from '../actions';
+import { 
+    FETCH_USER_PENDING, 
+    FETCH_USER_POSTS_PENDING, 
+    FETCH_USER_POSTS_SUCCESS, 
+    FETCH_USER_SUCCESS, 
+    SET_USER 
+} from '../actions';
 
 const Requester_ = new Requester(API);
 
@@ -30,9 +38,42 @@ export const FetchUserSuccess = (user: any) => {
     }
 }
 
+export const FetchUserPostsPending = () => {
+    return {
+        type: FETCH_USER_POSTS_PENDING   
+    }
+}
+
+export const FetchUserPostsSuccess = (id: string, posts: Array<IPost>) => {
+    return {
+        type: FETCH_USER_POSTS_SUCCESS,
+        payload: {
+            id: id,
+            posts: posts
+        }
+    }
+}
+
+export const FetchUsersPosts = (id: string) => {
+
+    let _id = id;
+
+    return (dispatch: Dispatch<any>) => {
+        dispatch(FetchUserPostsPending());
+        Requester_.makeGetRequest(`${GET_USER_POSTS(_id)}`).then((res) => {
+            if(!res.error){
+                dispatch(FetchUserPostsSuccess(_id, res.posts));
+            } else {
+                
+            }
+        }).catch((err) => {
+
+        });
+    }
+}
 
 export const RefreshUser = () => {
-    return (dispatch) => {
+    return (dispatch: Dispatch<any>) => {
         if(typeof window !== "undefined"){
 
             dispatch(FetchUserPending());
