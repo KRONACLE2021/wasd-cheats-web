@@ -1,6 +1,6 @@
-export default function getUserPermission(permissionSet: Array<string>) {
+export default function getUserPermission(permissionSet: Array<string>, returnType : string = "permission_string" ) {
     
-    if(!permissionSet) return "Member";
+    if(!permissionSet) return returnType == "permission_string" ? "Member" : 4;
 
     let highestPermission = 4;
 
@@ -8,7 +8,11 @@ export default function getUserPermission(permissionSet: Array<string>) {
         if(permissionTable[i] < highestPermission) highestPermission = permissionTable[i];
     }
 
-    return permissions[highestPermission];
+    if(returnType == "permission_string"){
+        return permissions[highestPermission];
+    } else {
+        return highestPermission;
+    }
 }
 
 

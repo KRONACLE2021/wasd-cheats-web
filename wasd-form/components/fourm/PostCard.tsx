@@ -80,7 +80,7 @@ const PostCard: React.FC<{ contents: string, uid: string | null, createdAt: stri
 
     return (
         <>
-            {userStore?.permissions?.includes("MODERATOR") ? (
+            {userStore?.permissions?.includes("MODERATOR") || props.uid == userStore.user.uid ? (
                 <ModelContainer isActive={deleteModelActive} width={"500px"} height={"auto"} setModelActive={setDeleteModelActive}>
                     <div style={{ padding: "10px 25px"}}>
                         <h2>Delete this post?</h2>

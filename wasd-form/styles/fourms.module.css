@@ -640,3 +640,12 @@
     width: 100%;
     padding: 0px 20px;
 }
+
+.admin_action_button{
+    background-color: var(--purple);
+    color: white;
+    border: none;
+    padding: 10px;
+    font-family: "Roboto", sans-serif;
+    border-radius: 7px;
+}

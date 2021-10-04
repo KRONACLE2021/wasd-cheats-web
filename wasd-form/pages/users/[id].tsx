@@ -55,10 +55,22 @@ export default function UserPage() {
                             <h2>About</h2>
                             <p>We dont know much about {user?.username}</p>
                             <p className={styles.user_about_text}>Created account {moment(user?.created_at).format('MMMM Do YYYY')}</p>
+                            {userStore?.permissions?.includes("MODERATOR") &&  getUserPermission(user?.permissions, "permission_int") < getUserPermission(userStore?.permissions,  "permission_int") ? <div> 
+                                <p>Admin Actions:</p>
+                                <button>Ban User</button>
+                                <button>Delete all posts</button>
+                                <button>Reset Profile information</button>
+                            </div>: ""}
+                            {userStore?.permissions?.includes("MODERATOR") ? <div>
+                                <p>Admin Stats:</p>
+                                <p>Current active subscription: None</p> 
+                                <p>Last logged in IP: <span style={{ color: "red"}}>Protected IP User</span></p>
+                                <button className={styles.admin_action_button}>View users content</button>
+                            </div>: ""}
                         </div>
                         <div className={styles.user_posts}>
                             <h3>Posts:</h3>
-                            {user.posts.map(i => {
+                            {user?.posts.map(i => {
                                 return <SimplePostCard    
                                     key={i.id} 
                                     id={i.id}

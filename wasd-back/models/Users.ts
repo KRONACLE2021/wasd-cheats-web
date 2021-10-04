@@ -1,5 +1,6 @@
 import { Schema, model } from 'mongoose';
 
+
 export interface IUser {
     uid: string;
     email: string;
@@ -13,6 +14,7 @@ export interface IUser {
     created_at: Date;
     banned: boolean;
     banId: string | null;
+    active_subscriptions: Array<String>;
 }
 
 
@@ -27,6 +29,7 @@ const UserSchema = new Schema<IUser>({
     posts: Array,
     uid: String ,
     banned: { type: Boolean, default: false },
+    active_subscriptions: Array
 });
 
 
