@@ -1,4 +1,5 @@
-import { GET_ITMES_PENDING, SET_SHOP_ITEMS, GET_ITEMS_FAILED } from "../actions";
+import filterDuplicates from "../../utils/filterDuplicates";
+import { GET_ITMES_PENDING, SET_SHOP_ITEMS, GET_ITEMS_FAILED, APPEND_SHOP_ITEM } from "../actions";
 
 const initalState = {
     items: [],
@@ -20,6 +21,10 @@ export default function shopItemsReducer(state : any = initalState, action : { t
             state.loading = false;
             state.error = true;
             state.errors = action.payload;
+            return state;
+        case APPEND_SHOP_ITEM:
+            state.items.push(action.payload);
+            filterDuplicates(state.items, (a, b) => a.id == b.id);
             return state;
         default: 
             return state;

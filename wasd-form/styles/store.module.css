@@ -14,7 +14,7 @@
 }
 
 .item_card_container {
-    width: 250px;
+    width: 240px;
     height: auto;
     min-height: 250px;
     padding: 10px 30px;
@@ -23,6 +23,7 @@
     flex-direction: column;
     justify-content: space-around;
     background-color: var(--bg-secondary);
+    border: 1px solid var(--bg-lighter);
 }
 
 .shop_items {
@@ -66,7 +67,7 @@
 }
 
 .view_item {
-    
+    width: 100%;
     padding: 10px 30px;
     border: none;
     border-radius: 7px;

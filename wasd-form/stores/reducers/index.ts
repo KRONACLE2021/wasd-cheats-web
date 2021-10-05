@@ -1,12 +1,12 @@
 import { combineReducers } from "redux";
 import categoryReducer from "./categoryReducer";
-
 import topicReducer from "./topicReducer";
 import userReducer from "./userReducer";
 import postsReducer from './postsReducer';
 import threadReducer from "./threadReducer";
 import textEditorReducer from "./textEditorReducer"; 
 import shopItemsReducer from "./shopItemsReducer";
+import adminReducer from "./adminReducer";
 
 export default combineReducers({
     user: userReducer,
@@ -15,5 +15,6 @@ export default combineReducers({
     postStore: postsReducer,
     threadStore: threadReducer,
     editorStore: textEditorReducer,
-    shopStore: shopItemsReducer
+    shopStore: shopItemsReducer,
+    adminStore: adminReducer
 });

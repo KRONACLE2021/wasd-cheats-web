@@ -36,7 +36,7 @@ const Navbar : React.FC<any> = (props) => {
                                 <li><Link href={"/user/settings"}>Settings</Link></li>
                                 {userStore.username !== undefined ? (userStore.permissions.includes("ADMINISTRATOR") ? (
                                     <>
-                                        <li>Admin Panel</li>
+                                        <li><Link href={"/admin"}>Admin Panel</Link></li>
                                         <li>Moderator</li>
                                     </>
                                 ) : "") : "" }

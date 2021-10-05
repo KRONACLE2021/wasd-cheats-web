@@ -1,15 +1,25 @@
+import moment from 'moment';
 import Router from 'next/router';
 import React, { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import AdminDashboardRoot from '../../components/admin/AdminDashboardRoot';
 import DashbaordCard from '../../components/admin/DashboardCard';
 import Preloader from '../../components/shared/Preloader';
+import { IUser } from '../../interfaces';
+import { adminFetchUsers } from '../../stores/actions/userActions';
 import styles from '../../styles/admin.module.css';
 
 export default function AdminPanel() {
     const [isLoading, setLoading] = useState(true);
 
+    const dispatch = useDispatch();
+
     let userStore = useSelector(state => state.user.user);
+    let recentUserStore = useSelector(state => state.user.otherCachedUsers);
+
+    const fetchAdminInfo = () => {
+        dispatch(adminFetchUsers("RECENT", userStore.api_key));
+    }
 
     useEffect(() => {
         if(userStore){
@@ -17,6 +27,7 @@ export default function AdminPanel() {
                 console.log(userStore);
                 if(userStore.permissions.includes("ADMINISTRATOR")) {
                     setLoading(false);
+                    fetchAdminInfo();
                 } else {
                     Router.push("/fourm")  
                 }
@@ -35,13 +46,10 @@ export default function AdminPanel() {
                         <DashbaordCard>
                             <h3>Recent users</h3>
                             <ul>
-                                <li>astrid - Joined 20 Days ago</li>
+                                {recentUserStore?.map((recentUser_: IUser) => {
+                                    return <li>{recentUser_.username} - Joined {moment(recentUser_.created_at).format('MMMM Do YYYY')}</li>
+                                })}
                             </ul>
-                        </DashbaordCard>
-                        <DashbaordCard>
-                            <h3>Backend server stats</h3>
-                            <h1>CPU: 40%</h1>
-                            <h1>RAM: 350mb of 1gb</h1>
                         </DashbaordCard>
                     </div>
                 </div>

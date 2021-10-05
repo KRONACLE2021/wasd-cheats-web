@@ -4,6 +4,7 @@ import Users from "../models/Users";
 import Ban from '../models/Ban';
 import checkAuth from '../middleware/checkAuth';
 import Posts from '../models/Posts';
+import sanitizeUsers from '../utils/sanitizeUsers';
 
 let Route = Router();
 
@@ -41,17 +42,21 @@ Route.get("/:id/posts", async (req, res, next) => {
     return res.json({ posts: posts });
 })
 
-Route.get("/admin/users", checkAuth, (req, res, next) => {
+Route.get("/admin/users", checkAuth, async (req, res, next) => {
     let sortBy = req.query.sort;
 
     const sortByRecentUsers = async () => {
         let users = await Users.find({}).limit(10).sort({ created_at: 1 });
-        return users;
+
+        let sanitizedUsers_ = sanitizeUsers(users);
+
+        return sanitizedUsers_;
     }   
 
     switch(sortBy){
         case "RECENT":
-            return res.json({ users: sortByRecentUsers() });
+            let users_ = await sortByRecentUsers()
+            return res.json({ users: users_ });
         default: 
             return res.json({ error: true, errors: ["You must sort a user by a type! Accepted sortBy types: ['RECENT']"]});
     }

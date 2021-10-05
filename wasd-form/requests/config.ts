@@ -22,6 +22,8 @@ export const DELETE_POST = (id: string) => `api/v1/posts/delete/${id}`;
 
 /* Store Routes */
 export const GET_STORE_ITEMS = `api/v1/shop/items`;
+export const ADMIN_GET_USER_INCART_ITEMS = `api/v1/shop/admin/users/checkout/incart`;
+export const ADD_STORE_ITEM = `api/v1/shop/admin/item/add`
 
 /* File upload routes */
 export const USER_FILE_UPLOAD = `api/v1/upload/usercontent`;
@@ -29,3 +31,4 @@ export const USER_FILE_UPLOAD = `api/v1/upload/usercontent`;
 /* USER ROUTES */
 export const GET_CURRENT_USER = `api/v1/users/me`;
 export const GET_USER_POSTS = (id: string) => `api/v1/users/${id}/posts`;
+export const GET_USERS = `api/v1/users/admin/users`;

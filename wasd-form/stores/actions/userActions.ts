@@ -5,10 +5,14 @@ import {
     LOGIN_ROUTE, 
     REGISTER_ROUTE, 
     GET_CURRENT_USER, 
-    GET_USER_POSTS
+    GET_USER_POSTS,
+    GET_USERS
 } from '../../requests/config';
 import Requester from '../../requests/Requester';
 import { 
+    ADMIN_USER_FETCH_FAILED,
+    ADMIN_USER_FETCH_PENDING,
+    ADMIN_USER_FETCH_SUCCESS,
     FETCH_USER_PENDING, 
     FETCH_USER_POSTS_PENDING, 
     FETCH_USER_POSTS_SUCCESS, 
@@ -53,6 +57,7 @@ export const FetchUserPostsSuccess = (id: string, posts: Array<IPost>) => {
         }
     }
 }
+
 
 export const FetchUsersPosts = (id: string) => {
 
@@ -168,6 +173,49 @@ export const RegisterUser = async ({email, username, password}: {email : string,
     }
 
 }
+
+const adminFetchUsersPending = () => {
+    return {
+        type: ADMIN_USER_FETCH_PENDING 
+    }
+}
+
+const adminFetchUsersSuccess = (users: Array<IUser>) => {
+    return {
+        type: ADMIN_USER_FETCH_SUCCESS,
+        payload: users
+    }
+}
+
+const adminFetchUsersFailed = (error: any) => {
+    return {
+        type:  ADMIN_USER_FETCH_FAILED,
+        payload: error
+    }
+}
+
+export const adminFetchUsers = (sortBy: string, api_key: string) => {
+
+
+    return (dispatch: Dispatch<any>) => {
+        dispatch(adminFetchUsersPending());
+
+        Requester_.makeGetRequest(GET_USERS, {
+            queryStringParams: [{ name: "sort", value: sortBy }],
+            headers: {
+                Authorization: api_key
+            }
+        }).then((res) => {
+            if(!res.error) {
+                dispatch(adminFetchUsersSuccess(res.users));
+            } else {
+                dispatch(adminFetchUsersFailed(res.errors));
+            }
+        }).catch((err) => {
+            dispatch(adminFetchUsersFailed(err))
+        });
+    }  
+};
 
 export const LogoutUser = () => {
     return {

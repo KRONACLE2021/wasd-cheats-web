@@ -1,7 +1,7 @@
 import { Dispatch } from 'redux';
 import { API, GET_STORE_ITEMS } from '../../requests/config';
 import Requester from '../../requests/Requester';
-import { SET_SHOP_ITEMS, GET_ITMES_PENDING, GET_ITEMS_FAILED } from '../actions';
+import { SET_SHOP_ITEMS, GET_ITMES_PENDING, GET_ITEMS_FAILED, APPEND_SHOP_ITEM } from '../actions';
 
 const Requester_ = new Requester(API);
 
@@ -35,6 +35,9 @@ export const GetItems = () => {
 }
 
 
-export const AdminAddItem = async (api_key: string) => {
-
+export const appendItem = (item: any) => {
+    return {
+        type: APPEND_SHOP_ITEM,
+        payload: item
+    }
 }

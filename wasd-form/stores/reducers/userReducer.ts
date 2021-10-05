@@ -1,4 +1,4 @@
-import { SET_USER, FETCH_USER_PENDING, FETCH_USER_SUCCESS, UNSET_USER, FETCH_USER_POSTS_PENDING, FETCH_USER_POSTS_SUCCESS } from "../actions";
+import { SET_USER, FETCH_USER_PENDING, FETCH_USER_SUCCESS, UNSET_USER, FETCH_USER_POSTS_PENDING, FETCH_USER_POSTS_SUCCESS, ADMIN_USER_FETCH_PENDING, ADMIN_USER_FETCH_SUCCESS, ADMIN_USER_FETCH_FAILED } from "../actions";
 
 const initalState = {
     loading: false,
@@ -26,6 +26,17 @@ export default function userReducer(state : any = initalState, action : { type: 
                     state.otherCachedUsers[state.otherCachedUsers.indexOf(state.otherCachedUsers.filter(i => i["uid"] == action.payload.id)[0])].posts = action.payload.posts;
                 }
             }
+        case ADMIN_USER_FETCH_PENDING:
+            state.loading = true;
+            return state;
+        case ADMIN_USER_FETCH_SUCCESS:
+            state.loading = false;
+            state.otherCachedUsers = action.payload;
+            return state;
+        case ADMIN_USER_FETCH_FAILED:
+            state.loading = false;
+            state.errors = action.payload;
+            return state;
         default:
             return state;
     }

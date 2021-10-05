@@ -1,4 +1,5 @@
 import { Router, json } from 'express';
+import { RedisClient } from 'redis';
 import { v4 as uuid } from 'uuid';
 import checkAuth from '../../middleware/checkAuth';
 import ItemSchema, { IStoreItem } from '../../models/Item';
@@ -6,6 +7,21 @@ import ItemSchema, { IStoreItem } from '../../models/Item';
 let Route = Router();
 
 Route.use(json());
+
+Route.get("/users/checkout/incart", checkAuth, async (req, res, next) => {
+    if(!res.locals.user.permissions.includes("ADMINISTRATOR")) return res.json({ error: true, errors: ["You do not have permission to modify this content!"] });
+
+    const redis: RedisClient = req.app.get("redis");
+
+    redis.get("*_order", (err, res_) => {
+
+        if(err) return res.json({ error: true, errors: ["Could not get information from redis!"]}).status(500);
+
+        if(!res_) return res.json({ in_cart: 0, orders: {} });
+
+        return res.json({ in_cart: res_.length ? res_.length : 1, orders: res_})
+    });
+});
 
 Route.get("/item/add", checkAuth, async (req, res, next) => {
 

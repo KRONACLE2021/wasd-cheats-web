@@ -2,7 +2,7 @@ import React from 'react';
 import styles from '../../styles/store.module.css';
 import Router from 'next/router';
 
-const ItemCard: React.FC<{ cover_image: string, name: string, description: string, price: string, currency: string, id: string }> = (props) => {
+const ItemCard: React.FC<{ cover_image: string, name: string, description: string, price: string | number, currency: string, id: string }> = (props) => {
     return (
         <div className={styles.item_card_container}>
             <div className={styles.item_info}>

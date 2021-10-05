@@ -41,6 +41,7 @@ export interface IUser {
     permissions: Array<string>;
     avatar: string;
     posts: Array<string>;
+    created_at: Date;
     uid: string;
 }
 
