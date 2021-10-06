@@ -7,11 +7,11 @@ import styles from '../../styles/admin.module.css';
 import DashboardCard from '../../components/admin/DashboardCard';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck, faDollarSign, faFile, faSubscript, faUser, faWalking, faWallet } from '@fortawesome/free-solid-svg-icons';
-import { getUsersIncartItems } from '../../stores/actions/adminActions';
+import { appendShopSubscriptions, getShopSubscriptions, getUsersIncartItems } from '../../stores/actions/adminActions';
 import ItemCard from '../../components/shop/ItemCard';
 import ModelContainer from '../../components/models/ModelContainer';
 import Requester from '../../requests/Requester';
-import { ADD_STORE_ITEM, API } from '../../requests/config';
+import { ADD_STORE_ITEM, ADD_SUBSCRIPTION, API } from '../../requests/config';
 import { appendShopItem } from '../../stores/actions/shopItemsActions';
 import Dropdown from './../../components/shared/Dropdown';
 
@@ -29,11 +29,13 @@ export default function adminShopManager() {
 
     let userStore = useSelector(state => state.user.user);
 
-    let adminDashboardStore = useSelector(state => state.adminStore);
 
+    let adminDashboardStore = useSelector(state => state.adminStore);
+    let adminSubscriptions = useSelector(state => state.adminStore.subscriptions);
 
     const onLoadRequests = () => {
         dispatch(getUsersIncartItems(userStore.api_key));
+        dispatch(getShopSubscriptions(userStore.api_key));
     }
 
     useEffect(() => {
@@ -99,9 +101,29 @@ export default function adminShopManager() {
                 timespanMilliseconds = addSubscriptionData.timespan *  6.048e+8;
             default: 
                 setError("you must provide a timespan for your subscription!");
-                return;
         }
+
+        Requester_.makePostRequest(ADD_SUBSCRIPTION, {
+            name: addSubscriptionData.name,
+            time_span: timespanMilliseconds
+        }, {
+            queryStringParams: [],
+            headers: {
+                authorization: userStore.api_key
+            }
+        }).then((res) => {
+            if(res.error == true){
+                setError(res.errors);
+            } else {
+                dispatch(appendShopSubscriptions(res.subscription));
+                setSubscriptionModelPopup(false);
+            }
+        }).catch((err) => {
+            setError(err);
+        });
     }
+
+    console.log(adminDashboardStore.subscriptions);
 
     if(isLoading) return <Preloader />;
 
@@ -118,7 +140,7 @@ export default function adminShopManager() {
                     <p>Item description</p>
                     <textarea onChange={(e) => setAddItemData({ ...addItemData, description: e.target.value })} placeholder={"Item Price (ex: 150)"} className={styles.admin_input}></textarea>
                     <p>What subscription should the user get? (to add a subscription please go to your shop dashboard and add a new subscription)</p>
-                    <Dropdown choices={["ROLE1", "ROLE2"]}/>
+                    <Dropdown choices={adminSubscriptions.map((i) => i.name)}/>
                     <p>Live Card preview</p>
                     <div className={styles.model_popup_centered}>
                         <ItemCard name={addItemData.name} price={addItemData.price} description={addItemData.description}  />
@@ -145,7 +167,7 @@ export default function adminShopManager() {
                         <Dropdown output={(data) => setSubscriptionData({ ...addSubscriptionData, timespan_type: data.toUpperCase()})} choices={["Months", "Weeks", "Days", "Hours"]}></Dropdown>
                     </div>
                     <div style={{ marginTop: "10px", marginBottom: "10px"}}>
-                        <button className={styles.button} onClick={() => submitCreateNewItem()}>Add Subscription</button>
+                        <button className={styles.button} onClick={() => submitCredateSubscription()}>Add Subscription</button>
                     </div>
                 </div>
             </ModelContainer>
@@ -174,6 +196,24 @@ export default function adminShopManager() {
                     <div className={styles.store_items_list}>
                         <button className={styles.button} onClick={() => setModelPopupActive(true)}>Add a new product</button>
                         <button className={styles.button} style={{ marginLeft: "10px" }} onClick={() => setSubscriptionModelPopup(true)}>Add a new subscription</button>
+                        <h2>Subscription types:</h2>
+                        <table className={styles.admin_table}>
+                            <tr>
+                                <th>Name</th>
+                                <th>Timespan (milliseconds)</th> 
+                                <th>api id</th>
+                            </tr>
+                            {adminSubscriptions.map((i) => {
+                                return (
+                                    <tr>
+                                        <th>{i.name}</th>
+                                        <th>{i.time_span}</th>
+                                        <th>{i.id}</th>
+                                    </tr>
+                                )
+                            })}
+                           
+                        </table>
                     </div>
                 </div>
             </AdminDashboardRoot>

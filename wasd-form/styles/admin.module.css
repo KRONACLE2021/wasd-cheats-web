@@ -127,3 +127,18 @@
     width: 50%;
     margin-right: 10px;
 }
+
+.admin_table {
+    width: 100%;
+}
+
+.admin_table td, .admin_table th {
+    border: 2px solid #353535;
+    text-align: left;
+    padding: 8px;
+    border-radius: 2px;
+}
+
+.admin_table tr:nth-child(even) {
+    background-color: var(--bg-secondary);
+}

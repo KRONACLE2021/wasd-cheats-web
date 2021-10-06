@@ -35,7 +35,7 @@ export const GetItems = () => {
 }
 
 
-export const appendItem = (item: any) => {
+export const appendShopItem = (item: any) => {
     return {
         type: APPEND_SHOP_ITEM,
         payload: item

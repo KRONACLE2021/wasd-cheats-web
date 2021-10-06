@@ -33,10 +33,12 @@ Route.post("/subscriptions/add", checkAuth, async (req, res, next) => {
         time_span,
     } = req.body;
 
+    console.log(time_span);
+
     if(!name || name == "") return res.json({ error: true, errors: ["A subscription must have a name!"]});
     if(!time_span || isNaN(parseInt(time_span))) return res.json({ error: true, errors: ["A subscription must have a time span! And the time span must be represented in miliseconds"]});
 
-    let time_span_int = parseInt(time_span);
+    let time_span_int = parseInt(time_span); 
 
     let id = uuid();
 

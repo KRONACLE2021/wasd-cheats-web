@@ -1,13 +1,18 @@
 import Requester from "../../requests/Requester";
 import { 
     ADMIN_GET_USER_INCART_ITEMS,
-    API
+    API,
+    GET_SUBSCRIPTIONS
 } from '../../requests/config';
 import { Dispatch } from "react";
 import { 
     ADMIN_GET_INCART_ITEMS_FAILED,
     ADMIN_GET_INCART_ITEMS_PENDING, 
-    ADMIN_GET_INCART_ITEMS_SUCCESS 
+    ADMIN_GET_INCART_ITEMS_SUCCESS, 
+    APPEND_SHOP_SUBSCRIPTIONS, 
+    GET_SHOP_SUBSCRIPTIONS_FAILED, 
+    GET_SHOP_SUBSCRIPTIONS_PENDING, 
+    SET_SHOP_SUBSCRIPTIONS
 } from "../actions";
 
 const Requester_ = new Requester(API);
@@ -55,3 +60,52 @@ export const getUsersIncartItems = (api_key: string) => {
         });
     }
 };
+
+export const setShopSubscriptions = (subscriptions: Array<any>) => {
+    return {
+        type: SET_SHOP_SUBSCRIPTIONS,
+        payload: subscriptions
+    };
+}
+
+export const getShopSubscriptionsPending = () => {
+    return {
+        type: GET_SHOP_SUBSCRIPTIONS_PENDING
+    }
+}
+
+export const getShopSubscriptionsFailed = (err: any) => {
+    return {
+        type: GET_SHOP_SUBSCRIPTIONS_FAILED,
+        payload: err
+    }
+}
+
+export const getShopSubscriptions = (api_key: string) => {
+    
+    return (dispatcher: Dispatch<any>) => {
+        dispatcher(getShopSubscriptionsPending());
+        Requester_.makeGetRequest(GET_SUBSCRIPTIONS, {
+            queryStringParams: [],
+            headers: {
+                Authorization: api_key
+            }
+        }).then((res) => {
+            if(!res.error) {
+                dispatcher(setShopSubscriptions(res.subscriptions));
+            } else {
+                dispatcher(getShopSubscriptionsFailed(res.errors));
+            }
+        }).catch((err) => {
+            dispatcher(getShopSubscriptionsFailed(err));
+        });
+
+    }
+}
+
+export const appendShopSubscriptions = (subscription: any) => {
+    return {
+        type: APPEND_SHOP_SUBSCRIPTIONS,
+        payload: subscription
+    }
+}
