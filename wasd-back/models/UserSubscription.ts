@@ -7,6 +7,7 @@ export interface ISubscription {
     transaction_id: string;
     date_activated: Date;
     date_end: Date;
+    is_active: boolean;
 }
 
 const UserSubscription = new Schema<ISubscription>({
@@ -15,7 +16,8 @@ const UserSubscription = new Schema<ISubscription>({
     id: String,
     transaction_id: String,
     date_activated: Date,
-    date_end: Date
+    date_end: Date,
+    is_active: Boolean
 });
 
 export default model<ISubscription>("Subscription", UserSubscription);

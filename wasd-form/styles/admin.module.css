@@ -118,3 +118,12 @@
     margin-top: 10px;
     margin-bottom: 10px;
 }
+
+.model_popup_content_sidebyside {
+    display: flex;
+}
+
+.model_popup_content_sidebyside input {
+    width: 50%;
+    margin-right: 10px;
+}

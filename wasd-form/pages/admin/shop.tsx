@@ -20,14 +20,17 @@ const Requester_ = new Requester(API);
 export default function adminShopManager() {
     const [isLoading, setLoading] = useState(true);
     const [modelPopupActive, setModelPopupActive] = useState(false);
+    const [subscriptionModelPopup, setSubscriptionModelPopup] = useState(false);
     const [error, setError] = useState("");
-    const [addItemData, setAddItemData] = useState({ name: "Item Name", description: "Item Description", price: "", stock: 100});
+    const [addItemData, setAddItemData] = useState({ name: "Item Name", description: "Item Description", price: 0, stock: 100});
+    const [addSubscriptionData, setSubscriptionData] = useState({ name: "", timespan: 0, timespan_type: "DAYS" });
 
     const dispatch = useDispatch();
 
     let userStore = useSelector(state => state.user.user);
 
     let adminDashboardStore = useSelector(state => state.adminStore);
+
 
     const onLoadRequests = () => {
         dispatch(getUsersIncartItems(userStore.api_key));
@@ -79,6 +82,27 @@ export default function adminShopManager() {
         });
     }
 
+    const submitCredateSubscription = () => {
+        if(!addSubscriptionData.name || addSubscriptionData.name == "") setError("You must provide a name for a subscription!");
+        if(!addSubscriptionData.timespan || addSubscriptionData.timespan == 0) setError("You must provide a timespan for a subscription!");
+
+        let timespanMilliseconds = 0;
+
+        switch(addSubscriptionData.timespan_type){
+            case "DAYS":
+                timespanMilliseconds =  addSubscriptionData.timespan * 8.64e+7;
+            case "MONTHS":
+                timespanMilliseconds =  addSubscriptionData.timespan * 2.628e+9;
+            case "HOURS":
+                timespanMilliseconds = addSubscriptionData.timespan * 3.6e+6;
+            case "WEEKS":
+                timespanMilliseconds = addSubscriptionData.timespan *  6.048e+8;
+            default: 
+                setError("you must provide a timespan for your subscription!");
+                return;
+        }
+    }
+
     if(isLoading) return <Preloader />;
 
     return (
@@ -93,7 +117,7 @@ export default function adminShopManager() {
                     <input onChange={(e) => setAddItemData({ ...addItemData, price: e.target.value })} placeholder={"Item Price (ex: 150)"} className={styles.admin_input}></input>
                     <p>Item description</p>
                     <textarea onChange={(e) => setAddItemData({ ...addItemData, description: e.target.value })} placeholder={"Item Price (ex: 150)"} className={styles.admin_input}></textarea>
-                    <p>What role should this product add to the user?</p>
+                    <p>What subscription should the user get? (to add a subscription please go to your shop dashboard and add a new subscription)</p>
                     <Dropdown choices={["ROLE1", "ROLE2"]}/>
                     <p>Live Card preview</p>
                     <div className={styles.model_popup_centered}>
@@ -101,6 +125,27 @@ export default function adminShopManager() {
                     </div>
                     <div style={{ marginTop: "10px", marginBottom: "10px"}}>
                         <button className={styles.button} onClick={() => submitCreateNewItem()}>Add product</button>
+                    </div>
+                </div>
+            </ModelContainer>
+            <ModelContainer isActive={subscriptionModelPopup} setModelActive={setSubscriptionModelPopup}>
+                <div className={styles.model_popup_container}>
+                    <h1>Create Subscription</h1>
+                    <p>Subscription Name</p>
+                    <input placeholder={"subscription name"} onChange={(e) => setSubscriptionData({ ...addSubscriptionData, name: e.target.value })} className={styles.admin_input}></input>
+                    <p>Subscription Timespan</p>
+                    <div className={styles.model_popup_content_sidebyside}>
+                        <input onChange={(e) => {
+                            if(isNaN(parseInt(e.target.value)) && e.target.value !== "") {
+                                setError("timespan must be a number!");
+                            } else {
+                                setSubscriptionData({ ...addSubscriptionData, timespan: isNaN(parseInt(e.target.value)) ? 0 :parseInt(e.target.value) });
+                            }
+                        }} placeholder={""} value={addSubscriptionData.timespan} className={styles.admin_input}></input>
+                        <Dropdown output={(data) => setSubscriptionData({ ...addSubscriptionData, timespan_type: data.toUpperCase()})} choices={["Months", "Weeks", "Days", "Hours"]}></Dropdown>
+                    </div>
+                    <div style={{ marginTop: "10px", marginBottom: "10px"}}>
+                        <button className={styles.button} onClick={() => submitCreateNewItem()}>Add Subscription</button>
                     </div>
                 </div>
             </ModelContainer>
@@ -128,6 +173,7 @@ export default function adminShopManager() {
                     </div>
                     <div className={styles.store_items_list}>
                         <button className={styles.button} onClick={() => setModelPopupActive(true)}>Add a new product</button>
+                        <button className={styles.button} style={{ marginLeft: "10px" }} onClick={() => setSubscriptionModelPopup(true)}>Add a new subscription</button>
                     </div>
                 </div>
             </AdminDashboardRoot>

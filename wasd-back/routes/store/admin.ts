@@ -3,6 +3,7 @@ import { RedisClient } from 'redis';
 import { v4 as uuid } from 'uuid';
 import checkAuth from '../../middleware/checkAuth';
 import ItemSchema, { IStoreItem } from '../../models/Item';
+import Subscription from '../../models/Subscription';
 
 let Route = Router();
 
@@ -23,7 +24,40 @@ Route.get("/users/checkout/incart", checkAuth, async (req, res, next) => {
     });
 });
 
-Route.get("/item/add", checkAuth, async (req, res, next) => {
+Route.post("/subscriptions/add", checkAuth, async (req, res, next) => {
+
+    if(!res.locals.user.permissions.includes("ADMINISTRATOR")) return res.json({ error: true, errors: ["You do not have permission to modify this content!"] });
+
+    let {
+        name,
+        time_span,
+    } = req.body;
+
+    if(!name || name == "") return res.json({ error: true, errors: ["A subscription must have a name!"]});
+    if(!time_span || isNaN(parseInt(time_span))) return res.json({ error: true, errors: ["A subscription must have a time span! And the time span must be represented in miliseconds"]});
+
+    let time_span_int = parseInt(time_span);
+
+    let id = uuid();
+
+    let subscription = await new Subscription({
+        name: name,
+        time_span: time_span_int,
+        id: id
+    }).save();
+
+    return res.json({ done: true, subscription: subscription });
+});
+
+Route.get("/subscriptions/get", checkAuth, async (req, res, next) => {
+    if(!res.locals.user.permissions.includes("ADMINISTRATOR")) return res.json({ error: true, errors: ["You do not have permission to view this content!"] }).status(403);
+
+    let subscriptions = await Subscription.find({});
+
+    return res.json({ done: true, subscriptions });
+});
+
+Route.post("/item/add", checkAuth, async (req, res, next) => {
 
     if(!res.locals.user.permissions.includes("ADMINISTRATOR")) return res.json({ error: true, errors: ["You do not have permission to modify this content!"] });
 
@@ -67,7 +101,7 @@ Route.get("/item/add", checkAuth, async (req, res, next) => {
         image: imgUrl
     });
 
-    return res.json(Item);
+    return res.json({ item: Item });
 });
 
 export default Route;
