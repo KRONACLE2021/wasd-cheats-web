@@ -7,6 +7,7 @@ import threadReducer from "./threadReducer";
 import textEditorReducer from "./textEditorReducer"; 
 import shopItemsReducer from "./shopItemsReducer";
 import adminReducer from "./adminReducer";
+import userCartReducer from "./userCartReducer";
 
 export default combineReducers({
     user: userReducer,
@@ -16,5 +17,6 @@ export default combineReducers({
     threadStore: threadReducer,
     editorStore: textEditorReducer,
     shopStore: shopItemsReducer,
-    adminStore: adminReducer
+    adminStore: adminReducer,
+    userCart: userCartReducer
 });
