@@ -1,5 +1,12 @@
 import filterDuplicates from "../../utils/filterDuplicates";
-import { ADD_ITEM_TO_CART, CLEAR_CART, FETCH_CART_ITEMS_FAILED, FETCH_CART_ITEMS_PENDING, FETCH_CART_ITEMS_SUCCESS, REMOVE_ITEM_FROM_CART } from "../actions";
+import { 
+    ADD_ITEM_TO_CART, 
+    CLEAR_CART, 
+    FETCH_CART_ITEMS_FAILED, 
+    FETCH_CART_ITEMS_PENDING, 
+    FETCH_CART_ITEMS_SUCCESS, 
+    REMOVE_ITEM_FROM_CART 
+} from "../actions";
 
 const initalState = {
     loading: false,
@@ -11,12 +18,16 @@ export default function userCartReducer(state : any = initalState, action : { ty
     switch(action.type){
         case ADD_ITEM_TO_CART:
             state.items.push(action.payload);
-            filterDuplicates(state.items, (a: { id: string }, b: { id: string }) => a.id == b.id);
+            state.items = filterDuplicates(state.items, (a: { id: string }, b: { id: string }) => a.id == b.id);
             return state;
         case REMOVE_ITEM_FROM_CART:
             if(state.items.indexOf(action.payload) == -1) return state;
-            state.items.splice(state.items.indexOf(action.payload), 1);
-            return state;
+          
+          
+            return {
+                ...state,
+                items: state.items.filter((i) => i !== action.payload)
+            };
         case CLEAR_CART:
             state.items = [];
             return state;
@@ -30,7 +41,7 @@ export default function userCartReducer(state : any = initalState, action : { ty
         case FETCH_CART_ITEMS_SUCCESS:
             state.loading = false;
             state.items = action.payload;
-            return state;
+            return state;       
         default: 
             return state;
     }
