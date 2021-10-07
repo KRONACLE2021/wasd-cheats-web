@@ -69,7 +69,8 @@ Route.post("/item/add", checkAuth, async (req, res, next) => {
         description,
         price,
         stock,
-        imgUrl
+        imgUrl,
+        subscription
     } = req.body;
 
     let errors : Array<String> = [];
@@ -90,7 +91,8 @@ Route.post("/item/add", checkAuth, async (req, res, next) => {
         price: price,
         stock: stock,
         id: id,
-        image: imgUrl
+        image: imgUrl,
+        subscription_id: subscription
     };
 
     let dbItem = await ItemSchema.create({
@@ -100,7 +102,8 @@ Route.post("/item/add", checkAuth, async (req, res, next) => {
         stock,
         price,
         id,
-        image: imgUrl
+        image: imgUrl,
+        subscription_id: subscription
     });
 
     return res.json({ item: Item });

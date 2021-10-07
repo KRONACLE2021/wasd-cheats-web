@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useState, useEffect } from 'react';
 import styles from '../../styles/fourms.module.css';
 
-const Dropdown: React.FC<{ choices: Array<string>, default_state: string | null, output: (out: string) => void }> = ({ choices, default_state, output }) => {
+const Dropdown: React.FC<{ choices: Array<{ name: string, data: any }>, default_state: string | null, output: (out: string) => void }> = ({ choices, default_state, output }) => {
     
     const [currentSelection, setSelection] = useState(default_state ? default_state : "<Select one>");
     const [dropdownActive, setDropdownActive] = useState(false);
@@ -23,7 +23,7 @@ const Dropdown: React.FC<{ choices: Array<string>, default_state: string | null,
             <div style={{ display: dropdownActive ? "block" : "none"}} className={styles.default_dropdown_selections}>
                 <ul>
                     {choices.map(i => {
-                        return <li onClick={() => setSelection(i)}>{i}</li>
+                        return <li key={i.name} onClick={() => setSelection(i.data)}>{i.name}</li>
                     })}
                 </ul>
             </div>

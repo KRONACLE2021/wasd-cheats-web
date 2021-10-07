@@ -1,11 +1,11 @@
 import filterDuplicates from "../../utils/filterDuplicates";
-import { GET_ITMES_PENDING, SET_SHOP_ITEMS, GET_ITEMS_FAILED, APPEND_SHOP_ITEM } from "../actions";
+import { GET_ITMES_PENDING, SET_SHOP_ITEMS, GET_ITEMS_FAILED, APPEND_SHOP_ITEM, GET_ITEM_PENDING, GET_ITEM_SUCCESS, GET_ITEM_FAILED } from "../actions";
 
 const initalState = {
     items: [],
     loading: false,
     error: false,
-    errors: []
+    errors: [],
 };
 
 export default function shopItemsReducer(state : any = initalState, action : { type: string, payload: any }) {
@@ -25,6 +25,18 @@ export default function shopItemsReducer(state : any = initalState, action : { t
         case APPEND_SHOP_ITEM:
             state.items.push(action.payload);
             filterDuplicates(state.items, (a, b) => a.id == b.id);
+            return state;
+        case GET_ITEM_PENDING:
+            state.loading = true;
+            return state;
+        case GET_ITEM_SUCCESS:
+            state.loading = false;
+            state.items.push(action.payload);
+            filterDuplicates(state.items, (a, b) => a.id == b.id);
+            return state;
+        case GET_ITEM_FAILED:
+            state.loading = false;
+            state.errors = action.payload;
             return state;
         default: 
             return state;

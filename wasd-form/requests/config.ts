@@ -22,6 +22,7 @@ export const DELETE_POST = (id: string) => `api/v1/posts/delete/${id}`;
 
 /* Store Routes */
 export const GET_STORE_ITEMS = `api/v1/shop/items`;
+export const GET_STORE_ITEM = (id: string) => `api/v1/shop/items/${id}`; 
 export const ADMIN_GET_USER_INCART_ITEMS = `api/v1/shop/admin/users/checkout/incart`;
 export const ADD_STORE_ITEM = `api/v1/shop/admin/item/add`;
 export const ADD_SUBSCRIPTION = `api/v1/shop/admin/subscriptions/add`;

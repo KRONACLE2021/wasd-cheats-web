@@ -142,3 +142,7 @@
 .admin_table tr:nth-child(even) {
     background-color: var(--bg-secondary);
 }
+
+.admin_table tr span {
+    margin-right: 10px; 
+}

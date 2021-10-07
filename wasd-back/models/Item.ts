@@ -9,6 +9,7 @@ export interface IStoreItem {
     dateAdded: Date;
     stock: Number;
     image: string;
+    subscription_id: string;
 }
 
 
@@ -20,7 +21,8 @@ const ItemSchema = new Schema<IStoreItem>({
     name: String,
     dateAdded: { type: Date, default: () => new Date() },
     stock: Number,
-    image: String
+    image: String,
+    subscription_id: String
 });
 
 

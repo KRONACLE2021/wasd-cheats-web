@@ -6,7 +6,7 @@ import AdminDashboardRoot from '../../components/admin/AdminDashboardRoot';
 import styles from '../../styles/admin.module.css';
 import DashboardCard from '../../components/admin/DashboardCard';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheck, faDollarSign, faFile, faSubscript, faUser, faWalking, faWallet } from '@fortawesome/free-solid-svg-icons';
+import { faCheck, faDollarSign, faFile, faPen, faSubscript, faTrash, faUser, faWalking, faWallet } from '@fortawesome/free-solid-svg-icons';
 import { appendShopSubscriptions, getShopSubscriptions, getUsersIncartItems } from '../../stores/actions/adminActions';
 import ItemCard from '../../components/shop/ItemCard';
 import ModelContainer from '../../components/models/ModelContainer';
@@ -22,7 +22,7 @@ export default function adminShopManager() {
     const [modelPopupActive, setModelPopupActive] = useState(false);
     const [subscriptionModelPopup, setSubscriptionModelPopup] = useState(false);
     const [error, setError] = useState("");
-    const [addItemData, setAddItemData] = useState({ name: "Item Name", description: "Item Description", price: 0, stock: 100});
+    const [addItemData, setAddItemData] = useState({ name: "Item Name", description: "Item Description", price: 0, stock: 100, subscription_id: ""});
     const [addSubscriptionData, setSubscriptionData] = useState({ name: "", timespan: 0, timespan_type: "DAYS" });
 
     const dispatch = useDispatch();
@@ -67,7 +67,8 @@ export default function adminShopManager() {
             price: addItemData.price,
             stock: 100,
             imgUrl: "",
-            description: addItemData.description
+            description: addItemData.description,
+            subscription: addItemData.subscription_id
         }, {
             queryStringParams: [],
             headers: {
@@ -139,8 +140,8 @@ export default function adminShopManager() {
                     <input onChange={(e) => setAddItemData({ ...addItemData, price: e.target.value })} placeholder={"Item Price (ex: 150)"} className={styles.admin_input}></input>
                     <p>Item description</p>
                     <textarea onChange={(e) => setAddItemData({ ...addItemData, description: e.target.value })} placeholder={"Item Price (ex: 150)"} className={styles.admin_input}></textarea>
-                    <p>What subscription should the user get? (to add a subscription please go to your shop dashboard and add a new subscription)</p>
-                    <Dropdown choices={adminSubscriptions.map((i) => i.name)}/>
+                    <p>What subscription should the user get? (to add a subscription please go to your shop dashboard and add a new subscription) (item will be displayed with ID)</p>
+                    <Dropdown choices={adminSubscriptions.map((i) => { return { name: i.name, data: i.id } })} output={(o) => setAddItemData({ ...addItemData, subscription_id: o})} />
                     <p>Live Card preview</p>
                     <div className={styles.model_popup_centered}>
                         <ItemCard name={addItemData.name} price={addItemData.price} description={addItemData.description}  />
@@ -202,18 +203,21 @@ export default function adminShopManager() {
                                 <th>Name</th>
                                 <th>Timespan (milliseconds)</th> 
                                 <th>api id</th>
+                                <th>Actions</th>
                             </tr>
                             {adminSubscriptions.map((i) => {
                                 return (
-                                    <tr>
+                                    <tr key={i.name} id={i.id}>
                                         <th>{i.name}</th>
                                         <th>{i.time_span}</th>
                                         <th>{i.id}</th>
+                                        <th><span><FontAwesomeIcon icon={faTrash} /></span><span><FontAwesomeIcon icon={faPen} /></span></th>
                                     </tr>
                                 )
                             })}
                            
                         </table>
+                        <h2>Products:</h2>
                     </div>
                 </div>
             </AdminDashboardRoot>

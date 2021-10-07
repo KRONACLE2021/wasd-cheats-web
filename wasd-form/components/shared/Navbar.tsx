@@ -15,8 +15,8 @@ const Navbar : React.FC<any> = (props) => {
             <nav>
                 <ul className={styles.nav_links}>
                     <li><Link href={"/fourm"}>Fourms</Link></li>
-                    <li><Link href={"/fourms"}>Shop</Link></li>
-                    <li><Link href={"/fourms"}>Pricing</Link></li>
+                    <li><Link href={"/store"}>Shop</Link></li>
+                    <li><Link href={"/store"}>Pricing</Link></li>
                 </ul>
             </nav>
             {userStore.username !== undefined ? (

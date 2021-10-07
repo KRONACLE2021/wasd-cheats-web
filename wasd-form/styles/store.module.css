@@ -77,3 +77,47 @@
     font-size: 15px;
     font-weight: 400;
 }
+
+.shop_big_item_container {
+    margin-top: 100px;
+    display: flex;
+    justify-content: center;
+}
+
+.item_picture_side {
+    width: 600px;
+    height: 600px;
+    margin-right: 50px;
+}
+
+.item_picture_side img {
+    width: 100%;
+    object-fit: cover;
+    height: 100%;
+}
+
+.item_information_side {
+    width: 500px;
+}
+
+.item_information_side .price {
+    font-size: 36px;
+}
+
+.buy_now_button {
+    padding: 10px 10px;
+    width: 100%;
+    font-family: "Roboto";
+    border-radius: 7px;
+    border: none;
+    background-color: var(--purple);
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+
+.gift_button {
+    margin-top: 20px;
+    background-color: var(--pink);
+}
