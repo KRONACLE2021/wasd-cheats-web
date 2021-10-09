@@ -27,6 +27,8 @@ export const ADMIN_GET_USER_INCART_ITEMS = `api/v1/shop/admin/users/checkout/inc
 export const ADD_STORE_ITEM = `api/v1/shop/admin/item/add`;
 export const ADD_SUBSCRIPTION = `api/v1/shop/admin/subscriptions/add`;
 export const GET_SUBSCRIPTIONS = `api/v1/shop/admin/subscriptions/get`
+export const CREATE_NEW_ORDER = `api/v1/shop/checkout/create-order` 
+export const GET_PAYPAL_ORDER = `api/v1/shop/checkout/payment/paypal`;
 
 /* File upload routes */
 export const USER_FILE_UPLOAD = `api/v1/upload/usercontent`;
