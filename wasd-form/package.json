@@ -8,6 +8,10 @@
     "start": "next start"
   },
   "dependencies": {
+    "@draft-js-plugins/drag-n-drop": "^4.2.1",
+    "@draft-js-plugins/drag-n-drop-upload": "^4.1.1",
+    "@draft-js-plugins/focus": "^4.1.2",
+    "@draft-js-plugins/image": "^4.1.2",
     "@fortawesome/fontawesome-svg-core": "^1.2.36",
     "@fortawesome/free-solid-svg-icons": "^5.15.4",
     "@fortawesome/react-fontawesome": "^0.1.15",

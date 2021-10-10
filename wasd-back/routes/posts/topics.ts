@@ -5,6 +5,7 @@ import Categorys from '../../models/Categorys';
 import checkAuth from '../../middleware/checkAuth';
 import Threads from '../../models/Threads';
 import Attachments from '../../models/Attachments';
+import Posts from '../../models/Posts';
 
 let Route = Router();
 
@@ -51,6 +52,28 @@ Route.post("/:id/delete", checkAuth, async (req, res, next) => {
 
     let id = req.params.id;
 
+    let Topic = await Topics.findOne({ id })
+
+    if(!Topic) return res.json({ error: true, errors: ["This topic does not exsist!"]});
+
+    let attachments = Topic.imgID;
+
+    if(attachments) {
+        let attachment_check = await Attachments.findOne({ id: attachments });
+
+        if(attachment_check) {
+            await Attachments.deleteOne({ id: attachments });
+        }
+    } 
+
+    let threadsInTopic = await Threads.find({ topicId: id });
+
+    for(var i of threadsInTopic){
+        await Posts.deleteOne({ threadId: i.id });
+    }
+
+    await Threads.deleteMany({ topicId: id });
+    
     await Topics.deleteOne({ id: id });
 
     return res.json({ done: true, message: "Topic has been deleted"});

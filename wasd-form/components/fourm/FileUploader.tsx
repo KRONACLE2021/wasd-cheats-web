@@ -35,6 +35,7 @@ const FileUploader : React.FC<{ reccomended_size: string, uploadType: "icon" | "
 
     const uploadFile = async (file_: any) => {
         
+        console.log("[WASD Uploader] Uploading file...")
         const formData = new FormData();
 
         formData.append("file", 
@@ -52,7 +53,7 @@ const FileUploader : React.FC<{ reccomended_size: string, uploadType: "icon" | "
         if(result.error == true) {
             alert("[AXIOS] Error uploading file: " + result.errors);
         } else {
-            output(result.id);
+            output(result.data.attachment_.id);
         }
     }
     

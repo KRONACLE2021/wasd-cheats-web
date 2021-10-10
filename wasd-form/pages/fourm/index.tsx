@@ -13,7 +13,7 @@ import FullPageError from '../../components/shared/FullpageError';
 const FourmHome: React.FC<any> = () => {
 
     const dispatch = useDispatch();
-    const userStore = useSelector(state => state.user);
+    const userStore = useSelector(state => state.user.user);
 
     const [isLoading, setLoading] = useState(true);
     const [error, setError] = useState();

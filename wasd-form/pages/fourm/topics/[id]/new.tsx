@@ -61,7 +61,7 @@ const NewThread: React.FC<any> = (props) => {
                         <p>Thread Name</p>
                         <input placeholder={"thread name"} onChange={(e) => setTitle(e.target.value)} className={styles.editor_input} />
                     </div>
-                    <h3>Description: </h3>
+                    <h3>Inital Post: </h3>
                     <p className={styles.editor_details}>For more details on how to fully utilize our editor please check this form post</p>
                     
                     <Draft output={setHtmlPost} />

@@ -123,6 +123,7 @@ a {
 
 
 .file-uploader_container {
+  position: relative;
   min-height: 150px;
   height: auto;
   padding: 10px;

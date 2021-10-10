@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styles from '../../styles/fourms.module.css';
-import { FetchTopicsByCategory } from '../../stores/actions/topicActions';
+import { CreateTopic, FetchTopicsByCategory } from '../../stores/actions/topicActions';
 import { useDispatch, useSelector } from 'react-redux';
 import TopicCard from './TopicCard';
 import ModelContainer from '../models/ModelContainer';
@@ -13,13 +13,17 @@ const CategoryContainer: React.FC<{name: string, id: string, isAdmin: any, toggl
     const [modelIsActive, setModelActive] = useState<boolean>(false);
     const [topicCreateData, setTopicCreateData] = useState({ category: props.id });
     const topics = useSelector(state => state.topics.topics);
+    const userStore = useSelector(state =>  state.user.user);
 
     useEffect(() => {
         FetchTopicsByCategory(props.id, dispatch);
     }, []);
 
     const adminCreateTopic = () => {
-        console.log(topicCreateData);
+        if(userStore.api_key){
+            console.log(topicCreateData);
+            dispatch(CreateTopic(topicCreateData, userStore.api_key))
+        }
     }
 
     return (
@@ -30,7 +34,7 @@ const CategoryContainer: React.FC<{name: string, id: string, isAdmin: any, toggl
                     <div>
                         <div>
                             <p>Topic name</p>
-                            <input className={styles.input} placeholder={"Topic Name"} onChange={(e) => setTopicCreateData({...topicCreateData, name: e.target.value})}></input>
+                            <input className={styles.input} placeholder={"Topic Name"} onChange={(e) => setTopicCreateData({...topicCreateData, title: e.target.value})}></input>
                         </div>
                         <div>
                             <p>Topic description</p>
@@ -38,7 +42,7 @@ const CategoryContainer: React.FC<{name: string, id: string, isAdmin: any, toggl
                         </div>
                         
                         <div className={styles.top_spacer}></div>
-                        <FileUploader reccomended_size={"50x50"} uploadType={"icon"} output={(attachmentId: string) => {setTopicCreateData({ ...topicCreateData, attachmentId})}} />
+                        <FileUploader reccomended_size={"50x50"} uploadType={"icon"} output={(attachmentId: string) => {setTopicCreateData({ ...topicCreateData, attachmentId: attachmentId})}} />
                         <button className={styles.add_topic_btn} onClick={() => adminCreateTopic()}>Create Topic</button>
                         <div className={styles.top_spacer}></div>
                     </div>
@@ -67,6 +71,11 @@ const CategoryContainer: React.FC<{name: string, id: string, isAdmin: any, toggl
                                     />
                         }
                     }) : "" }
+
+                    {topics.length == 0 ? <div style={{ textAlign: "center"}}> 
+                        <h1>Things are empty in here..</h1> 
+                        <p>Try adding a topic to start some conversations!</p>
+                    </div> : ""}
                 </div>
             </div>
         </>
