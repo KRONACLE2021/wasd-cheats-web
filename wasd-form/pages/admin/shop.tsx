@@ -5,38 +5,46 @@ import Preloader from '../../components/shared/Preloader';
 import AdminDashboardRoot from '../../components/admin/AdminDashboardRoot';
 import styles from '../../styles/admin.module.css';
 import DashboardCard from '../../components/admin/DashboardCard';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheck, faDollarSign, faFile, faPen, faSubscript, faTrash, faUser, faWalking, faWallet } from '@fortawesome/free-solid-svg-icons';
-import { appendShopSubscriptions, deleteSubscriptionItem, getShopSubscriptions, getUsersIncartItems } from '../../stores/actions/adminActions';
 import ItemCard from '../../components/shop/ItemCard';
 import ModelContainer from '../../components/models/ModelContainer';
 import Requester from '../../requests/Requester';
-import { ADD_STORE_ITEM, ADD_SUBSCRIPTION, API, DELETE_SUBSCRIPTIONS } from '../../requests/config';
-import { appendShopItem } from '../../stores/actions/shopItemsActions';
 import Dropdown from './../../components/shared/Dropdown';
-import axios from 'axios';
+import WASDTable from '../../components/shared/Table';
+import { ADD_STORE_ITEM, ADD_SUBSCRIPTION, API, DELETE_SUBSCRIPTIONS } from '../../requests/config';
+import { appendShopItem, GetItems } from '../../stores/actions/shopItemsActions';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCheck, faDollarSign, faFile, faPen, faSubscript, faTrash, faUser, faWalking, faWallet } from '@fortawesome/free-solid-svg-icons';
+import { appendShopSubscriptions, deleteSubscriptionItem, getShopSubscriptions, getUsersIncartItems } from '../../stores/actions/adminActions';
 
 const Requester_ = new Requester(API);
 
 export default function adminShopManager() {
+
     const [isLoading, setLoading] = useState(true);
     const [modelPopupActive, setModelPopupActive] = useState(false);
     const [subscriptionModelPopup, setSubscriptionModelPopup] = useState(false);
     const [error, setError] = useState("");
     const [addItemData, setAddItemData] = useState({ name: "Item Name", description: "Item Description", price: 0, stock: 100, subscription_id: ""});
     const [addSubscriptionData, setSubscriptionData] = useState({ name: "", timespan: 0, timespan_type: "DAYS" });
+    const [subscriptionDeletePopup, setSubscriptionDeletePopup] = useState(false);
+    const [deletingItemId, setDeletingItemID] = useState("");
+
+    //For when a user is editing a product
+    const [currentProduct, setCurrentProduct] = useState({});
+    const [editProductPopupActive, setEditProductPopupActive] = useState(false);
 
     const dispatch = useDispatch();
 
     let userStore = useSelector(state => state.user.user);
-
-
     let adminDashboardStore = useSelector(state => state.adminStore);
     let adminSubscriptions = useSelector(state => state.adminStore.subscriptions);
+    let storeProducts = useSelector(state => state.shopStore.items);
+
 
     const onLoadRequests = () => {
         dispatch(getUsersIncartItems(userStore.api_key));
         dispatch(getShopSubscriptions(userStore.api_key));
+        dispatch(GetItems());
     }
 
     useEffect(() => {
@@ -133,11 +141,46 @@ export default function adminShopManager() {
         dispatch(deleteSubscriptionItem(id, userStore.api_key));
     }
 
+    const editItem = (item: string) => {
+        setCurrentProduct(item);
+        setEditProductPopupActive(true);
+    }
+
+    const updateProduct = () => {
+
+    }
+
     if(isLoading) return <Preloader />;
 
     return (
         <div>
-            <ModelContainer isActive={modelPopupActive} setModelActive={setModelPopupActive}>
+            <ModelContainer key={"EditItemPopup"} isActive={editProductPopupActive} setModelActive={setEditProductPopupActive}>
+                <div className={styles.model_popup_container}>
+                    <h1 className={styles.action_heading}>You're editing {currentProduct?.name}</h1>
+                    <p>Item Name</p>
+                    <input onChange={(e) => setCurrentProduct({ ...currentProduct, name: e.target.value })} value={currentProduct?.name} placeholder={"Item Name"} className={styles.admin_input}></input>
+                    <p>Item Price</p>
+                    <input onChange={(e) => setCurrentProduct({ ...currentProduct, price: e.target.value })} placeholder={"Item Price (ex: 150)"} value={currentProduct?.price} className={styles.admin_input}></input>
+                    <p>Item description</p>
+                    <textarea onChange={(e) => setCurrentProduct({ ...currentProduct, description: e.target.value })} placeholder={"Description"} value={currentProduct?.description} className={styles.admin_input}></textarea>
+                    <p>What subscription should the user get? (to add a subscription please go to your shop dashboard and add a new subscription) (item will be displayed with ID)</p>
+                    <Dropdown choices={adminSubscriptions.map((i) => { return { name: i.name, data: i.id } })} output={(o) => setCurrentProduct({ ...currentProduct, subscription_id: o})} default_state={currentProduct?.subscription_id} />
+                    <div style={{ marginTop: "10px", marginBottom: "10px"}}>
+                        <button className={styles.button} onClick={() => updateProduct()}>Update Product</button>
+                    </div>
+                </div>
+            </ModelContainer>
+            <ModelContainer key={"SubscriptonDeletePopup"} isActive={subscriptionDeletePopup} setModelActive={setSubscriptionDeletePopup}>
+                <div className={styles.model_popup_container}>
+                    <h1>Are you sure you want to delete this subscription?</h1>
+                    <p>Deleting this subscription will unbind it from all of the products its tied to, the users that have this active subscription will still have what they paid for, just you will no longer be allowed to purchase the item that the subscription has been tied too.</p>
+                    <div style={{ marginTop: "10px", marginBottom: "10px"}}>
+                        <button className={styles.button} onClick={() => setSubscriptionDeletePopup(false)}>Cancel</button>
+                        <button className={`${styles.button} ${styles.button_delete}`} onClick={() => deleteSubscripton(deletingItemId)}>Delete</button>
+                    </div>
+                </div>
+            </ModelContainer>
+            <ModelContainer key={"CreateNewItemPopup"} isActive={modelPopupActive} setModelActive={setModelPopupActive}>
                 <div className={styles.model_popup_container}>
                     <h1 className={styles.action_heading}>Create a new item!</h1>
                     <p className={styles.action_description}>you're creating a shop item, this item will be displayed to all users once you click submit, if you're looking for a way to set the currency of something please go to the shop settings</p>
@@ -146,7 +189,7 @@ export default function adminShopManager() {
                     <p>Item Price</p>
                     <input onChange={(e) => setAddItemData({ ...addItemData, price: e.target.value })} placeholder={"Item Price (ex: 150)"} className={styles.admin_input}></input>
                     <p>Item description</p>
-                    <textarea onChange={(e) => setAddItemData({ ...addItemData, description: e.target.value })} placeholder={"Item Price (ex: 150)"} className={styles.admin_input}></textarea>
+                    <textarea onChange={(e) => setAddItemData({ ...addItemData, description: e.target.value })} placeholder={"Description"} className={styles.admin_input}></textarea>
                     <p>What subscription should the user get? (to add a subscription please go to your shop dashboard and add a new subscription) (item will be displayed with ID)</p>
                     <Dropdown choices={adminSubscriptions.map((i) => { return { name: i.name, data: i.id } })} output={(o) => setAddItemData({ ...addItemData, subscription_id: o})} />
                     <p>Live Card preview</p>
@@ -158,7 +201,7 @@ export default function adminShopManager() {
                     </div>
                 </div>
             </ModelContainer>
-            <ModelContainer isActive={subscriptionModelPopup} setModelActive={setSubscriptionModelPopup}>
+            <ModelContainer key={"SetSubscripitonPopup"} isActive={subscriptionModelPopup} setModelActive={setSubscriptionModelPopup}>
                 <div className={styles.model_popup_container}>
                     <h1>Create Subscription</h1>
                     <p>Subscription Name</p>
@@ -205,26 +248,57 @@ export default function adminShopManager() {
                         <button className={styles.button} onClick={() => setModelPopupActive(true)}>Add a new product</button>
                         <button className={styles.button} style={{ marginLeft: "10px" }} onClick={() => setSubscriptionModelPopup(true)}>Add a new subscription</button>
                         <h2>Subscription types:</h2>
-                        <table className={styles.admin_table}>
-                            <tr>
-                                <th>Name</th>
-                                <th>Timespan (milliseconds)</th> 
-                                <th>api id</th>
-                                <th>Actions</th>
-                            </tr>
-                            {adminSubscriptions.map((i) => {
+                        <WASDTable 
+                                table_data={adminSubscriptions.map((i: any) => {
+                                    return (
+                                        <tr key={i.name} id={i.id}>
+                                            <th>{i.name}</th>
+                                            <th>{i.time_span}</th>
+                                            <th>{i.id}</th>
+                                            <th><span onClick={() => {
+                                                setDeletingItemID(i.id);
+                                                setSubscriptionDeletePopup(true);
+                                            }}><FontAwesomeIcon icon={faTrash} /></span><span><FontAwesomeIcon icon={faPen} /></span></th>
+                                        </tr>
+                                    )
+                                })}
+                                table_colomns={[
+                                    "Name",
+                                    "Timespan (milliseconds)",
+                                    "API ID",
+                                    "Actions"
+                                ]}
+                        />
+                        <h2>Products:</h2>
+                        <WASDTable 
+                            table_colomns={[
+                                "Name",
+                                "Price",
+                                "Linked Subscription",
+                                "API ID",
+                                "Currency",
+                                "Image",
+                                "Description",
+                                "Actions"
+                            ]}
+
+                            table_data={storeProducts.map(i => {
                                 return (
-                                    <tr key={i.name} id={i.id}>
+                                    <tr key={i.name}>
                                         <th>{i.name}</th>
-                                        <th>{i.time_span}</th>
+                                        <th>{i.price}</th>
+                                        <th>{i.subscription_id}</th>
                                         <th>{i.id}</th>
-                                        <th><span><FontAwesomeIcon icon={faTrash} /></span><span><FontAwesomeIcon icon={faPen} /></span></th>
+                                        <th>{i.currency}</th>
+                                        <th>{i.image}</th>
+                                        <th>{i.description}</th>
+                                        <th><span><FontAwesomeIcon icon={faTrash} /></span><span onClick={() => {
+                                            editItem(i);
+                                        }}><FontAwesomeIcon icon={faPen} /></span></th>
                                     </tr>
                                 )
                             })}
-                           
-                        </table>
-                        <h2>Products:</h2>
+                        />
                     </div>
                 </div>
             </AdminDashboardRoot>

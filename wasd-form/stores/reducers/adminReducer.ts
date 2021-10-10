@@ -1,4 +1,4 @@
-import { ADMIN_GET_INCART_ITEMS_PENDING, ADMIN_GET_INCART_ITEMS_SUCCESS, APPEND_SHOP_SUBSCRIPTIONS, GET_SHOP_SUBSCRIPTIONS_FAILED, GET_SHOP_SUBSCRIPTIONS_PENDING, SET_SHOP_SUBSCRIPTIONS } from "../actions";
+import { ADMIN_GET_INCART_ITEMS_PENDING, ADMIN_GET_INCART_ITEMS_SUCCESS, APPEND_SHOP_SUBSCRIPTIONS, DELETE_SUBSCRIPTION_ITEM_FAILED, DELETE_SUBSCRIPTION_ITEM_PENDING, DELETE_SUBSCRIPTION_ITEM_SUCCESS, GET_SHOP_SUBSCRIPTIONS_FAILED, GET_SHOP_SUBSCRIPTIONS_PENDING, SET_SHOP_SUBSCRIPTIONS } from "../actions";
 
 const initalState = {
     loading: false,
@@ -35,6 +35,15 @@ export default function adminReducer(state: any = initalState, action : { type: 
         case GET_SHOP_SUBSCRIPTIONS_FAILED:
             state.loading = false;
             state.errors = action.payload;
+            return state;
+        case DELETE_SUBSCRIPTION_ITEM_PENDING:
+            state.loading = true;
+            return state;
+        case DELETE_SUBSCRIPTION_ITEM_FAILED:
+            state.errors = action.payload;
+            return state;
+        case DELETE_SUBSCRIPTION_ITEM_SUCCESS:
+            state.loading = false;
             return state;
         default:
             return state;

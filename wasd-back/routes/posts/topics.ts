@@ -46,6 +46,16 @@ Route.get("/:id", async (req, res, next) => {
     return res.json(topics_);
 });
 
+Route.post("/:id/delete", checkAuth, async (req, res, next) => {
+    if(!res.locals.user.permissions.includes("MODERATOR")) return res.json({ error: true, errors: ["You do not have permissions to delete a topic!"]});
+
+    let id = req.params.id;
+
+    await Topics.deleteOne({ id: id });
+
+    return res.json({ done: true, message: "Topic has been deleted"});
+});
+
 /* 
     POST /api/v1/topics/create
 
@@ -88,7 +98,7 @@ Route.post("/create", checkAuth, async (req, res, next) => {
 
     let id = uuid();
 
-    let topic = await Topics.create({ id, description, category, imgUrl: attachment.url, threads: [], title });
+    let topic = await Topics.create({ id, description, category, imgID: attachment.id, threads: [], title });
 
     attachment.attachedTo = id;
     attachment?.save();
@@ -99,6 +109,5 @@ Route.post("/create", checkAuth, async (req, res, next) => {
 
     return res.json(topic);
 });
-
 
 export default Route;

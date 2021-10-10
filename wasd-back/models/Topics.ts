@@ -4,7 +4,7 @@ export interface ITopics {
     id: string;
     title: string;
     description: string;
-    imgUrl: string;
+    imgID: string;
     createdAt: Date;
     category: string;
     threads: Array<string>;
@@ -15,7 +15,7 @@ const TopicsSchema = new Schema<ITopics>({
     id: String,
     title: String,
     description: String,
-    imgUrl: String,
+    imgID: String,
     category: String,
     threads: Array,
     createdAt: { type: Date, default: () => new Date() }

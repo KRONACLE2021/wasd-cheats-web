@@ -2,6 +2,8 @@ import { Router, json } from 'express';
 import { RedisClient } from 'redis';
 import { v4 as uuid } from 'uuid';
 import checkAuth from '../../middleware/checkAuth';
+import Attachments from '../../models/Attachments';
+import Item from '../../models/Item';
 import ItemSchema, { IStoreItem } from '../../models/Item';
 import Subscription from '../../models/Subscription';
 
@@ -10,7 +12,7 @@ let Route = Router();
 Route.use(json());
 
 Route.get("/users/checkout/incart", checkAuth, async (req, res, next) => {
-    if(!res.locals.user.permissions.includes("ADMINISTRATOR")) return res.json({ error: true, errors: ["You do not have permission to modify this content!"] });
+    if(!res.locals.user.permissions.includes("ADMINISTRATOR")) return res.json({ error: true, errors: ["You do not have permission to modify this content!"] }).status(403);
 
     const redis: RedisClient = req.app.get("redis");
 
@@ -26,7 +28,7 @@ Route.get("/users/checkout/incart", checkAuth, async (req, res, next) => {
 
 Route.post("/subscriptions/add", checkAuth, async (req, res, next) => {
 
-    if(!res.locals.user.permissions.includes("ADMINISTRATOR")) return res.json({ error: true, errors: ["You do not have permission to modify this content!"] });
+    if(!res.locals.user.permissions.includes("ADMINISTRATOR")) return res.json({ error: true, errors: ["You do not have permission to modify this content!"] }).status(403);
 
     let {
         name,
@@ -71,9 +73,10 @@ Route.post("/subscription/:id/delete", checkAuth, async (req, res, next) => {
     return res.json({ doen: true, message: "Subscription has been deleted!"});
 });
 
-Route.post("/item/add", checkAuth, async (req, res, next) => {
+Route.post("/item/:id/edit", checkAuth, async (req, res, next) => {
+    if(!res.locals.user.permissions.includes("ADMINISTRATOR")) return res.json({ error: true, errors: ["You do not have premissions to modify this content!"]}).status(403);
 
-    if(!res.locals.user.permissions.includes("ADMINISTRATOR")) return res.json({ error: true, errors: ["You do not have permission to modify this content!"] });
+    let id = req.params.id;
 
     let {
         name,
@@ -81,7 +84,48 @@ Route.post("/item/add", checkAuth, async (req, res, next) => {
         description,
         price,
         stock,
-        imgUrl,
+        imgID,
+        subscription
+    } = req.body;
+
+    let editingItem = await Item.findOne({ id: id });
+
+    if(!editingItem) return res.json({ error: true, errors: ["The item you are trying to is not found!"]});
+
+    if(subscription) {
+        let subscription_check = await Subscription.findOne({ id: subscription });
+        if(!subscription_check) subscription = null;
+    }
+
+    if(imgID){
+        let attachemnt_check = await Attachments.findOne({ id: imgID });
+        if(!attachemnt_check) imgID = null;
+    }
+
+    editingItem.name = name ? name : editingItem.name;
+    editingItem.currency = currency ? currency : editingItem.currency;
+    editingItem.description = description ? description : editingItem.description;
+    editingItem.price = price ? price : editingItem.price;
+    editingItem.stock = stock ? stock : editingItem.stock;
+    editingItem.image = imgID ? imgID : editingItem.image;
+    editingItem.subscription_id = subscription ? subscription : editingItem.subscription_id;
+
+    await editingItem.save();
+
+    return res.json({ item: editingItem, done: true });
+});
+
+Route.post("/item/add", checkAuth, async (req, res, next) => {
+
+    if(!res.locals.user.permissions.includes("ADMINISTRATOR")) return res.json({ error: true, errors: ["You do not have permission to modify this content!"] }).status(403);
+
+    let {
+        name,
+        currency,
+        description,
+        price,
+        stock,
+        imgID,
         subscription
     } = req.body;
 
@@ -93,7 +137,12 @@ Route.post("/item/add", checkAuth, async (req, res, next) => {
     if(!price) errors.push("You haven't provided a price for the item!");
     
     if(!stock) stock = 0;
-    
+
+    if(imgID){
+        let attachment_check = await Attachments.findOne({ id: imgID });
+        if(!attachment_check) imgID = null;
+    }
+
     let id = uuid();
     
     let Item = {
@@ -103,7 +152,7 @@ Route.post("/item/add", checkAuth, async (req, res, next) => {
         price: price,
         stock: stock,
         id: id,
-        image: imgUrl,
+        image: imgID,
         subscription_id: subscription
     };
 
@@ -114,7 +163,7 @@ Route.post("/item/add", checkAuth, async (req, res, next) => {
         stock,
         price,
         id,
-        image: imgUrl,
+        image: imgID,
         subscription_id: subscription
     });
 

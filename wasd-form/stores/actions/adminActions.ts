@@ -10,6 +10,9 @@ import {
     ADMIN_GET_INCART_ITEMS_FAILED,
     ADMIN_GET_INCART_ITEMS_PENDING, 
     ADMIN_GET_INCART_ITEMS_SUCCESS, 
+    ADMIN_UPDATE_PRODUCT_FAILED, 
+    ADMIN_UPDATE_PRODUCT_PENDING, 
+    ADMIN_UPDATE_PRODUCT_SUCCESS, 
     APPEND_SHOP_SUBSCRIPTIONS, 
     DELETE_SUBSCRIPTION_ITEM_FAILED, 
     DELETE_SUBSCRIPTION_ITEM_PENDING, 
@@ -150,4 +153,31 @@ export const deleteSubscriptionItem = (id: string, api_key: string) => {
             dispatcher(deleteSubscriptionItemFailed(err));
         })
     }   
+}
+
+const updateProductPending = () => {
+    return {
+        type: ADMIN_UPDATE_PRODUCT_PENDING
+    }
+}
+
+
+const updateProductFailed = (err: Array<string>) => {
+    return {
+        type: ADMIN_UPDATE_PRODUCT_FAILED,
+        payload: err
+    }
+}
+
+
+const updateProductSuccess = (product: any) => {
+    return {
+        type: ADMIN_UPDATE_PRODUCT_SUCCESS,
+        payload: product
+    }
+}
+export const updateProduct = (id: string, api_key: string) => {
+    return (dispatcher: Dispatch<any>) => {
+        dispatcher(updateProductPending());
+    }
 }

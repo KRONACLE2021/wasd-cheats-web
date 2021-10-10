@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import TopicCard from './TopicCard';
 import ModelContainer from '../models/ModelContainer';
 import FileUploader from './FileUploader';
+import { BASE_IMAGE_URL } from '../../requests/config';
 
 const CategoryContainer: React.FC<{name: string, id: string, isAdmin: any, toggleAddModel: any}> = (props) => {
 
@@ -61,7 +62,7 @@ const CategoryContainer: React.FC<{name: string, id: string, isAdmin: any, toggl
                         if(t.category == props.id) {
                             return <TopicCard   title={t.title}
                                                 description={t.description}
-                                                imgUrl={t.imgUrl}
+                                                imgUrl={BASE_IMAGE_URL(t.imgID)}
                                                 id={t.id}
                                     />
                         }

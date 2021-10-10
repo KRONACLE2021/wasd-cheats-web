@@ -713,3 +713,9 @@
 .default_dropdown_selections ul li {
     padding: 5px 0px;
 }
+
+.fourm_header_actions_bar_container {
+    background-color: var(--bg-lighter);
+    margin-top: 10px;
+    margin-left: 0px;
+}

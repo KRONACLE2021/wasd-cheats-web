@@ -2,6 +2,7 @@ const development = true;
 
 export const API = development ? "http://localhost:8080" : "https://api.wasdcheats.cc";
 export const API_STATUS_CHECK = "api/status";
+export const BASE_IMAGE_URL = (id: string) => `${API}/api/v1/uploads/file/${id}`;
 
 /* AUTH ROUTES */
 export const REGISTER_ROUTE = "api/v1/auth/register";

@@ -24,7 +24,7 @@ const TopicPage : React.FC<any> = () => {
 
     const topics = useSelector(state => state.topics.topics.filter((item) => (item["id"] == id)));
     const threads = useSelector(state => state.threadStore.threads.filter((item) => (item["topicId"] == id)));
-    const userStore = useSelector(state => state.user);
+    const userStore = useSelector(state => state.user.user);
 
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [activeThreads, setActiveThreads] = useState<Array<any>>([]);
@@ -92,7 +92,11 @@ const TopicPage : React.FC<any> = () => {
                         <h1 className={styles.header}>{topics[0].title}</h1>
                         <p style={{ marginBottom: "0px"}}>{topics[0].description}</p>
 
-                        {userStore?.permissions?.includes("MODERATOR") ? <ActionsBar actions={adminActions}></ActionsBar> : "" }
+                        {userStore?.permissions?.includes("MODERATOR") ? <> 
+                            <div className={styles.fourm_header_actions_bar_container}>
+                                <ActionsBar actions={adminActions}></ActionsBar> 
+                            </div>
+                        </> : "" }
                     </div>
                     <div className={styles.thread_create_container}>
                             <button className={styles.thread_create} onClick={() => router.push(`/fourm/topics/${topics[0].id}/new`)}>Start a Thread</button>
