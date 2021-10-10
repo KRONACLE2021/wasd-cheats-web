@@ -15,6 +15,7 @@ export interface IUser {
     banned: boolean;
     banId: string | null;
     active_subscriptions: Array<String>;
+    purchased_products: Array<String>;
 }
 
 
@@ -29,6 +30,7 @@ const UserSchema = new Schema<IUser>({
     posts: Array,
     uid: String ,
     banned: { type: Boolean, default: false },
+    purchased_products: Array,
     active_subscriptions: Array
 });
 

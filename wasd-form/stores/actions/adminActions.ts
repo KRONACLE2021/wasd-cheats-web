@@ -2,6 +2,7 @@ import Requester from "../../requests/Requester";
 import { 
     ADMIN_GET_USER_INCART_ITEMS,
     API,
+    DELETE_SUBSCRIPTIONS,
     GET_SUBSCRIPTIONS
 } from '../../requests/config';
 import { Dispatch } from "react";
@@ -10,6 +11,9 @@ import {
     ADMIN_GET_INCART_ITEMS_PENDING, 
     ADMIN_GET_INCART_ITEMS_SUCCESS, 
     APPEND_SHOP_SUBSCRIPTIONS, 
+    DELETE_SUBSCRIPTION_ITEM_FAILED, 
+    DELETE_SUBSCRIPTION_ITEM_PENDING, 
+    DELETE_SUBSCRIPTION_ITEM_SUCCESS, 
     GET_SHOP_SUBSCRIPTIONS_FAILED, 
     GET_SHOP_SUBSCRIPTIONS_PENDING, 
     SET_SHOP_SUBSCRIPTIONS
@@ -108,4 +112,42 @@ export const appendShopSubscriptions = (subscription: any) => {
         type: APPEND_SHOP_SUBSCRIPTIONS,
         payload: subscription
     }
+}
+
+const deleteSubscriptionItemPending = () => {
+    return {
+        type: DELETE_SUBSCRIPTION_ITEM_PENDING
+    }
+} 
+
+const deleteSubscriptionItemFailed = (errors: Array<any>) => {
+    return {
+        type: DELETE_SUBSCRIPTION_ITEM_FAILED,
+        payload: errors
+    }
+}
+
+const deleteSubscriptionItemSuccess = (id: string) => {
+    return {
+        type: DELETE_SUBSCRIPTION_ITEM_SUCCESS,
+        payload: id
+    }
+}
+
+export const deleteSubscriptionItem = (id: string, api_key: string) => {
+    return (dispatcher: Dispatch<any>) => {
+        dispatcher(deleteSubscriptionItemPending());
+        Requester_.makePostRequest(DELETE_SUBSCRIPTIONS(id), {}, {
+            queryStringParams: [],
+            headers: {
+                Authorization: api_key
+            }
+        }).then((res) => {
+            if(!res.error){
+                dispatcher(deleteSubscriptionItemSuccess(id));
+            } 
+        }).catch((err) => {
+            dispatcher(deleteSubscriptionItemFailed(err));
+        })
+    }   
 }

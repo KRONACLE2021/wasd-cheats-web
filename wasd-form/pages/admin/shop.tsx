@@ -7,13 +7,14 @@ import styles from '../../styles/admin.module.css';
 import DashboardCard from '../../components/admin/DashboardCard';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck, faDollarSign, faFile, faPen, faSubscript, faTrash, faUser, faWalking, faWallet } from '@fortawesome/free-solid-svg-icons';
-import { appendShopSubscriptions, getShopSubscriptions, getUsersIncartItems } from '../../stores/actions/adminActions';
+import { appendShopSubscriptions, deleteSubscriptionItem, getShopSubscriptions, getUsersIncartItems } from '../../stores/actions/adminActions';
 import ItemCard from '../../components/shop/ItemCard';
 import ModelContainer from '../../components/models/ModelContainer';
 import Requester from '../../requests/Requester';
-import { ADD_STORE_ITEM, ADD_SUBSCRIPTION, API } from '../../requests/config';
+import { ADD_STORE_ITEM, ADD_SUBSCRIPTION, API, DELETE_SUBSCRIPTIONS } from '../../requests/config';
 import { appendShopItem } from '../../stores/actions/shopItemsActions';
 import Dropdown from './../../components/shared/Dropdown';
+import axios from 'axios';
 
 const Requester_ = new Requester(API);
 
@@ -94,12 +95,16 @@ export default function adminShopManager() {
         switch(addSubscriptionData.timespan_type){
             case "DAYS":
                 timespanMilliseconds =  addSubscriptionData.timespan * 8.64e+7;
+                break;
             case "MONTHS":
                 timespanMilliseconds =  addSubscriptionData.timespan * 2.628e+9;
+                break;
             case "HOURS":
                 timespanMilliseconds = addSubscriptionData.timespan * 3.6e+6;
+                break;
             case "WEEKS":
                 timespanMilliseconds = addSubscriptionData.timespan *  6.048e+8;
+                break;
             default: 
                 setError("you must provide a timespan for your subscription!");
         }
@@ -124,7 +129,9 @@ export default function adminShopManager() {
         });
     }
 
-    console.log(adminDashboardStore.subscriptions);
+    const deleteSubscripton = (id: string) => {
+        dispatch(deleteSubscriptionItem(id, userStore.api_key));
+    }
 
     if(isLoading) return <Preloader />;
 
@@ -165,7 +172,7 @@ export default function adminShopManager() {
                                 setSubscriptionData({ ...addSubscriptionData, timespan: isNaN(parseInt(e.target.value)) ? 0 :parseInt(e.target.value) });
                             }
                         }} placeholder={""} value={addSubscriptionData.timespan} className={styles.admin_input}></input>
-                        <Dropdown output={(data) => setSubscriptionData({ ...addSubscriptionData, timespan_type: data.toUpperCase()})} choices={["Months", "Weeks", "Days", "Hours"]}></Dropdown>
+                        <Dropdown output={(data) => setSubscriptionData({ ...addSubscriptionData, timespan_type: data.toUpperCase()})} choices={[{ name: "Months", data: "months" }, { name: "Weeks", data: "weeks" }, { name: "Days", data: "days" }, { name: "Hours", data: "hours" } ]}></Dropdown>
                     </div>
                     <div style={{ marginTop: "10px", marginBottom: "10px"}}>
                         <button className={styles.button} onClick={() => submitCredateSubscription()}>Add Subscription</button>

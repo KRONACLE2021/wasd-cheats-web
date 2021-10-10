@@ -10,15 +10,24 @@ import "draft-js/dist/Draft.css";
 
 import {RefreshUser} from '../stores/actions/userActions';
 import { createWrapper } from 'next-redux-wrapper';
+import { fetchItemsInCart } from '../stores/actions/userCartActions';
 
 function MyApp({ Component, pageProps }: AppProps) {
 
   let dispatch = useDispatch();
   let userStore = useSelector(state => state.user);
+  let user = useSelector(state => state.user.user);
 
   useEffect(() => {
     dispatch(RefreshUser());
   }, [userStore]);
+
+  useEffect(() => {
+    if(userStore.user.api_key){
+      console.log("fetching users cart")
+      dispatch(fetchItemsInCart(userStore.user.api_key));
+    }
+  }, [user]);
 
   return <>
     <Provider store={Store}>

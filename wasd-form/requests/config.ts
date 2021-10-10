@@ -24,11 +24,14 @@ export const DELETE_POST = (id: string) => `api/v1/posts/delete/${id}`;
 export const GET_STORE_ITEMS = `api/v1/shop/items`;
 export const GET_STORE_ITEM = (id: string) => `api/v1/shop/items/${id}`; 
 export const ADMIN_GET_USER_INCART_ITEMS = `api/v1/shop/admin/users/checkout/incart`;
+export const GET_USER_INCART_ITEMS = `api/v1/shop/checkout/order`;
 export const ADD_STORE_ITEM = `api/v1/shop/admin/item/add`;
 export const ADD_SUBSCRIPTION = `api/v1/shop/admin/subscriptions/add`;
-export const GET_SUBSCRIPTIONS = `api/v1/shop/admin/subscriptions/get`
+export const GET_SUBSCRIPTIONS = `api/v1/shop/admin/subscriptions/get`;
+export const DELETE_SUBSCRIPTIONS = (id: string) => `api/v1/shop/admin/subscription/${id}/delete`;
 export const CREATE_NEW_ORDER = `api/v1/shop/checkout/create-order` 
 export const GET_PAYPAL_ORDER = `api/v1/shop/checkout/payment/paypal`;
+export const CAPTURE_PAYPAL_ORDER = `api/v1/shop/checkout/capture/paypal`;
 
 /* File upload routes */
 export const USER_FILE_UPLOAD = `api/v1/upload/usercontent`;
