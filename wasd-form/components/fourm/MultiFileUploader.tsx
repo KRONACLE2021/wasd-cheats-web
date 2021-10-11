@@ -13,14 +13,13 @@ let allowedFileTypes = [
     "image/x-icon"
 ];
 
-const FileUploader : React.FC<{ 
+const MultiFileUploader : React.FC<{ 
     reccomended_size: string, 
     uploadType: "icon" | "image", 
-    output: (arg: string) => void, 
+    output: (arg: Array<string>) => void, 
     custom_classes: Array<string> | undefined 
 }> = ({ reccomended_size, uploadType, output, custom_classes })  => {
-    const [file, setFile] = useState<{selectedFile: null | File }>({ selectedFile: null });
-    const [fileUrl, setFileUrl] = useState<any>("");
+    const [file, setFile] = useState<{selectedFiles: Array<{ file: File, url: string}> }>({ selectedFiles: [] });
 
     const userStore = useSelector(state => state.user);
 
@@ -31,7 +30,7 @@ const FileUploader : React.FC<{
             console.log("[WASD Uploader] Error! Mimetype does not match an allowed mimetype");
             alert("Invalid file type!");
         } else {
-            setFile({ selectedFile: e.target.files[0] });
+            setFile({ selectedFiles: [...file.selectedFiles, { file: e.target.files[0], url: URL.createObjectURL(e.target.files[0]) }] });
             setFileUrl(URL.createObjectURL(e.target.files[0]))
             uploadFile(e.target.files[0]);
         }
@@ -65,19 +64,26 @@ const FileUploader : React.FC<{
     return (
         <div className={`file-uploader_container ${custom_classes}`}>
             <input className="file-uploader_input" type="file" onChange={onFileChange} />
-            {fileUrl !== "" ? <> 
-                <p>Your uploaded file (Click to change): </p>
-                <img src={fileUrl} style={{ height: "100px", width: "100%", objectFit: "scale-down"}}></img> 
-                <p>{file.selectedFile.name}</p>
+            {file.selectedFiles.length !== 0 ? <>
+                <div>
+                    <p>Your files: </p>
+                    {file.selectedFiles.map(file_ => {
+                        return (
+                            <div>
+                                <img src={file_.url} style={{ height: "100px", width: "100%", objectFit: "scale-down"}}></img> 
+                                <p>{file_.file.name}</p>
+                            </div>
+                        )
+                    })}
+                </div>
             </> : (
-                <>
-                    <img src={"/upload_file.png"} className={"file_uploader_image"} alt={"Upload a file"} />
-                    <p><span style={{fontWeight: "600"}}>Click </span> to upload a {uploadType}</p>
-                    <p>Reccomended size: {reccomended_size}</p>
-                </>
+                <div>
+                    <p className={"file_uploader-smallText"}><span style={{fontWeight: "400", marginBottom: "0px", marginTop: "0px"}}>Click </span> to upload a {uploadType} (Max file uploads: 10)</p>
+                    <p className={"file_uploader-size file_uploader-smallText"}>Reccomended size: {reccomended_size}</p>
+                </div>
             ) }
         </div>
     )
 }
 
-export default FileUploader;
+export default MultiFileUploader;

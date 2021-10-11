@@ -124,14 +124,14 @@ a {
 
 .file-uploader_container {
   position: relative;
-  min-height: 150px;
+  display: flex;
+  align-items: center;
+  min-height: 100px;
   height: auto;
-  padding: 10px;
+  padding: 0px 20px;
   width: 100%;
   left: 0;
   background-color: var(--bg-lighter);
-  border: 2px solid var(--purple);
-  text-align: center;
   cursor: pointer;
   margin-bottom: 10px;
 }
@@ -146,6 +146,11 @@ a {
   left: 0;
   top: 0;
   opacity: 0;
+}
+
+.file_uploader_image {
+  height: 75px;
+  margin-top: 10px;
 }
 
 @keyframes loading-logo {
@@ -190,3 +195,38 @@ a {
   color: grey;
 }
 
+
+.editor {
+  box-sizing: border-box;
+  border: 1px solid #ddd;
+  cursor: text;
+  padding: 16px;
+  border-radius: 2px;
+  margin-bottom: 2em;
+  box-shadow: inset 0px 1px 8px -3px #ABABAB;
+  background: #fefefe;
+}
+
+.small_file-uploader {
+  height: 100px !important;
+}
+
+.small_file-uploader .file_uploader_image {
+  height: 40px;
+}
+
+.file_uploader-disclamer {
+  color: grey;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.file_uploader-size {
+  margin-bottom: 0px;
+  margin-top: 0px;
+}
+
+.file_uploader-smallText {
+  font-size: 14px;
+  color: rgb(158, 158, 158);
+}

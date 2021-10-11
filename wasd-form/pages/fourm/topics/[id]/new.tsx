@@ -8,6 +8,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import Draft from '../../../../components/editor/draft';
 import Preloader from '../../../../components/shared/Preloader';
 import FourmError from '../../../../components/shared/FourmError';
+import FileUploader from '../../../../components/fourm/FileUploader';
+import MultiFileUploader from '../../../../components/fourm/MultiFileUploader';
 
 
 const NewThread: React.FC<any> = (props) => {
@@ -65,6 +67,7 @@ const NewThread: React.FC<any> = (props) => {
                     <p className={styles.editor_details}>For more details on how to fully utilize our editor please check this form post</p>
                     
                     <Draft output={setHtmlPost} />
+                    <MultiFileUploader reccomended_size={"1920x1080 - 20MB"} uploadType={"image"} output={() => {}} custom_classes={["small_file-uploader"]} />
                     <div className={styles.top_spacer}></div>
                     <button className={styles.post_thread_btn} onClick={() => submitForm()}>Post Thread</button>
                     <div className={styles.top_spacer}></div>
