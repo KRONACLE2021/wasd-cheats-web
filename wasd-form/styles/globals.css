@@ -208,7 +208,9 @@ a {
 }
 
 .small_file-uploader {
-  height: 100px !important;
+  min-height: 75px !important;
+  border-radius: 7px;
+  margin-top: 20px;
 }
 
 .small_file-uploader .file_uploader_image {
@@ -222,7 +224,7 @@ a {
 }
 
 .file_uploader-size {
-  margin-bottom: 0px;
+  margin-bottom: 10px;
   margin-top: 0px;
 }
 

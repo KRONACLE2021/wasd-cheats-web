@@ -20,6 +20,8 @@ const MultiFileUploader : React.FC<{
     custom_classes: Array<string> | undefined 
 }> = ({ reccomended_size, uploadType, output, custom_classes })  => {
     const [file, setFile] = useState<{selectedFiles: Array<{ file: File, url: string}> }>({ selectedFiles: [] });
+    const [uploadedAttachemnts, setUploadedAttachemnts] = useState<Array<string>>([]);
+    const [error, setError] = useState<string>("");
 
     const userStore = useSelector(state => state.user);
 
@@ -31,13 +33,14 @@ const MultiFileUploader : React.FC<{
             alert("Invalid file type!");
         } else {
             setFile({ selectedFiles: [...file.selectedFiles, { file: e.target.files[0], url: URL.createObjectURL(e.target.files[0]) }] });
-            setFileUrl(URL.createObjectURL(e.target.files[0]))
             uploadFile(e.target.files[0]);
         }
     
     };
 
     const uploadFile = async (file_: any) => {
+        
+        if(uploadedAttachemnts.length == 10) return setError("Reached attachment limit!"); 
         
         console.log("[WASD Uploader] Uploading file...")
         const formData = new FormData();
@@ -57,7 +60,8 @@ const MultiFileUploader : React.FC<{
         if(result.error == true) {
             alert("[AXIOS] Error uploading file: " + result.errors);
         } else {
-            output(result.data.attachment_.id);
+            setUploadedAttachemnts([ ...uploadedAttachemnts, result.data.attachment_.id ]);
+            output([ ...uploadedAttachemnts, result.data.attachment_.id ]);
         }
     }
     
@@ -69,7 +73,7 @@ const MultiFileUploader : React.FC<{
                     <p>Your files: </p>
                     {file.selectedFiles.map(file_ => {
                         return (
-                            <div>
+                            <div style={{ float: "left", marginLeft: "10px"}}>
                                 <img src={file_.url} style={{ height: "100px", width: "100%", objectFit: "scale-down"}}></img> 
                                 <p>{file_.file.name}</p>
                             </div>

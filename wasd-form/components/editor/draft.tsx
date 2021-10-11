@@ -7,6 +7,8 @@ import createImagePlugin from '@draft-js-plugins/image';
 import createBlockDndPlugin from '@draft-js-plugins/drag-n-drop';
 import createFocusPlugin from '@draft-js-plugins/focus';
 import { composeDecorators } from '@draft-js-plugins/editor';
+import MultiFileUploader from '../fourm/MultiFileUploader';
+import { BASE_IMAGE_URL } from '../../requests/config';
 
 const Editor = dynamic(import("@draft-js-plugins/editor").then(module => module.default), {
     ssr: false
@@ -22,10 +24,11 @@ const decorator = composeDecorators(
 
 const imagePlugin = createImagePlugin({ decorator });
 
-const draftEditor: React.FC<{output: Function, placeholder: string}> = (props) => {
+const draftEditor: React.FC<{output: Function, hasUploader: boolean, uploads: (uploads: Array<string>) => void, placeholder: string}> = (props) => {
 
     const [editorState, setEditorState] = useState(() => EditorState.createEmpty());
-    
+    const [attachments, setAttachments] = useState<Array<string>>([]);
+
     const toggleBlockType = (blockType : string) => {
         let newState = RichUtils.toggleBlockType(editorState, blockType);
 
@@ -34,10 +37,25 @@ const draftEditor: React.FC<{output: Function, placeholder: string}> = (props) =
     }
 
     const createContent = () => {
-        //props.output(stateToHTML(editorState.getCurrentContent()));
+        props.output(stateToHTML(editorState.getCurrentContent()));
     }
 
-    const handleOnChange = editorState_ => setEditorState(editorState_);
+    const handleOnChange = editorState_ => { 
+        setEditorState(editorState_);
+        createContent(); 
+    }
+
+    const handleUploadChange = (data) => {
+        for(var i of data){
+            if(attachments.indexOf(i) !== -1) return;
+            setAttachments([...attachments, i]);
+            handleOnChange(imagePlugin.addImage(editorState, BASE_IMAGE_URL(i), null));
+        }
+    } 
+
+    useEffect(() => {
+        props.uploads(attachments);
+    }, [attachments])
 
 
     return (
@@ -56,6 +74,10 @@ const draftEditor: React.FC<{output: Function, placeholder: string}> = (props) =
                     onChange={handleOnChange}
                     plugins={[dragNdDrop, focusPlugin, imagePlugin]}
                 />
+
+                {props.hasUploader ? (
+                    <MultiFileUploader reccomended_size={"1920x1080 - 20MB"} uploadType={"image"} output={handleUploadChange} custom_classes={["small_file-uploader"]} />
+                ): ""}
             </div>
         </div>
     )
