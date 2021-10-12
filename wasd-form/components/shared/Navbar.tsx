@@ -33,7 +33,7 @@ const Navbar : React.FC<any> = (props) => {
                             <ul className={styles.drop_down_list}>
                                 <li><Link href={"/logout"}>Logout</Link></li>
                                 <li><Link href={"/users/me"}>Profile</Link></li>
-                                <li><Link href={"/user/settings"}>Settings</Link></li>
+                                <li><Link href={"/users/me/settings"}>Settings</Link></li>
                                 {userStore.username !== undefined ? (userStore.permissions.includes("ADMINISTRATOR") ? (
                                     <>
                                         <li><Link href={"/admin"}>Admin Panel</Link></li>

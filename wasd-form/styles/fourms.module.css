@@ -743,3 +743,8 @@
     color: grey;
     font-size: 14px;
 }
+
+.root_page_container {
+    margin-top: 100px;
+    padding: 0px 40px;
+}

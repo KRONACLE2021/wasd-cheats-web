@@ -16,11 +16,14 @@ export interface IUser {
     banId: string | null;
     active_subscriptions: Array<String>;
     purchased_products: Array<String>;
+    bio: String;
+    banner: String;
 }
 
 
 const UserSchema = new Schema<IUser>({
     username: { type: String, required: true },
+    bio: String,
     email: { type: String, required: true },
     permissions: Array,
     password: { type: String, required: true },
@@ -31,7 +34,8 @@ const UserSchema = new Schema<IUser>({
     uid: String ,
     banned: { type: Boolean, default: false },
     purchased_products: Array,
-    active_subscriptions: Array
+    active_subscriptions: Array,
+    banner: String
 });
 
 

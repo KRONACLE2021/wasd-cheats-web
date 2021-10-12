@@ -22,6 +22,7 @@ export const CREATE_NEW_TOPIC = `api/v1/topics/create`;
 export const DELETE_POST = (id: string) => `api/v1/posts/delete/${id}`;
 export const DELETE_TOPIC = (id: string) => `api/v1/topics/${id}/delete`;
 export const REPORT_POST = `api/v1/report/post`;
+export const UPDATE_USER_PROFILE = `api/v1/users/me/update`;
 
 /* Store Routes */
 export const GET_STORE_ITEMS = `api/v1/shop/items`;

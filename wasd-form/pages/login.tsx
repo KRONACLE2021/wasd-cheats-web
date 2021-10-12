@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import Router from 'next/router';
+import Router, { useRouter } from 'next/router';
 import styles from '../styles/login.module.css'; 
 import { LoginUser } from '../stores/actions/userActions';
 import { useDispatch, useSelector } from 'react-redux';
@@ -11,6 +11,7 @@ import { HCAPTCHA_SITE_KEY } from '../site_config';
 const Login : React.FC<any> = (props) => {
     
     const dispatch = useDispatch();
+    const router = useRouter();
 
     const userStore = useSelector(state => state.user);
 
@@ -23,7 +24,8 @@ const Login : React.FC<any> = (props) => {
     useEffect(() => {
         if(userStore){
             if(userStore.user.username){
-                Router.push("/fourm");
+
+                router.push(router.query.after ? router.query.after : "/fourm");
             }
         }
     }, [userStore]);
@@ -37,7 +39,7 @@ const Login : React.FC<any> = (props) => {
             if(res.error) {
                 setErrors(res.errors);
             } else {
-                Router.push("/fournm");
+                router.push(router.query.after ? router.query.after : "/fourm");
             }
         } 
 

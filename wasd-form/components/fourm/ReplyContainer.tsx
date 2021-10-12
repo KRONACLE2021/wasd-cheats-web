@@ -64,7 +64,7 @@ const ReplyContainer: React.FC<{user: any, topic_id: string}> = ({ user, topic_i
     return (
         <div className={`${styles.reply_continer} ${editorIsActive ? styles.editor_active : ""}`}>
             <div className={styles.reply_user_pfp_contianer}>
-                <img src={getAvatar(user)} />
+                <img src={getAvatar(user.user)} />
             </div>
             {editorIsActive == false ? <div onClick={() => spawnEditor()} className={styles.reply_placeholder}>
                 <p>{fillerText}</p>

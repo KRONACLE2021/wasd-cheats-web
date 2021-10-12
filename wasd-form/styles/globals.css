@@ -131,6 +131,8 @@ a {
   padding: 0px 20px;
   width: 100%;
   left: 0;
+  border-radius: 7px;
+  max-width: 500px;
   background-color: var(--bg-lighter);
   cursor: pointer;
   margin-bottom: 10px;

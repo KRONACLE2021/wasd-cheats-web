@@ -66,14 +66,17 @@ const FileUploader : React.FC<{
         <div className={`file-uploader_container ${custom_classes}`}>
             <input className="file-uploader_input" type="file" onChange={onFileChange} />
             {fileUrl !== "" ? <> 
-                <p>Your uploaded file (Click to change): </p>
-                <img src={fileUrl} style={{ height: "100px", width: "100%", objectFit: "scale-down"}}></img> 
-                <p>{file.selectedFile.name}</p>
+                <div>
+                    <p>Your uploaded file (Click to change): </p>
+                    <img src={fileUrl} style={{ height: "100px", width: "100%", objectFit: "scale-down"}}></img> 
+                    <p>{file.selectedFile.name}</p>
+                </div>
             </> : (
                 <>
-                    <img src={"/upload_file.png"} className={"file_uploader_image"} alt={"Upload a file"} />
-                    <p><span style={{fontWeight: "600"}}>Click </span> to upload a {uploadType}</p>
-                    <p>Reccomended size: {reccomended_size}</p>
+                    <div>
+                        <p><span style={{fontWeight: "600"}}>Click </span> to upload a {uploadType}</p>
+                        <p>Reccomended size: {reccomended_size}</p>
+                    </div>
                 </>
             ) }
         </div>

@@ -5,6 +5,7 @@ import Ban from '../models/Ban';
 import checkAuth from '../middleware/checkAuth';
 import Posts from '../models/Posts';
 import sanitizeUsers from '../utils/sanitizeUsers';
+import Attachments from '../models/Attachments';
 
 let Route = Router();
 
@@ -23,12 +24,47 @@ Route.get("/me", checkAuth, (req, res, next) => {
         created_at: user.created_at,
         permissions: user.permissions, 
         uid: user.uid, 
-        tags: user.tags 
+        tags: user.tags,
+        banner: user.banner
     };
 
     return res.json(cleanUser);
 });
 
+Route.post("/me/update", checkAuth, async (req, res, next) => {
+    
+    let {
+        bio,
+        banner,
+        avatar
+    } = req.body;
+
+    let userId = res.locals.user.uid;
+
+    let dbUser = await  Users.findOne({ uid: userId });
+
+    if(!dbUser) return res.json({ error: true, errors: ["You dont exsist in our database! Wait how did we get here? This is impossible."]})
+
+    //check if the images supplied are hosted on our site
+    if(banner) {
+        let attachment_check = await Attachments.findOne({ id: banner });
+        if(!attachment_check) banner = "";
+        dbUser.banner = attachment_check.id;
+    } 
+    if(avatar) {
+        let attachment_check = await Attachments.findOne({ id: avatar });
+        if(!attachment_check) avatar = "";
+        dbUser.avatar = attachment_check.id;
+    }
+
+    dbUser.bio = bio ? bio : dbUser.bio;
+
+    await dbUser.save();
+
+    let sanitizedUser = sanitizeUsers(dbUser);
+
+    return res.json({ done: true, user: sanitizedUser });
+});
 
 Route.get("/:id/posts", async (req, res, next) => {
     let id = req.params.id;

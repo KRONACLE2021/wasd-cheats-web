@@ -6,7 +6,8 @@ import {
     REGISTER_ROUTE, 
     GET_CURRENT_USER, 
     GET_USER_POSTS,
-    GET_USERS
+    GET_USERS,
+    UPDATE_USER_PROFILE
 } from '../../requests/config';
 import Requester from '../../requests/Requester';
 import { 
@@ -223,5 +224,45 @@ export const LogoutUser = () => {
     return {
         type: SET_USER,
         payload: {}
+    }
+}
+
+const updateUserPending = () => {
+    return {
+
+    }
+}
+
+const updateUserSuccess = (user: any) => {
+    return {
+
+    }
+}
+
+
+const updateUserFailed = (errors: Array<string>) => {
+    return {
+
+    }
+}
+
+export const UpdateUser = ({ bio, username, banner, avatar } : { bio: string, username: string, banner: string, avatar: string}, api_key: string) => {
+    return (dispatcher: Dispatch<any>) => {
+        dispatcher(updateUserPending());
+
+        Requester_.makePostRequest(UPDATE_USER_PROFILE, {
+            bio,
+            banner,
+            avatar
+        }, {
+            queryStringParams: [],
+            headers: {
+                Authorization: api_key 
+            }
+        }).then((res) => {
+            if(!res.error){
+                updateUserSuccess(res.user);
+            }
+        })
     }
 }
