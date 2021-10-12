@@ -725,3 +725,7 @@
     min-width: 500px;
     max-width: 800px;
 }
+
+.fourm_post_contents img {
+    max-height: 400px;
+}

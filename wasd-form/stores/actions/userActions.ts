@@ -111,11 +111,12 @@ export const RefreshUser = () => {
 
 }
 
-export const LoginUser = async (login: {username: string, password: string}, dispatch : any) => {
+export const LoginUser = async (login: {username: string, password: string, h_captcha: string }, dispatch : any) => {
 
     let result = await Requester_.makePostRequest(LOGIN_ROUTE, {
         username: login.username,
-        password: login.password
+        password: login.password,
+        h_captcha: login.h_captcha
     },{
         headers: {
             "content-type": "application/json"
@@ -142,11 +143,12 @@ export const LoginUser = async (login: {username: string, password: string}, dis
 }
 
 
-export const RegisterUser = async ({email, username, password}: {email : string, username: string, password: string}, dispatch : any) => {
+export const RegisterUser = async ({email, username, password, h_captcha}: {email : string, username: string, password: string, h_captcha: string | undefined }, dispatch : any) => {
     let result = await Requester_.makePostRequest(REGISTER_ROUTE, {
         username,
         email,
-        password
+        password,
+        h_captcha
     }, {
         headers: {
             "content-type": "application/json"

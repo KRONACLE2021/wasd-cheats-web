@@ -6,7 +6,7 @@ import fetchUser from '../../requests/getUser';
 import { IUser } from '../../interfaces';
 import { SetPostUser, DeletePost } from '../../stores/actions/postsAction';
 import { useDispatch, useSelector } from 'react-redux';
-import getUserPermission from '../../utils/getUserPermission';
+import getUserPermission, { getPermissionColor } from '../../utils/getUserPermission';
 import { QuoteUser, SetEditorFocused } from '../../stores/actions/textEditorActions';
 import ModelContainer from '../models/ModelContainer';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -97,10 +97,10 @@ const PostCard: React.FC<{ contents: string, uid: string | null, createdAt: stri
                     <div className={styles.post_user_container}>
                         <img src={props.user?.avatar} className={styles.pfp} />
                         <h3 className={styles.username}>{props.user?.username}</h3>
-                        <p className={styles.permission_type}>{props?.user?.permissions ? getUserPermission(props?.user?.permissions) : ""}</p>
+                        <p className={`${styles.permission_type} ${getPermissionColor(props?.user?.permissions)} `}>{props?.user?.permissions ? getUserPermission(props?.user?.permissions) : ""}</p>
                     </div>
                     <div className={styles.post_content}>
-                    <div dangerouslySetInnerHTML={{ __html: contents }}></div>
+                    <div dangerouslySetInnerHTML={{ __html: contents }} className={styles.fourm_post_contents}></div>
                         
                        <ActionsBar actions={userActions} />
                     </div>

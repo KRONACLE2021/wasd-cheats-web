@@ -179,5 +179,7 @@ const updateProductSuccess = (product: any) => {
 export const updateProduct = (id: string, api_key: string) => {
     return (dispatcher: Dispatch<any>) => {
         dispatcher(updateProductPending());
+
+        Requester_.makePostRequest()
     }
 }

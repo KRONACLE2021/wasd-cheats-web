@@ -4,6 +4,8 @@ import { isEmailBurner } from "burner-email-providers";
 import { v4 as uuid } from 'uuid';
 import bcrypt from 'bcrypt';
 import DiscordOauth from './discord_oauth';
+import HCaptchaVerify from "../utils/hCaptcha";
+
 
 let Route = Router();
 
@@ -78,7 +80,16 @@ Route.post("/login", async (req, res, next) => {
 
     if(!body.username) return res.json({error: true, errors: ["No email/username provided!"]});
     if(!body.password) return res.json({error: true, errors: ["No password provided!"]});
+    if(!body.h_captcha) return res.json({ error: true, errors: ["No h-captcha token provided!"] });
 
+    await HCaptchaVerify(body.h_captcha).then((res_) => {
+        if(!res_.success){
+            return res.json({ error: true, errors: ["Please retry the captcha!"]})
+        }
+    }).catch((err) => {
+        console.log(err);
+        return res.status(500).json({ error: true, errors: ["Internal server error occured whilst trying to contact HCAPTCHA, try again later."]});
+    });
 
     let user = await UserModel.findOne({ username: body.username });
 

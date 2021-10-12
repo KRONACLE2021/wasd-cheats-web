@@ -6,6 +6,7 @@ import Threads from '../../models/Threads';
 import checkAuth from '../../middleware/checkAuth';
 import { IUser } from '../../models/Users';
 import Posts from '../../models/Posts';
+import Attachments from '../../models/Attachments';
 
 let Route = Router();
 
@@ -62,9 +63,18 @@ Route.post("/create", checkAuth, async (req, res, next) => {
     let id = uuid();
     let threadId = body.thread_id;
 
-
     //provide attachment checking
-
+    let validatedAttachments = [];
+    if(attachments){
+        for(var i of attachments){
+            console.log("Validating attachment: ", i);
+            let attachment = await Attachments.findOne({ id: i });
+            if(!attachment) continue;
+            validatedAttachments.push(attachment.id);
+            attachment.attachedTo = id;
+            await attachment.save(); 
+        }
+    }
     
     //check for blank posts and "spam"
     if(!contents || contents == "" || contents.replace(/\s/g, '').length == 0) errors.push("You must provide the contents of what you want to post!");
@@ -87,7 +97,7 @@ Route.post("/create", checkAuth, async (req, res, next) => {
     } 
 
 
-    let post = await CreatePost(attachments, contents, user.uid, threadId, refrenced_post_id);
+    let post = await CreatePost(validatedAttachments, contents, user.uid, threadId, refrenced_post_id);
 
     if(post == false) return res.json({ error: true, errors: ["Could not save post to database! If this error continues please contact a website admin. "]});
 

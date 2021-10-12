@@ -21,13 +21,14 @@ const NewThread: React.FC<any> = (props) => {
     const { query: { id } } = router;
 
     const [title, setTitle] = useState<string>("");
+    const [attachments, setAttachments] = useState<Array<string>>([]);
     const [htmlPost, setHtmlPost] = useState<string>("");
     const [loading, setLoading] = useState<boolean>(true);
     const [errors, setErrors] = useState<Array<String>>([]);
 
 
     const submitForm = async () => {
-        let response = await CreateThread({title, post: htmlPost, attachments: null, topic_id: id }, user.user.api_key, dispatch);
+        let response = await CreateThread({title, post: htmlPost, attachments: attachments, topic_id: id }, user.user.api_key, dispatch);
         if(!response.error){
             router.push(`/fourm/threads/${response.id}`);
         } else {
@@ -66,7 +67,9 @@ const NewThread: React.FC<any> = (props) => {
                     <h3>Inital Post: </h3>
                     <p className={styles.editor_details}>For more details on how to fully utilize our editor please check this form post</p>
                     
-                    <Draft output={setHtmlPost} />
+                    <Draft hasUploader={true} uploads={(data: Array<string>) => {
+                        setAttachments(data);
+                    }} output={setHtmlPost} placeholder={"Your post"} />
                     <div className={styles.top_spacer}></div>
                     <button className={styles.post_thread_btn} onClick={() => submitForm()}>Post Thread</button>
                     <div className={styles.top_spacer}></div>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { EditorState, RichUtils, Modifier } from 'draft-js';
 import dynamic from 'next/dynamic';
 import Toolbar from './toolbar/Toolbar';
@@ -54,7 +54,9 @@ const draftEditor: React.FC<{output: Function, hasUploader: boolean, uploads: (u
     } 
 
     useEffect(() => {
-        props.uploads(attachments);
+        if(props.uploads) {
+            props.uploads(attachments);
+        }
     }, [attachments])
 
 

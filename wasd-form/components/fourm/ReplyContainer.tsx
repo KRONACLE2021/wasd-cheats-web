@@ -37,7 +37,7 @@ const ReplyContainer: React.FC<{user: any, topic_id: string}> = ({ user, topic_i
     const spawnEditor = () => {
 
         console.log(user);
-        if(!user.uid) {
+        if(!user.user.uid) {
             Router.push("/login");
         }
 
@@ -46,11 +46,11 @@ const ReplyContainer: React.FC<{user: any, topic_id: string}> = ({ user, topic_i
 
     const createPost_ = async () => {
 
-        if(!user.uid){
+        if(!user.user.uid){
             Router.push("/login");
         }
 
-        let res = await CreatePost(editorOutput, [], topic_id, user.api_key, dispatch);
+        let res = await CreatePost(editorOutput, [], topic_id, user.user.api_key, dispatch);
 
         if(res.error){
             setErrors(res.errors);
@@ -71,7 +71,7 @@ const ReplyContainer: React.FC<{user: any, topic_id: string}> = ({ user, topic_i
             </div> : ( 
                 <div style={{width: "100%"}}>
                     { error.length !== 0 ? <FourmError error={"Error!"} errorDescription={error[0]} /> : "" }
-                    <div className={styles.reply_draft_editor}> <Draft  output={setEditorOutput} /> </div> 
+                    <div className={styles.reply_draft_editor}> <Draft hasUploader={true} output={setEditorOutput} /> </div> 
                     <div className={styles.top_spacer}></div>
                     <button className={styles.post_thread_btn} onClick={() => createPost_()}>Post</button>
                 </div>

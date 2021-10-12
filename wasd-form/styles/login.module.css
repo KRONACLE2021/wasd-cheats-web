@@ -7,7 +7,7 @@
 }
 
 .login_box {
-    height: 500px;
+    min-height: 500px;
     width: 400px;
     display: flex;
     justify-content: space-between;

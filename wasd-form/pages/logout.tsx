@@ -7,7 +7,7 @@ const Logout: React.FC<any> = (props) => {
 
     const dispatch = useDispatch();
 
-    const userStore = useSelector(state => state.user);
+    const userStore = useSelector(state => state.user.user);
 
     useEffect(() => {
         if(userStore){

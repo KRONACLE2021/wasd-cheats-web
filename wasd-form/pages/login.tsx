@@ -5,6 +5,7 @@ import styles from '../styles/login.module.css';
 import { LoginUser } from '../stores/actions/userActions';
 import { useDispatch, useSelector } from 'react-redux';
 import FourmError from '../components/shared/FourmError';
+import HCaptcha from '@hcaptcha/react-hcaptcha';
 
 const Login : React.FC<any> = (props) => {
     
@@ -12,10 +13,7 @@ const Login : React.FC<any> = (props) => {
 
     const userStore = useSelector(state => state.user);
 
-    const [email, setEmail] = useState<string>("");
-    const [password, setPassword] = useState<string>("");
-
-    const [isLoading, setLoading] = useState<boolean>(false);
+    const [loginBody, setLoginBody] = useState<{ h_captcha?: string | undefined | null, username: string, password: string}>({ username: "", password: "" });
     const [isSubmitting, setSubmitting] = useState<boolean>(false);
 
     const [errors, setErrors] = useState<Array<string>>([]);
@@ -32,10 +30,7 @@ const Login : React.FC<any> = (props) => {
     const submitForm = async () => {
         setSubmitting(true);
 
-        let res = await LoginUser({
-            username: email,
-            password: password
-        }, dispatch);
+        let res = await LoginUser(loginBody, dispatch);
 
         if(res) {
             if(res.error) {
@@ -59,12 +54,15 @@ const Login : React.FC<any> = (props) => {
                                         <div className={styles.spacer_top}></div> 
                                     </> ) : "" }
                     <div className={styles.login_box__input_fields}>
-                        <input placeholder={"email/username"} onChange={(e) =>  setEmail(e.target.value)} className={styles.login_input} />
+                        <input placeholder={"email/username"} onChange={(e) =>  setLoginBody({ ...loginBody, username: e.target.value })} className={styles.login_input} />
                         <div className={styles.spacer_top}></div>
-                        <input placeholder={"password"} type={"password"} onChange={(e) =>  setPassword(e.target.value)} className={styles.login_input} />
+                        <input placeholder={"password"} type={"password"} onChange={(e) =>  setLoginBody({ ...loginBody, password: e.target.value })} className={styles.login_input} />
                     </div>
 
                     <div className={styles.spacer_top}></div>
+                    <HCaptcha onVerify={(token) => { 
+                        setLoginBody({ ...loginBody, h_captcha: token })
+                    }} sitekey={"10000000-ffff-ffff-ffff-000000000001"}/>
                     <div className={styles.spacer_top}></div>
 
                     <div className={styles.login_box_buttons}>
