@@ -12,12 +12,14 @@ import ModelContainer from '../models/ModelContainer';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash, faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
 import ActionsBar from './ActionsBar';
+import ReportModel from '../shared/ReportModel';
 
 
 const PostCard: React.FC<{ contents: string, uid: string | null, createdAt: string, id: string, attachments: Array<string>, user: IUser | null, replyToPost: Function, thread: any}> = (props) => {
 
     const [contents, setContents] = useState<string | null>(null);
     const [deleteModelActive, setDeleteModelActive] = useState(false);
+    const [reportModelActive, setReportModelActive] = useState(false);
     const userStore = useSelector(state => state.user);
     const dispatch = useDispatch();
 
@@ -66,7 +68,9 @@ const PostCard: React.FC<{ contents: string, uid: string | null, createdAt: stri
             name: "Report",
             fasIcon: faExclamationTriangle,
             fasSize: "lg",
-            eventHandeler: () => {},
+            eventHandeler: () => {
+                setReportModelActive(true);
+            },
             permission: true
         },
         {
@@ -80,6 +84,13 @@ const PostCard: React.FC<{ contents: string, uid: string | null, createdAt: stri
 
     return (
         <>
+            <ReportModel 
+                content_type={"POST"}
+                content_id={props.id}
+                modelActive={reportModelActive}
+                setModelActive={setReportModelActive}
+            />
+
             {userStore?.permissions?.includes("MODERATOR") || props.uid == userStore.user.uid ? (
                 <ModelContainer isActive={deleteModelActive} width={"500px"} height={"auto"} setModelActive={setDeleteModelActive}>
                     <div style={{ padding: "10px 25px"}}>

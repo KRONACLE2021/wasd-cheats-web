@@ -729,3 +729,17 @@
 .fourm_post_contents img {
     max-height: 400px;
 }
+
+.report_model_content div input, .report_model_content div p  {
+    display: inline-block;
+}
+
+
+.report_model_content div input {
+    margin-right: 10px;
+}
+
+.report_model_bottom_text {
+    color: grey;
+    font-size: 14px;
+}

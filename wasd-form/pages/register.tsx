@@ -5,6 +5,7 @@ import { RegisterUser } from '../stores/actions/userActions';
 import { useDispatch } from 'react-redux';
 import FourmError from '../components/shared/FourmError';
 import HCaptcha from '@hcaptcha/react-hcaptcha';
+import { HCAPTCHA_SITE_KEY } from '../site_config';
 
 const Login : React.FC<any> = (props) => {
     
@@ -66,7 +67,7 @@ const Login : React.FC<any> = (props) => {
                     <div className={styles.spacer_top}></div>
                     <HCaptcha onVerify={(token) => { 
                         setRegisterData({ ...registerData, h_captcha: token })
-                    }} sitekey={"10000000-ffff-ffff-ffff-000000000001"}/>
+                    }} sitekey={HCAPTCHA_SITE_KEY}/>
                     <div className={styles.spacer_top}></div>
 
                     <div className={styles.login_box_buttons}>

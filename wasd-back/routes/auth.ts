@@ -22,6 +22,17 @@ Route.post("/register", async (req, res, next) => {
     if(!body.username) return res.json({error: true, errors: ["No username provided!"]}).status(300);
     if(!body.password) return res.json({error: true, errors: ["No password provided!"]}).status(300);
     if(!body.email) return res.json({error: true, errors: ["No email provided!"]}).status(300);
+    if(!body.h_captcha) return res.json({ error: true, errors: ["No h-captcha token provided!"] });
+
+    await HCaptchaVerify(body.h_captcha).then((res_) => {
+        if(!res_.success){
+            return res.json({ error: true, errors: ["Please retry the captcha!"]})
+        }
+    }).catch((err) => {
+        console.log(err);
+        return res.status(500).json({ error: true, errors: ["Internal server error occured whilst trying to contact HCAPTCHA, try again later."]});
+    });
+
     
     const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     let isEmail = re.test(String(body.email).toLowerCase());
@@ -50,7 +61,7 @@ Route.post("/register", async (req, res, next) => {
         let user = {
             uid: uuid(),
             tags: [],
-            permissions: ["REGULAR"],
+            permissions: ["REGULAR", "ALLOW_POSTING"],
             avatar: "",
             email: body.email,
             api_key: generateRandomString(64),
