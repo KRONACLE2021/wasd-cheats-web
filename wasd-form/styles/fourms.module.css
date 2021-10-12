@@ -645,6 +645,7 @@
 .user_page_content {
     display: flex;
     padding: 0px 30px; 
+    overflow: hidden;
 }
 
 .user_about_text {
@@ -661,6 +662,7 @@
 }
 
 .user_posts {
+    position: relative;
     width: 100%;
     padding: 0px 20px;
 }

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styles from '../../../styles/fourms.module.css';
 import FourmRoot from '../../../components/fourm/FourmRoot';
-import { AdminDeleteTopic, FetchTopicById } from '../../../stores/actions/topicActions';
+import { AdminDeleteTopic, AdminLockTopic, FetchTopicById } from '../../../stores/actions/topicActions';
 import { Router, useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
 import { FetchThreadsByTopic } from '../../../stores/actions/threadActions';
@@ -29,6 +29,7 @@ const TopicPage : React.FC<any> = () => {
 
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [activeThreads, setActiveThreads] = useState<Array<any>>([]);
+    const [lockTopicModel, setLockTopicModel] = useState<boolean>(false);
     const [deleteModel, setDeleteModelActive] = useState<boolean>(false);
 
     let adminActions = [
@@ -43,7 +44,9 @@ const TopicPage : React.FC<any> = () => {
             name: "Lock",
             fasIcon: faLock,
             fasSize: "lg",
-            eventHandeler: () => {},
+            eventHandeler: () => {
+                setLockTopicModel(true);
+            },
             permission: userStore?.permissions?.includes("MODERATOR")
         },
         {
@@ -91,6 +94,11 @@ const TopicPage : React.FC<any> = () => {
             router.push("/fourm");
         }
     }
+
+    const lockTopic = () => {
+        if(!userStore.api_key) return router.push(`/login?after=/fourm/topics/${id}`);
+        dispatch(AdminLockTopic(id, userStore.api_key));
+    }
    
 
     return (
@@ -114,6 +122,16 @@ const TopicPage : React.FC<any> = () => {
                 </>
             ) : ""
         }> 
+            <ModelContainer isActive={lockTopicModel}  setModelActive={setLockTopicModel} key={"DeleteTopicPopup"}>
+                    <div style={{ padding: "10px 25px"}}>
+                        <h2>Lock this topic?</h2>
+                        <p style={{fontWeight: "bolder"}}>Only moderators and admins will be able to create threads in this topic if you lock it.</p>
+                    </div>
+                    <div className={styles.delete_button_container}>
+                        <button className={styles.delete_button} onClick={() => setLockTopicModel(false)}>Cancel</button>
+                        <button className={`${styles.delete_button} ${styles.delete_button_red}`} onClick={() => lockTopic()}>Lock Topic</button>
+                    </div>
+            </ModelContainer>
             <ModelContainer isActive={deleteModel}  setModelActive={setDeleteModelActive} key={"DeleteTopicPopup"}>
                     <div style={{ padding: "10px 25px"}}>
                         <h2>Delete this topic?</h2>

@@ -1,8 +1,8 @@
 import { Dispatch } from 'redux';
-import { API, CREATE_NEW_TOPIC, DELETE_TOPIC, FETCH_TOPIC, FETCH_TOPICS_BY_CATEGORY } from '../../requests/config';
+import { API, CREATE_NEW_TOPIC, DELETE_TOPIC, FETCH_TOPIC, FETCH_TOPICS_BY_CATEGORY, LOCK_TOPIC } from '../../requests/config';
 import Requester from '../../requests/Requester';
 
-import { ADD_CATEGORY, ADD_TOPIC, CREATE_TOPICS, DELETE_TOPIC_FAILED, DELETE_TOPIC_PENDING, DELETE_TOPIC_SUCCESS, FETCH_TOPICS_FAILED, FETCH_TOPICS_PENDING, FETCH_TOPICS_SUCCESS, SET_CATEGORYS, SET_TOPICS } from "../actions"
+import { ADD_CATEGORY, ADD_TOPIC, CREATE_TOPICS, DELETE_TOPIC_FAILED, DELETE_TOPIC_PENDING, DELETE_TOPIC_SUCCESS, FETCH_TOPICS_FAILED, FETCH_TOPICS_PENDING, FETCH_TOPICS_SUCCESS, LOCK_TOPIC_FAILED, LOCK_TOPIC_PENDING, LOCK_TOPIC_SUCCESS, SET_CATEGORYS, SET_TOPICS } from "../actions"
 
 const Requester_ = new Requester(API);
 
@@ -130,5 +130,47 @@ export const AdminDeleteTopic = (id: string, api_key: string) => {
         }).catch(err => {
             dispatcher(deleteTopicFailed(err));
         });
+    }
+}
+
+export const lockTopicPending = () => {
+    return {
+        type: LOCK_TOPIC_PENDING
+    }
+}
+
+export const lockTopicSuccess = (topic: any) => {
+    return {
+        type: LOCK_TOPIC_SUCCESS,
+        payload: topic
+    }
+}
+
+export const lockTopicFailed = (errors: Array<string>) => {
+    return {
+        type: LOCK_TOPIC_FAILED,
+        payload: errors
+    }
+}
+
+export const AdminLockTopic = (id: string, api_key: string) => {
+    return (dispatcher: Dispatch<any>) => {
+        dispatcher(lockTopicPending());
+
+        Requester_.makePostRequest(LOCK_TOPIC(id), "", {
+            queryStringParams: [],
+            headers: {
+                Authorization: api_key
+            }
+        }).then(res => {
+            if(!res.error){
+                dispatcher(lockTopicSuccess(res.topic));
+            } else {
+                dispatcher(lockTopicFailed(res.errors));
+            }
+        }).catch(err =>  {
+            dispatcher(lockTopicFailed(err.errors))
+        });
+
     }
 }

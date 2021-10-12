@@ -3,6 +3,7 @@ import styles from '../../styles/navigation.module.css';
 import { useSelector } from 'react-redux';
 import Link from 'next/link';
 import Router from 'next/router';
+import getAvatar from '../../utils/getAvatar';
 
 
 const Navbar : React.FC<any> = (props) => {
@@ -22,7 +23,7 @@ const Navbar : React.FC<any> = (props) => {
             {userStore.username !== undefined ? (
                 <>
                     <div className={styles.logged_in_user}>
-                        <img src={userStore.avatar !== "" ? userStore.avatar : `https://avatars.dicebear.com/api/jdenticon/${userStore.uid}.svg`}></img>
+                        <img src={getAvatar(userStore)}></img>
                         <p className={styles.logged_in_user_username}>{userStore.username}</p>
 
                         <div className={styles.logged_in_dropdown}>

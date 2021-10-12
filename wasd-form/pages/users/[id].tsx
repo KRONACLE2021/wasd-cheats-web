@@ -9,6 +9,7 @@ import { useDispatch } from 'react-redux';
 import { FetchUsersPosts } from '../../stores/actions/userActions';
 import PostCard from '../../components/fourm/PostCard';
 import SimplePostCard from '../../components/fourm/SimplePostCard';
+import { BASE_IMAGE_URL } from '../../requests/config';
 
 export default function UserPage() {
     
@@ -42,7 +43,7 @@ export default function UserPage() {
         <div style={{ display: "flex", alignItems: "center", maxWidth: "100%", justifyContent: "center"}}>
             <div className={styles.fourm_user_page_container}>
                 <div className={styles.user_stats_container}>
-                    <img src={"/test-banner.jpg"} className={styles.user_banner}/>
+                    <img src={user?.banner ? BASE_IMAGE_URL(user?.banner) : "/default-banner.png"} className={styles.user_banner}/>
                     <div className={styles.user_info_flex}>
                         <img src={getAvatar(user)} className={styles.user_avatar}></img>
                         <div className={styles.user_stats_items}>

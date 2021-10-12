@@ -106,7 +106,7 @@ const PostCard: React.FC<{ contents: string, uid: string | null, createdAt: stri
 
             <div className={styles.fourm_post_container}>
                     <div className={styles.post_user_container}>
-                        <img src={props.user?.avatar} className={styles.pfp} />
+                        <img src={getAvatar(props.user)} className={styles.pfp} />
                         <h3 className={styles.username}>{props.user?.username}</h3>
                         <p className={`${styles.permission_type} ${getPermissionColor(props?.user?.permissions)} `}>{props?.user?.permissions ? getUserPermission(props?.user?.permissions) : ""}</p>
                     </div>

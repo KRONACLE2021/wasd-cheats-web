@@ -7,6 +7,7 @@ export interface ITopics {
     imgID: string;
     createdAt: Date;
     category: string;
+    locked: boolean;
     threads: Array<string>;
 }
 
@@ -18,7 +19,8 @@ const TopicsSchema = new Schema<ITopics>({
     imgID: String,
     category: String,
     threads: Array,
-    createdAt: { type: Date, default: () => new Date() }
+    createdAt: { type: Date, default: () => new Date() },
+    locked: Boolean
 });
 
 

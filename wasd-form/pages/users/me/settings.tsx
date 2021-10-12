@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import Router from 'next/router';
 import styles from '../../../styles/fourms.module.css';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import FileUploader from '../../../components/fourm/FileUploader';
 import { BASE_IMAGE_URL } from '../../../requests/config';
+import { UpdateUser } from '../../../stores/actions/userActions';
 
 
 export default function UserSettings() {
@@ -12,6 +13,7 @@ export default function UserSettings() {
     const [initalLoad, setInitalLoad] = useState(true);
     const userStore = useSelector(state => state.user.user);
     const isLoading = useSelector(state => state.user.loading);
+    const dispatcher = useDispatch();
 
     useEffect(() => {
         if(!userStore.uid){
@@ -30,7 +32,7 @@ export default function UserSettings() {
     }, [userStore]);
 
     const updateProfile = () => {
-        
+        dispatcher(UpdateUser(userUpdateBody, userStore.api_key));
     }
 
     return (
@@ -56,7 +58,7 @@ export default function UserSettings() {
                     <img  style={{ maxHeight: "150px" }} src={BASE_IMAGE_URL(userUpdateBody.avatar)} />
                     <FileUploader output={(imageId) => setUserUpdateBody({ ...userUpdateBody, avatar: imageId })} uploadType={"avatar"} reccomended_size={"1920x1080 (20MB)"} />
                 </div>
-                <button className={styles.thread_create}>Update Profile</button>
+                <button onClick={() => updateProfile()} className={styles.thread_create}>Update Profile</button>
             </div>
         </div>
     );

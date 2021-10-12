@@ -3,6 +3,7 @@ import styles from '../../styles/fourms.module.css';
 import ActionsBar from './ActionsBar';
 import getUserPermission, { getPermissionColor } from '../../utils/getUserPermission';
 import DOMPurify from 'dompurify';
+import getAvatar from '../../utils/getAvatar';
 
 const SimplePostCard: React.FC<{ id: string, contents: string, postOwner: any, createdAt: string, attachments: any }> = (props) => {
 
@@ -18,12 +19,12 @@ const SimplePostCard: React.FC<{ id: string, contents: string, postOwner: any, c
         <div className={styles.user_post_cards}>
             <div className={styles.fourm_post_container}>
                     <div className={styles.post_user_container}>
-                        <img src={props.postOwner?.avatar} className={styles.pfp} />
+                        <img src={getAvatar(props.postOwner)} className={styles.pfp} />
                         <h3 className={styles.username}>{props.postOwner?.username}</h3>
                         <p className={`${getPermissionColor(props?.postOwner?.permissions)} ${styles.permission_type}`}>{props?.postOwner?.permissions ? getUserPermission(props?.postOwner?.permissions) : ""}</p>
                     </div>
                     <div className={styles.post_content}>
-                    <div dangerouslySetInnerHTML={{ __html: contents }}></div>
+                    <div dangerouslySetInnerHTML={{ __html: contents }} className={styles.fourm_post_contents}></div>
                        {/* <ActionsBar actions={userActions} /> */}
                     </div>
             </div>

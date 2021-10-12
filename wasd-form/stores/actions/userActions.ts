@@ -18,7 +18,10 @@ import {
     FETCH_USER_POSTS_PENDING, 
     FETCH_USER_POSTS_SUCCESS, 
     FETCH_USER_SUCCESS, 
-    SET_USER 
+    SET_USER, 
+    UPDATE_USER_FAILED, 
+    UPDATE_USER_PENDING,
+    UPDATE_USER_SUCCESS
 } from '../actions';
 
 const Requester_ = new Requester(API);
@@ -215,7 +218,7 @@ export const adminFetchUsers = (sortBy: string, api_key: string) => {
                 dispatch(adminFetchUsersFailed(res.errors));
             }
         }).catch((err) => {
-            dispatch(adminFetchUsersFailed(err))
+            dispatch(adminFetchUsersFailed(err.errors))
         });
     }  
 };
@@ -229,20 +232,22 @@ export const LogoutUser = () => {
 
 const updateUserPending = () => {
     return {
-
+        type: UPDATE_USER_PENDING
     }
 }
 
 const updateUserSuccess = (user: any) => {
     return {
-
+        type: UPDATE_USER_SUCCESS,
+        payload: user
     }
 }
 
 
 const updateUserFailed = (errors: Array<string>) => {
     return {
-
+        type: UPDATE_USER_FAILED,
+        payload: errors
     }
 }
 
@@ -262,7 +267,9 @@ export const UpdateUser = ({ bio, username, banner, avatar } : { bio: string, us
         }).then((res) => {
             if(!res.error){
                 updateUserSuccess(res.user);
+            } else {
+                dispatcher(updateUserFailed(res.errors));
             }
-        })
+        }).catch(err => dispatcher(updateUserFailed(err.errors)));
     }
 }

@@ -1,4 +1,4 @@
-import { SET_USER, FETCH_USER_PENDING, FETCH_USER_SUCCESS, UNSET_USER, FETCH_USER_POSTS_PENDING, FETCH_USER_POSTS_SUCCESS, ADMIN_USER_FETCH_PENDING, ADMIN_USER_FETCH_SUCCESS, ADMIN_USER_FETCH_FAILED } from "../actions";
+import { SET_USER, FETCH_USER_PENDING, FETCH_USER_SUCCESS, UNSET_USER, FETCH_USER_POSTS_PENDING, FETCH_USER_POSTS_SUCCESS, ADMIN_USER_FETCH_PENDING, ADMIN_USER_FETCH_SUCCESS, ADMIN_USER_FETCH_FAILED, UPDATE_USER_PENDING, UPDATE_USER_FAILED, UPDATE_USER_SUCCESS } from "../actions";
 
 const initalState = {
     loading: false,
@@ -36,6 +36,17 @@ export default function userReducer(state : any = initalState, action : { type: 
         case ADMIN_USER_FETCH_FAILED:
             state.loading = false;
             state.errors = action.payload;
+            return state;
+        case UPDATE_USER_PENDING:
+            state.loading = true;
+            return state;
+        case UPDATE_USER_SUCCESS:
+            state.loading = false;
+            state.user = action.payload;
+            return state;
+        case UPDATE_USER_FAILED:
+            state.loading = false;
+            state.errors = [];
             return state;
         default:
             return state;

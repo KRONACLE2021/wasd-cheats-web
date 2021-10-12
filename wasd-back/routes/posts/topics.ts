@@ -12,6 +12,20 @@ let Route = Router();
 Route.use(json());
 
 
+Route.post("/:id/lock", checkAuth, async (req, res, next) => {
+    if(!res.locals.user.permissions.includes("MODERATOR")) return res.json({ error: true, errors: ["You do not have permissions to lock a topic!"]});
+
+    let id = req.params.id;
+
+    let topic = await Threads.findOne({ id: id });
+
+    if(!topic) return res.json({ error: true, errors: ["Could not find topic!"]});
+
+    topic.locked = true;
+    await topic.save();
+    
+    return res.json({ topic: topic });
+});
 
 Route.get("/:id/threads", async (req, res, next) => {
 
