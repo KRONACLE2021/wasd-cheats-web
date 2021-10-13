@@ -1,3 +1,4 @@
+import filterDuplicates from "../../utils/filterDuplicates";
 import { 
     SET_USER, 
     FETCH_USER_PENDING, 
@@ -12,7 +13,8 @@ import {
     UPDATE_USER_FAILED, 
     UPDATE_USER_SUCCESS,
     CACHE_USER_PENDING,
-    CACHE_USER_FAILED
+    CACHE_USER_FAILED,
+    CACHE_USER_SUCCESS
 } from "../actions";
 
 const initalState = {
@@ -69,6 +71,11 @@ export default function userReducer(state : any = initalState, action : { type: 
         case CACHE_USER_FAILED:
             state.loading = false;
             state.errors = action.payload;
+            return state;
+        case CACHE_USER_SUCCESS:
+            state.loading = false;
+            state.otherCachedUsers.push(action.payload);
+            state.otherCachedUsers = filterDuplicates(state.otherCachedUsers, (a: any, b: any) => a.id == b.id);
             return state;
         default:
             return state;

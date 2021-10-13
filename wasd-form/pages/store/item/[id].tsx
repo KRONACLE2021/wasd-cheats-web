@@ -1,6 +1,7 @@
 import Router, { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
+import { BASE_IMAGE_URL } from '../../../requests/config';
 import { GetItem } from '../../../stores/actions/shopItemsActions';
 import { addItemToCart, postCartItems } from '../../../stores/actions/userCartActions';
 import styles from '../../../styles/store.module.css';
@@ -37,7 +38,7 @@ export default function StoreItem() {
         <div>
             <div className={styles.shop_big_item_container}>
                 <div className={styles.item_picture_side}>
-                    <img src={"/test-banner.jpg"}></img>
+                    <img src={item?.image ? BASE_IMAGE_URL(item?.image) : "/default-shop-item.png"}></img>
                 </div>
                 <div className={styles.item_information_side}>
                     <h1>{item?.name}</h1>

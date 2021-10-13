@@ -138,9 +138,11 @@ Route.post("/item/add", checkAuth, async (req, res, next) => {
     
     if(!stock) stock = 0;
 
+ 
     if(imgID){
         let attachment_check = await Attachments.findOne({ id: imgID });
         if(!attachment_check) imgID = null;
+        console.log("added", imgID, "to the thingy");
     }
 
     let id = uuid();

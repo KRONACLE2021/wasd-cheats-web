@@ -15,7 +15,9 @@ import {
     ADMIN_USER_FETCH_FAILED,
     ADMIN_USER_FETCH_PENDING,
     ADMIN_USER_FETCH_SUCCESS,
+    CACHE_USER_FAILED,
     CACHE_USER_PENDING,
+    CACHE_USER_SUCCESS,
     FETCH_USER_PENDING, 
     FETCH_USER_POSTS_PENDING, 
     FETCH_USER_POSTS_SUCCESS, 
@@ -284,14 +286,14 @@ const fetchOtherUserPending = () => {
 
 const fetchOtherUserSuccess = (user: any) => {
     return {
-        type: CACHE_USER_PENDING,
+        type: CACHE_USER_SUCCESS,
         payload: user
     }
 }
 
 const fetchOtherUserFailed = (err: Array<string>) => {
     return {
-        type: CACHE_USER_PENDING,
+        type: CACHE_USER_FAILED,
         payload: err
     }
 }

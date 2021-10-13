@@ -10,11 +10,12 @@ import ModelContainer from '../../components/models/ModelContainer';
 import Requester from '../../requests/Requester';
 import Dropdown from './../../components/shared/Dropdown';
 import WASDTable from '../../components/shared/Table';
-import { ADD_STORE_ITEM, ADD_SUBSCRIPTION, API, DELETE_SUBSCRIPTIONS } from '../../requests/config';
+import { ADD_STORE_ITEM, ADD_SUBSCRIPTION, API, BASE_IMAGE_URL, DELETE_SUBSCRIPTIONS } from '../../requests/config';
 import { appendShopItem, GetItems } from '../../stores/actions/shopItemsActions';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck, faDollarSign, faFile, faPen, faSubscript, faTrash, faUser, faWalking, faWallet } from '@fortawesome/free-solid-svg-icons';
 import { appendShopSubscriptions, deleteSubscriptionItem, getShopSubscriptions, getUsersIncartItems } from '../../stores/actions/adminActions';
+import FileUploader from '../../components/fourm/FileUploader';
 
 const Requester_ = new Requester(API);
 
@@ -24,7 +25,7 @@ export default function adminShopManager() {
     const [modelPopupActive, setModelPopupActive] = useState(false);
     const [subscriptionModelPopup, setSubscriptionModelPopup] = useState(false);
     const [error, setError] = useState("");
-    const [addItemData, setAddItemData] = useState({ name: "Item Name", description: "Item Description", price: 0, stock: 100, subscription_id: ""});
+    const [addItemData, setAddItemData] = useState({ name: "Item Name", description: "Item Description", price: 0, stock: 100, subscription_id: "", imgID: ""});
     const [addSubscriptionData, setSubscriptionData] = useState({ name: "", timespan: 0, timespan_type: "DAYS" });
     const [subscriptionDeletePopup, setSubscriptionDeletePopup] = useState(false);
     const [deletingItemId, setDeletingItemID] = useState("");
@@ -75,7 +76,7 @@ export default function adminShopManager() {
             name: addItemData.name,
             price: addItemData.price,
             stock: 100,
-            imgUrl: "",
+            imgID: addItemData.imgID,
             description: addItemData.description,
             subscription: addItemData.subscription_id
         }, {
@@ -86,6 +87,7 @@ export default function adminShopManager() {
         }).then((res) => {
             if(!res.error){
                 dispatch(appendShopItem(res.item));
+                setModelPopupActive(false);
             } else {
                 setError(res.errors);
             }
@@ -192,6 +194,11 @@ export default function adminShopManager() {
                     <textarea onChange={(e) => setAddItemData({ ...addItemData, description: e.target.value })} placeholder={"Description"} className={styles.admin_input}></textarea>
                     <p>What subscription should the user get? (to add a subscription please go to your shop dashboard and add a new subscription) (item will be displayed with ID)</p>
                     <Dropdown choices={adminSubscriptions.map((i) => { return { name: i.name, data: i.id } })} output={(o) => setAddItemData({ ...addItemData, subscription_id: o})} />
+                    <div style={{ marginTop: "10px"}}>
+                        <p>Cover image:</p>
+                        <img src={addItemData.imgID ? BASE_IMAGE_URL(addItemData.imgID) : "/default-shop-photo.png"}  style={{ maxHeight:"250px"}}/> 
+                        <FileUploader reccomended_size={"4:3 (20MB)"} output={(id) => setAddItemData({ ...addItemData, imgID: id })} uploadType={"Cover Image"} />
+                    </div>
                     <p>Live Card preview</p>
                     <div className={styles.model_popup_centered}>
                         <ItemCard name={addItemData.name} price={addItemData.price} description={addItemData.description}  />

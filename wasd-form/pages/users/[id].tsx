@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/router';
+import { Router, useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
 import styles from '../../styles/fourms.module.css';
 import getAvatar from '../../utils/getAvatar';
 import getUserPermission, { getPermissionColor } from '../../utils/getUserPermission';
 import moment from 'moment';
 import { useDispatch } from 'react-redux';
-import { FetchUsersPosts } from '../../stores/actions/userActions';
+import { fetchOtherUser, FetchUsersPosts } from '../../stores/actions/userActions';
 import PostCard from '../../components/fourm/PostCard';
 import SimplePostCard from '../../components/fourm/SimplePostCard';
 import { BASE_IMAGE_URL } from '../../requests/config';
 import fetchUser from '../../requests/getUser';  
+import { IUser } from '../../interfaces';
 
 export default function UserPage() {
     
@@ -19,8 +20,8 @@ export default function UserPage() {
     const [user, setUser] = useState<any>(null);
     const dispatcher = useDispatch();
 
-    const userStore = useSelector(state => state.user.user);
-
+    const userStore = useSelector((state : any) => state.user.user);
+    const otherCachedUsers = useSelector((state : any) => state.user.otherCachedUsers)
     console.log(userStore);
 
     useEffect(() => {
@@ -31,12 +32,8 @@ export default function UserPage() {
                 setUser(userStore);
             }
         } else {
-            fetchUser(id, userStore.api_key).then((res) =>{
-                if(!res.error){
-                    setUser(res);
-                    console.log(res);
-                }
-            })
+            if(id == userStore.uid) return router.push("/users/me");
+            dispatcher(fetchOtherUser(id, userStore.api_key));
         }
     }, [userStore, id]);
 
@@ -46,6 +43,16 @@ export default function UserPage() {
             dispatcher(FetchUsersPosts(user.uid));
         }
     }, [user]);
+
+    useEffect(() => {
+        let user = otherCachedUsers.filter((i: IUser) => i.uid == id);
+
+        if(user.length !== 0){
+            setUser(user[0]);
+        } else {
+            
+        }
+    }, [otherCachedUsers])
 
     return (
         <div style={{ display: "flex", alignItems: "center", maxWidth: "100%", justifyContent: "center"}}>
@@ -72,7 +79,7 @@ export default function UserPage() {
                             </div>: ""}
                             {userStore?.permissions?.includes("MODERATOR") ? <div>
                                 <p>Admin Stats:</p>
-                                <p>Current active subscription: <br></br>{user?.subscriptions.map((subscription: string) => <span>Sub ID: {subscription} <br></br></span>)}</p> 
+                                <p>Current active subscription: <br></br>{user?.subscriptions ? user?.subscriptions?.map((subscription: string) => <span>Sub ID: {subscription} <br></br></span>) : "None"}</p> 
                                 <p>Last logged in IP: <span style={{ color: "red"}}>{user?.last_logged_ip ? user?.last_logged_ip : "Protected IP User"}</span></p>
                                 <button className={styles.admin_action_button}>View users content</button>
                             </div>: ""}
