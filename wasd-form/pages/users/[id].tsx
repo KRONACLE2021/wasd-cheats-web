@@ -10,12 +10,13 @@ import { FetchUsersPosts } from '../../stores/actions/userActions';
 import PostCard from '../../components/fourm/PostCard';
 import SimplePostCard from '../../components/fourm/SimplePostCard';
 import { BASE_IMAGE_URL } from '../../requests/config';
+import fetchUser from '../../requests/getUser';  
 
 export default function UserPage() {
     
     const router = useRouter();
     const { query: { id } } = router;
-    const [user, setUser] = useState(null);
+    const [user, setUser] = useState<any>(null);
     const dispatcher = useDispatch();
 
     const userStore = useSelector(state => state.user.user);
@@ -29,6 +30,13 @@ export default function UserPage() {
             } else {
                 setUser(userStore);
             }
+        } else {
+            fetchUser(id, userStore.api_key).then((res) =>{
+                if(!res.error){
+                    setUser(res);
+                    console.log(res);
+                }
+            })
         }
     }, [userStore, id]);
 
@@ -64,8 +72,8 @@ export default function UserPage() {
                             </div>: ""}
                             {userStore?.permissions?.includes("MODERATOR") ? <div>
                                 <p>Admin Stats:</p>
-                                <p>Current active subscription: None</p> 
-                                <p>Last logged in IP: <span style={{ color: "red"}}>Protected IP User</span></p>
+                                <p>Current active subscription: <br></br>{user?.subscriptions.map((subscription: string) => <span>Sub ID: {subscription} <br></br></span>)}</p> 
+                                <p>Last logged in IP: <span style={{ color: "red"}}>{user?.last_logged_ip ? user?.last_logged_ip : "Protected IP User"}</span></p>
                                 <button className={styles.admin_action_button}>View users content</button>
                             </div>: ""}
                         </div>

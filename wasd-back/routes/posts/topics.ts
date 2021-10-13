@@ -17,13 +17,18 @@ Route.post("/:id/lock", checkAuth, async (req, res, next) => {
 
     let id = req.params.id;
 
-    let topic = await Threads.findOne({ id: id });
+    let topic = await Topics.findOne({ id: id });
 
     if(!topic) return res.json({ error: true, errors: ["Could not find topic!"]});
 
-    topic.locked = true;
+    if(topic.locked == null){
+        topic.locked = true;
+    } else {
+        topic.locked = !topic.locked;
+    }
+
     await topic.save();
-    
+
     return res.json({ topic: topic });
 });
 

@@ -156,7 +156,7 @@ export const lockTopicFailed = (errors: Array<string>) => {
 export const AdminLockTopic = (id: string, api_key: string) => {
     return (dispatcher: Dispatch<any>) => {
         dispatcher(lockTopicPending());
-
+        console.log(LOCK_TOPIC(id));
         Requester_.makePostRequest(LOCK_TOPIC(id), "", {
             queryStringParams: [],
             headers: {

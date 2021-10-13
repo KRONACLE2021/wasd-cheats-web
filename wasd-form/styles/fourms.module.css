@@ -717,7 +717,7 @@
 }
 
 .fourm_header_actions_bar_container {
-    background-color: var(--bg-lighter);
+    background-color: rgba(24, 24, 24, 0.712);
     margin-top: 10px;
     margin-left: 0px;
 }
@@ -749,4 +749,23 @@
 .root_page_container {
     margin-top: 100px;
     padding: 0px 40px;
+}
+
+.info_banner_container {
+    border-left: 3px solid var(--pink);
+    background-color: rgba(71, 0, 71, 0.705);
+    padding: 5px 10px;
+    margin-bottom: 10px;
+}
+
+.info_banner_content {
+    margin-left: 10px;
+}
+
+.info_banner_content h1 {
+    font-size: 22px;
+}
+
+.base_model_container {
+    width: 500px;
 }

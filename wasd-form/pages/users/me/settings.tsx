@@ -45,10 +45,6 @@ export default function UserSettings() {
                     <textarea className={styles.input} value={userUpdateBody.bio} onChange={(e) => setUserUpdateBody({ ...userUpdateBody, bio: e.target.value })} placeholder={"Your bio"}></textarea>
                 </div>
                 <div>
-                    <p>Username (Your username can only be changed every 3 months)</p>
-                    <input className={styles.input} value={userUpdateBody.username} onChange={(e) => setUserUpdateBody({ ...userUpdateBody, username: e.target.value })} placeholder={"Current username"}></input>
-                </div>
-                <div>
                     <p>Banner</p>
                     <img style={{ maxHeight: "150px" }} src={BASE_IMAGE_URL(userUpdateBody.banner)} />
                     <FileUploader uploadType={"banner"} output={(imageId) => setUserUpdateBody({ ...userUpdateBody, banner: imageId })} reccomended_size={"1920x1080 (20MB)"} />

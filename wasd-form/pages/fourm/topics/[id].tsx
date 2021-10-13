@@ -12,6 +12,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faLock, faTrash } from '@fortawesome/free-solid-svg-icons';
 import ActionsBar from '../../../components/fourm/ActionsBar';
 import ModelContainer from '../../../components/models/ModelContainer';
+import InfoBanner from '../../../components/Banners/InfoBanner';
+import FileUploader from '../../../components/fourm/FileUploader';
+import { IThread } from '../../../interfaces';
+import Preloader from '../../../components/shared/Preloader';
 
 
 
@@ -27,21 +31,28 @@ const TopicPage : React.FC<any> = () => {
     const threads = useSelector(state => state.threadStore.threads.filter((item) => (item["topicId"] == id)));
     const userStore = useSelector(state => state.user.user);
 
+    const [editTopicData, setEditTopicData] = useState<{ title: string, description: string, icon: string }>({ title: "", description: "", icon: "" });
+    const [topic, setTopic] = useState<{ title: string, locked: boolean, description: string, icon?: string, threads: Array<IThread> }>({ title: "", locked: false, description: "", icon: "", threads: [] });
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [activeThreads, setActiveThreads] = useState<Array<any>>([]);
     const [lockTopicModel, setLockTopicModel] = useState<boolean>(false);
     const [deleteModel, setDeleteModelActive] = useState<boolean>(false);
+    const [editModel, setEditModel] = useState<boolean>(false);
+    const [loading, setLoading] = useState<boolean>(true);
+
 
     let adminActions = [
         {
             name: "Edit",
             fasIcon: faEdit,
             fasSize: "lg",
-            eventHandeler: () => {},
+            eventHandeler: () => {
+                setEditModel(true);
+            },
             permission: userStore?.permissions?.includes("MODERATOR")
         },
         {
-            name: "Lock",
+            name: topics[0]?.locked ? "Unlock" : "Lock",
             fasIcon: faLock,
             fasSize: "lg",
             eventHandeler: () => {
@@ -71,6 +82,14 @@ const TopicPage : React.FC<any> = () => {
     }, [id]);
 
     useEffect(() => {
+        if(topics.length !== 0) {
+            setTopic(topics[0]);
+            setEditTopicData({ title: topics[0].title, description: topics[0].description, icon: topics[0].icon });
+            setLoading(false);
+        }
+    }, [topics.length]);
+
+    useEffect(() => {
         const current = threads.slice((currentPage - 1) * 10, threads.length < 10 ? 10 : threads.length);
         setActiveThreads(current);
     }, [currentPage, threads.length]);
@@ -86,7 +105,7 @@ const TopicPage : React.FC<any> = () => {
  
     }
 
-    const PaginatorWithVars = <Paginator postsPerPage={10} totalPosts={ topics[0] ? topics[0].threads.length : 0 } maxPaginationNumbers={5} currentPage={currentPage} paginate={pagination} />;
+    const PaginatorWithVars = <Paginator postsPerPage={10} totalPosts={ topic ? topic.threads.length : 0 } maxPaginationNumbers={5} currentPage={currentPage} paginate={pagination} />;
  
     const deleteTopic = () => {
         if(userStore.api_key && id){
@@ -98,18 +117,21 @@ const TopicPage : React.FC<any> = () => {
     const lockTopic = () => {
         if(!userStore.api_key) return router.push(`/login?after=/fourm/topics/${id}`);
         dispatch(AdminLockTopic(id, userStore.api_key));
+
+        setLockTopicModel(false);
     }
    
+    if(loading) return <Preloader />;
 
     return (
 
         <FourmRoot header={
-            topics[0] !== undefined ? (
+            topic !== undefined ? (
                 <>
                     <div className={styles.topic_header}>
-                        <h1 className={styles.header}>{topics[0].title}</h1>
-                        <p style={{ marginBottom: "0px"}}>{topics[0].description}</p>
-
+                        {topic.locked ? <InfoBanner title={"This thread has been locked!"} message={"WASD Admins have locked this thread."} /> : ""}
+                        <h1 className={styles.header}>{topic.title}</h1>
+                        <p style={{ marginBottom: "0px"}}>{topic.description}</p>
                         {userStore?.permissions?.includes("MODERATOR") ? <> 
                             <div className={styles.fourm_header_actions_bar_container}>
                                 <ActionsBar actions={adminActions}></ActionsBar> 
@@ -117,22 +139,25 @@ const TopicPage : React.FC<any> = () => {
                         </> : "" }
                     </div>
                     <div className={styles.thread_create_container}>
-                            <button className={styles.thread_create} onClick={() => router.push(`/fourm/topics/${topics[0].id}/new`)}>Start a Thread</button>
+                        {topic.locked && !userStore?.permissions?.includes("MODERATOR") ? "" : (
+                            <button className={styles.thread_create} onClick={() => router.push(`/fourm/topics/${topic.id}/new`)}>Start a Thread</button>
+                        )}
                     </div>
                 </>
             ) : ""
         }> 
             <ModelContainer isActive={lockTopicModel}  setModelActive={setLockTopicModel} key={"DeleteTopicPopup"}>
                     <div style={{ padding: "10px 25px"}}>
-                        <h2>Lock this topic?</h2>
+                        <h2>{topic?.locked ? "Unlock" : "Lock"} this topic?</h2>
                         <p style={{fontWeight: "bolder"}}>Only moderators and admins will be able to create threads in this topic if you lock it.</p>
                     </div>
                     <div className={styles.delete_button_container}>
                         <button className={styles.delete_button} onClick={() => setLockTopicModel(false)}>Cancel</button>
-                        <button className={`${styles.delete_button} ${styles.delete_button_red}`} onClick={() => lockTopic()}>Lock Topic</button>
+                        <button className={`${styles.delete_button} ${styles.delete_button_red}`} onClick={() => lockTopic()}>{topic?.locked ? "Unlock" : "Lock"} Topic</button>
                     </div>
             </ModelContainer>
-            <ModelContainer isActive={deleteModel}  setModelActive={setDeleteModelActive} key={"DeleteTopicPopup"}>
+
+            <ModelContainer isActive={deleteModel}  setModelActive={setDeleteModelActive} key={"LockTopicModel"}>
                     <div style={{ padding: "10px 25px"}}>
                         <h2>Delete this topic?</h2>
                         <p style={{fontWeight: "bolder"}}>Deleting this topic will delete all content under it! Are you sure you want to delete it?</p>
@@ -140,6 +165,29 @@ const TopicPage : React.FC<any> = () => {
                     <div className={styles.delete_button_container}>
                         <button className={styles.delete_button} onClick={() => setDeleteModelActive(false)}>Cancel</button>
                         <button className={`${styles.delete_button} ${styles.delete_button_red}`} onClick={() => deleteTopic()}>Delete Topic</button>
+                    </div>
+            </ModelContainer>
+
+            <ModelContainer isActive={editModel}  setModelActive={setEditModel} key={"EditTopicModel"}>
+                    <div style={{ padding: "10px 25px"}} className={styles.base_model_container}>
+                        <h2>Edit {topics[0]?.title}</h2>
+                        <div>
+                            <div>
+                                <p>Title</p>
+                                <input className={styles.input} onChange={(e) => setEditTopicData({ ...editTopicData, title: e.target.value })} value={editTopicData.title} placeholder={"Title"}  />
+                            </div>
+                            <div>
+                                <p>Description</p>
+                                <input className={styles.input} onChange={(e) => setEditTopicData({ ...editTopicData, description: e.target.value })} value={editTopicData.description} placeholder={"Description"} />
+                            </div>
+
+                            <div>
+                                <p>Icon</p>
+                                <FileUploader />
+                            </div>
+                        </div>
+                    
+                        <button className={`${styles.delete_button}`} onClick={() => lockTopic()}>Update topic</button>
                     </div>
             </ModelContainer>
             <div className={styles.fourm_container}>

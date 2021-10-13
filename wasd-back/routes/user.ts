@@ -132,6 +132,19 @@ Route.post("/:id/ban", checkAuth, async (req, res, next) => {
 
 Route.get("/:id", async (req, res, next) => {
     let { id } = req.params;
+
+    let apiKey = req.headers.authorization;
+
+    let isAdmin = false;
+    let userCheck = await Users.findOne({ api_key: apiKey });
+
+    if(userCheck) {
+        console.log("gotten api key with user request")
+        if(userCheck.permissions.includes("MODERATOR") || userCheck.permissions.includes("ADMINISTRATOR")) {
+            isAdmin = true;
+            console.log("user is admin")
+        }
+    }
     
     let user = await Users.findOne({ uid: id });
   
@@ -143,10 +156,27 @@ Route.get("/:id", async (req, res, next) => {
         posts: user.posts, 
         permissions: user.permissions, 
         uid: user.uid, 
-        tags: user.tags 
+        tags: user.tags,
+        banner: user.banner,
+        banned: user.banned
     };
 
-    return res.json(cleanUser);
+    let adminUser = {
+        avatar: user.avatar, 
+        username: user.username, 
+        posts: user.posts, 
+        permissions: user.permissions, 
+        uid: user.uid, 
+        tags: user.tags,
+        banner: user.banner,
+        last_logged_ip: user.last_logged_in_location,
+        email: user.email,
+        banned: user.banned,
+        banId: user.banId,
+        subscriptions: user.active_subscriptions
+    }
+
+    return res.json(isAdmin ? adminUser : cleanUser);
 });
 
 

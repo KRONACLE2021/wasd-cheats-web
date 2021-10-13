@@ -18,6 +18,7 @@ export interface IUser {
     purchased_products: Array<String>;
     bio: String;
     banner: String;
+    last_logged_in_location: string;
 }
 
 
@@ -35,7 +36,8 @@ const UserSchema = new Schema<IUser>({
     banned: { type: Boolean, default: false },
     purchased_products: Array,
     active_subscriptions: Array,
-    banner: String
+    banner: String,
+    last_logged_in_location: String
 });
 
 

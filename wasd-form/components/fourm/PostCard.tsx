@@ -13,6 +13,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash, faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
 import ActionsBar from './ActionsBar';
 import ReportModel from '../shared/ReportModel';
+import Link from 'next/dist/client/link';
 
 
 const PostCard: React.FC<{ contents: string, uid: string | null, createdAt: string, id: string, attachments: Array<string>, user: IUser | null, replyToPost: Function, thread: any}> = (props) => {
@@ -107,7 +108,7 @@ const PostCard: React.FC<{ contents: string, uid: string | null, createdAt: stri
             <div className={styles.fourm_post_container}>
                     <div className={styles.post_user_container}>
                         <img src={getAvatar(props.user)} className={styles.pfp} />
-                        <h3 className={styles.username}>{props.user?.username}</h3>
+                        <Link href={`/users/${props.user?.uid}`}><h3 className={styles.username}>{props.user?.username}</h3></Link>
                         <p className={`${styles.permission_type} ${getPermissionColor(props?.user?.permissions)} `}>{props?.user?.permissions ? getUserPermission(props?.user?.permissions) : ""}</p>
                     </div>
                     <div className={styles.post_content}>

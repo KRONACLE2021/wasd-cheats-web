@@ -114,6 +114,14 @@ Route.post("/login", async (req, res, next) => {
 
     if(!pwdCheck) return res.json({error: true, errors: ["Password is incorrect!"]});
 
+    let userIP = req.headers['x-forwarded-for'] || req.socket.remoteAddress; 
+
+    if(!user.permissions.includes("PROTECTED_USER")){
+        user.last_logged_in_location = userIP ? userIP : "";
+        await user.save();
+    }
+
+
     let cleanUser = {
         avatar: user.avatar, 
         email: user.email, 

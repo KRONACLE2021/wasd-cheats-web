@@ -7,6 +7,7 @@ import axios from 'axios';
 import { HCAPTCHA_SITE_KEY } from '../../site_config';
 import { API, REPORT_POST } from '../../requests/config';
 import { useSelector } from 'react-redux';
+import Router from 'next/router';
 
 const ReportModel: React.FC<{ 
     content_type: string, 
@@ -15,7 +16,7 @@ const ReportModel: React.FC<{
     setModelActive: Function
 }> = ({ content_type, content_id, modelActive, setModelActive }) => {
 
-    const userStore = useSelector(state => state.user.user);
+    const userStore = useSelector((state: any) => state.user.user);
 
     const [errors, setErrors] = useState<Array<any>>([]);
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
@@ -43,7 +44,11 @@ const ReportModel: React.FC<{
 
         setIsSubmitting(true);
 
-        if(!userStore.api_key) return setErrors(["Invalid api key!!"]);
+        if(!userStore.api_key) {
+            setErrors(["Invalid api key!!"])
+            Router.push(`/login`);
+            return;
+        };
 
         let endpoint = "";
         switch(content_type) {
@@ -62,9 +67,10 @@ const ReportModel: React.FC<{
             let body = res.data;
             if(body.error) {
                 setErrors(body.errors);
+            } else {
+                setSubmitted(true);
             }
             
-            setSubmitted(true);
         }).catch((err) => {
             console.log(err);
             setErrors(["Error connecting to WASD api!"])
@@ -84,6 +90,9 @@ const ReportModel: React.FC<{
                 ) : (
                 <div>
                     <h2>Report content.</h2>
+                    {errors.length !== 0 ? (
+                        <FourmError error={"Error!"} errorDescription={errors[0]} />
+                    ) : ""}
                     <div style={{ padding: "0px  10px", marginBottom: "10px"}} className={styles.report_model_content}> 
                         {reportReasons.map((report_reason) => {
                             return (

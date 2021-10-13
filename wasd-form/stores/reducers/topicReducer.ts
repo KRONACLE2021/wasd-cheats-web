@@ -1,4 +1,4 @@
-import { ADD_TOPIC, DELETE_TOPIC_FAILED, DELETE_TOPIC_PENDING, DELETE_TOPIC_SUCCESS, FETCH_TOPICS_FAILED, FETCH_TOPICS_PENDING, FETCH_TOPICS_SUCCESS, REMOVE_TOPIC, SET_TOPICS, SET_TOTAL_THREADS } from "../actions";
+import { ADD_TOPIC, DELETE_TOPIC_FAILED, DELETE_TOPIC_PENDING, DELETE_TOPIC_SUCCESS, FETCH_TOPICS_FAILED, FETCH_TOPICS_PENDING, FETCH_TOPICS_SUCCESS, LOCK_TOPIC_FAILED, LOCK_TOPIC_PENDING, LOCK_TOPIC_SUCCESS, REMOVE_TOPIC, SET_TOPICS, SET_TOTAL_THREADS } from "../actions";
 
 const initalState = {
     topics: [],
@@ -54,6 +54,20 @@ export default function topicReducer(state : any = initalState, action : { type:
                     state.topics[i] = null;
                 }
             }
+            return state;
+        case LOCK_TOPIC_PENDING:
+            state.loading = true;
+            return state;
+        case LOCK_TOPIC_SUCCESS:
+            state.loading = false;
+            for(var i in state.topics) {
+                if(state.topics[i].id == action.payload.id){
+                    state.topics[i] = action.payload;
+                }
+            }
+            return state;
+        case LOCK_TOPIC_FAILED:
+            state.loading = true;
             return state;
         default:
             return state;

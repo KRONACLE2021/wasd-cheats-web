@@ -7,13 +7,15 @@ import {
     GET_CURRENT_USER, 
     GET_USER_POSTS,
     GET_USERS,
-    UPDATE_USER_PROFILE
+    UPDATE_USER_PROFILE,
+    FETCH_USER
 } from '../../requests/config';
 import Requester from '../../requests/Requester';
 import { 
     ADMIN_USER_FETCH_FAILED,
     ADMIN_USER_FETCH_PENDING,
     ADMIN_USER_FETCH_SUCCESS,
+    CACHE_USER_PENDING,
     FETCH_USER_PENDING, 
     FETCH_USER_POSTS_PENDING, 
     FETCH_USER_POSTS_SUCCESS, 
@@ -271,5 +273,45 @@ export const UpdateUser = ({ bio, username, banner, avatar } : { bio: string, us
                 dispatcher(updateUserFailed(res.errors));
             }
         }).catch(err => dispatcher(updateUserFailed(err.errors)));
+    }
+}
+
+const fetchOtherUserPending = () => {
+    return {
+        type: CACHE_USER_PENDING
+    }
+}
+
+const fetchOtherUserSuccess = (user: any) => {
+    return {
+        type: CACHE_USER_PENDING,
+        payload: user
+    }
+}
+
+const fetchOtherUserFailed = (err: Array<string>) => {
+    return {
+        type: CACHE_USER_PENDING,
+        payload: err
+    }
+}
+
+export const fetchOtherUser = (id: string, api_key?: string) => {
+    return (dispatcher: Dispatch<any>) => {
+        dispatcher(fetchOtherUserPending());
+        Requester_.makeGetRequest(FETCH_USER(id), {
+            queryStringParams: [],
+            headers: {
+                Authorization: api_key
+            }
+        }).then((res) => {
+            if(!res.errors) {
+                dispatcher(fetchOtherUserSuccess(res));
+            } else {
+                dispatcher(fetchOtherUserFailed(res.errors));
+            }
+        }).catch((err) => {
+            dispatcher(fetchOtherUserFailed(err.errors));
+        });
     }
 }
