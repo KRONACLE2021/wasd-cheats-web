@@ -20,7 +20,6 @@ const ThreadCard: React.FC<IThread> = (props) => {
             </div>
             <div className={styles.thread_stats}>
                 <p>{props.posts.length - 1} replies</p>
-                <p>0 views</p>
             </div>
         </div>
     )

@@ -6,18 +6,20 @@ import getAvatar from '../../utils/getAvatar';
 import getUserPermission, { getPermissionColor } from '../../utils/getUserPermission';
 import moment from 'moment';
 import { useDispatch } from 'react-redux';
-import { fetchOtherUser, FetchUsersPosts } from '../../stores/actions/userActions';
+import { BanUser, fetchOtherUser, FetchUsersPosts } from '../../stores/actions/userActions';
 import PostCard from '../../components/fourm/PostCard';
 import SimplePostCard from '../../components/fourm/SimplePostCard';
 import { BASE_IMAGE_URL } from '../../requests/config';
 import fetchUser from '../../requests/getUser';  
 import { IUser } from '../../interfaces';
+import Preloader from '../../components/shared/Preloader';
 
 export default function UserPage() {
     
     const router = useRouter();
     const { query: { id } } = router;
     const [user, setUser] = useState<any>(null);
+    const [loading, setLoading] = useState<boolean>(true);
     const dispatcher = useDispatch();
 
     const userStore = useSelector((state : any) => state.user.user);
@@ -31,7 +33,7 @@ export default function UserPage() {
             } else {
                 setUser(userStore);
             }
-        } else {
+        } else if(id !== null && id !== undefined) {
             if(id == userStore.uid) return router.push("/users/me");
             dispatcher(fetchOtherUser(id, userStore.api_key));
         }
@@ -49,10 +51,18 @@ export default function UserPage() {
 
         if(user.length !== 0){
             setUser(user[0]);
+            setLoading(false);
         } else {
             
         }
-    }, [otherCachedUsers])
+    }, [otherCachedUsers]);
+
+    const banUser = () => {
+        if(!userStore.api_key) return router.push(`/login?after=/users/${id}`);
+        dispatcher(BanUser(id, userStore.api_key));
+    }
+
+    if(loading) return <Preloader />;
 
     return (
         <div style={{ display: "flex", alignItems: "center", maxWidth: "100%", justifyContent: "center"}}>
@@ -77,11 +87,12 @@ export default function UserPage() {
                                 <button>Delete all posts</button>
                                 <button>Reset Profile information</button>
                             </div>: ""}
-                            {userStore?.permissions?.includes("MODERATOR") ? <div>
+                            {userStore?.permissions?.includes("MODERATOR") && id !== userStore.uid && id !== "me" ? <div>
                                 <p>Admin Stats:</p>
                                 <p>Current active subscription: <br></br>{user?.subscriptions ? user?.subscriptions?.map((subscription: string) => <span>Sub ID: {subscription} <br></br></span>) : "None"}</p> 
                                 <p>Last logged in IP: <span style={{ color: "red"}}>{user?.last_logged_ip ? user?.last_logged_ip : "Protected IP User"}</span></p>
                                 <button className={styles.admin_action_button}>View users content</button>
+                                <button className={styles.admin_action_button} onClick={() => banUser()} style={{ marginLeft: "10px"}}>{ user?.banned == false ? "Ban user" : "Unban user" } </button>
                             </div>: ""}
                         </div>
                         <div className={styles.user_posts}>
@@ -96,6 +107,10 @@ export default function UserPage() {
                                     attachments={i.attachments} 
                                 /> 
                             })}
+                            {user?.posts.length == 0 ? <div style={{ textAlign: "center"}}> 
+                                <h1 style={{ color: "grey" }}>Things are kinda empty in here..</h1>  
+                                <p style={{ color: "grey" }}>This user hasnt posted on this fourm before :c</p>
+                            </div> : ""}
                         </div>
                     </div>
                 </div>

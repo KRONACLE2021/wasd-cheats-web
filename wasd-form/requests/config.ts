@@ -37,6 +37,7 @@ export const DELETE_SUBSCRIPTIONS = (id: string) => `api/v1/shop/admin/subscript
 export const CREATE_NEW_ORDER = `api/v1/shop/checkout/create-order` 
 export const GET_PAYPAL_ORDER = `api/v1/shop/checkout/payment/paypal`;
 export const CAPTURE_PAYPAL_ORDER = `api/v1/shop/checkout/capture/paypal`;
+export const ADMIN_DELETE_SHOP_ITEM = (id: string) => `api/v1/shop/admin/item/${id}/delete`;
 
 /* File upload routes */
 export const USER_FILE_UPLOAD = `api/v1/upload/usercontent`;
@@ -45,3 +46,4 @@ export const USER_FILE_UPLOAD = `api/v1/upload/usercontent`;
 export const GET_CURRENT_USER = `api/v1/users/me`;
 export const GET_USER_POSTS = (id: string) => `api/v1/users/${id}/posts`;
 export const GET_USERS = `api/v1/users/admin/users`;
+export const BAN_USER = (id: string) =>  `api/v1/users/${id}/ban`;

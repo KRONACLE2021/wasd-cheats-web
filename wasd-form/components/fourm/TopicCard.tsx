@@ -2,7 +2,7 @@ import React from 'react'
 import Router from 'next/router';
 import styles from '../../styles/fourms.module.css';
 
-const PostCard: React.FC<{ title: string, description: string, imgUrl: string, id: string }> = (props) => {
+const PostCard: React.FC<{ title: string, description: string, imgUrl: string, id: string, threadAmount: number }> = (props) => {
     return (
         <div onClick={() => {
             Router.push(`/fourm/topics/${props.id}`);            
@@ -16,12 +16,8 @@ const PostCard: React.FC<{ title: string, description: string, imgUrl: string, i
             </div>
             <div className={styles.topic_stats_container}>
                 <div className={styles.topic_stats}>
-                    <h3>44</h3>
+                    <h3>{props.threadAmount}</h3>
                     <h4>Topics</h4>
-                </div>
-                <div className={styles.topic_stats}>
-                    <h3>106</h3>
-                    <h4>Posts</h4>
                 </div>
             </div>
         </div>

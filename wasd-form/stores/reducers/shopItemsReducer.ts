@@ -1,5 +1,5 @@
 import filterDuplicates from "../../utils/filterDuplicates";
-import { GET_ITMES_PENDING, SET_SHOP_ITEMS, GET_ITEMS_FAILED, APPEND_SHOP_ITEM, GET_ITEM_PENDING, GET_ITEM_SUCCESS, GET_ITEM_FAILED } from "../actions";
+import { GET_ITMES_PENDING, SET_SHOP_ITEMS, GET_ITEMS_FAILED, APPEND_SHOP_ITEM, GET_ITEM_PENDING, GET_ITEM_SUCCESS, GET_ITEM_FAILED, DELETE_SHOP_ITEM_SUCCESS } from "../actions";
 
 const initalState = {
     items: [],
@@ -37,6 +37,9 @@ export default function shopItemsReducer(state : any = initalState, action : { t
         case GET_ITEM_FAILED:
             state.loading = false;
             state.errors = action.payload;
+            return state;
+        case DELETE_SHOP_ITEM_SUCCESS:
+            state.items = state.items.filter((i : any)=> i.id !== action.payload);
             return state;
         default: 
             return state;

@@ -14,7 +14,8 @@ import {
     UPDATE_USER_SUCCESS,
     CACHE_USER_PENDING,
     CACHE_USER_FAILED,
-    CACHE_USER_SUCCESS
+    CACHE_USER_SUCCESS,
+    ADMIN_BAN_USER_SUCCESS
 } from "../actions";
 
 const initalState = {
@@ -76,6 +77,17 @@ export default function userReducer(state : any = initalState, action : { type: 
             state.loading = false;
             state.otherCachedUsers.push(action.payload);
             state.otherCachedUsers = filterDuplicates(state.otherCachedUsers, (a: any, b: any) => a.id == b.id);
+            return state;
+        case ADMIN_BAN_USER_SUCCESS:
+            state.otherCachedUsers = state.otherCachedUsers.map((i) => {
+                if(i.uid == action.payload){
+                    i.banned = !i.banned;
+                    return i
+                } else {
+                    return i;
+                }
+            });
+
             return state;
         default:
             return state;

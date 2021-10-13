@@ -101,7 +101,7 @@ Route.get("/admin/users", checkAuth, async (req, res, next) => {
 
 Route.post("/:id/ban", checkAuth, async (req, res, next) => {
 
-    if(!res.locals.user.permissions("MODERATOR") || !res.locals.user.permissions("ADMINISTRATOR")) return res.json({ error: true, errors: ["You do not have permission to execute this command!"]});
+    if(!res.locals.user.permissions.includes("MODERATOR") || !res.locals.user.permissions.includes("ADMINISTRATOR")) return res.json({ error: true, errors: ["You do not have permission to execute this command!"]});
 
     let id = req.params.id;
     
@@ -111,22 +111,43 @@ Route.post("/:id/ban", checkAuth, async (req, res, next) => {
 
     if(!user_) return res.json({ error: true, errors: ["This user does not exsist!"] });
 
-    user_.banned = true;
+    if(user_.banned == true) {
+        user_.banned = false;
 
-    let banId = uuid();
+        await Ban.deleteOne({ id: user_.banId });
+        
+        user_.banId = null;
+        
+        await user_.save();
 
-    let userBan = await new Ban({
-        id: banId,
-        uid: user_.uid,
-        bannedBy: res.locals.user.uid,
-        banReason: bannedReason
-    }).save();
+        res.json({
+            done: true,
+            message: "user has been unbanned!"
+        });
 
-    res.json({
-        done: true,
-        message: "user has been banned!",
-        ban: userBan
-    });
+    } else {
+        user_.banned = true;
+    
+        let banId = uuid();
+    
+        user_.banId = banId;
+        
+        await user_.save();
+    
+        let userBan = await new Ban({
+            id: banId,
+            uid: user_.uid,
+            bannedBy: res.locals.user.uid,
+            banReason: bannedReason
+        }).save();
+    
+        res.json({
+            done: true,
+            message: "user has been banned!",
+            ban: userBan
+        });
+    
+    }
 
 });
 

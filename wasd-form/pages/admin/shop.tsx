@@ -10,8 +10,8 @@ import ModelContainer from '../../components/models/ModelContainer';
 import Requester from '../../requests/Requester';
 import Dropdown from './../../components/shared/Dropdown';
 import WASDTable from '../../components/shared/Table';
-import { ADD_STORE_ITEM, ADD_SUBSCRIPTION, API, BASE_IMAGE_URL, DELETE_SUBSCRIPTIONS } from '../../requests/config';
-import { appendShopItem, GetItems } from '../../stores/actions/shopItemsActions';
+import { ADD_STORE_ITEM, ADD_SUBSCRIPTION, ADMIN_DELETE_SHOP_ITEM, API, BASE_IMAGE_URL, DELETE_SUBSCRIPTIONS } from '../../requests/config';
+import { AdminDeleteItem, adminDeleteItemFailed, appendShopItem, GetItems } from '../../stores/actions/shopItemsActions';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck, faDollarSign, faFile, faPen, faSubscript, faTrash, faUser, faWalking, faWallet } from '@fortawesome/free-solid-svg-icons';
 import { appendShopSubscriptions, deleteSubscriptionItem, getShopSubscriptions, getUsersIncartItems } from '../../stores/actions/adminActions';
@@ -29,6 +29,7 @@ export default function adminShopManager() {
     const [addSubscriptionData, setSubscriptionData] = useState({ name: "", timespan: 0, timespan_type: "DAYS" });
     const [subscriptionDeletePopup, setSubscriptionDeletePopup] = useState(false);
     const [deletingItemId, setDeletingItemID] = useState("");
+    const [itemDeletePopupModel, setItemDeletePopupModel] = useState(false);
 
     //For when a user is editing a product
     const [currentProduct, setCurrentProduct] = useState({});
@@ -152,10 +153,24 @@ export default function adminShopManager() {
 
     }
 
+    const deleteItemRequest = () => {
+        let deletingId = deletingItemId;
+
+        dispatch(AdminDeleteItem(deletingId, userStore.api_key));
+        setDeletingItemID("");
+        setItemDeletePopupModel(false);
+    }
+
+    const deleteItem = (id: string) => {
+        setDeletingItemID(id);
+        setItemDeletePopupModel(true);
+    }   
+
     if(isLoading) return <Preloader />;
 
     return (
         <div>
+            
             <ModelContainer key={"EditItemPopup"} isActive={editProductPopupActive} setModelActive={setEditProductPopupActive}>
                 <div className={styles.model_popup_container}>
                     <h1 className={styles.action_heading}>You're editing {currentProduct?.name}</h1>
@@ -172,6 +187,7 @@ export default function adminShopManager() {
                     </div>
                 </div>
             </ModelContainer>
+            
             <ModelContainer key={"SubscriptonDeletePopup"} isActive={subscriptionDeletePopup} setModelActive={setSubscriptionDeletePopup}>
                 <div className={styles.model_popup_container}>
                     <h1>Are you sure you want to delete this subscription?</h1>
@@ -182,6 +198,18 @@ export default function adminShopManager() {
                     </div>
                 </div>
             </ModelContainer>
+
+            <ModelContainer key={"DeleteItemPopupModel"} isActive={itemDeletePopupModel} setModelActive={setItemDeletePopupModel}>
+                <div className={styles.model_popup_container}>
+                    <h1>Are you sure you want to delete this item?</h1>
+                    <p>Deleting this item will remove it from the shop, deleting an item that a user has already purchased will not remove it from the users account.</p>
+                    <div style={{ marginTop: "10px", marginBottom: "0px"}}>
+                        <button className={styles.button} onClick={() => setSubscriptionDeletePopup(false)}>Cancel</button>
+                        <button className={`${styles.button} ${styles.button_delete}`} onClick={() => deleteItemRequest(deletingItemId)}>Delete</button>
+                    </div>
+                </div>
+            </ModelContainer>
+            
             <ModelContainer key={"CreateNewItemPopup"} isActive={modelPopupActive} setModelActive={setModelPopupActive}>
                 <div className={styles.model_popup_container}>
                     <h1 className={styles.action_heading}>Create a new item!</h1>
@@ -229,6 +257,7 @@ export default function adminShopManager() {
                     </div>
                 </div>
             </ModelContainer>
+            
             <AdminDashboardRoot>
                 <div className={styles.dashboard_container}>
                     <h1>Manage your store.</h1>
@@ -299,7 +328,9 @@ export default function adminShopManager() {
                                         <th>{i.currency}</th>
                                         <th>{i.image}</th>
                                         <th>{i.description}</th>
-                                        <th><span><FontAwesomeIcon icon={faTrash} /></span><span onClick={() => {
+                                        <th><span onClick={() => {
+                                            deleteItem(i.id);
+                                        }}><FontAwesomeIcon icon={faTrash} /></span><span onClick={() => {
                                             editItem(i);
                                         }}><FontAwesomeIcon icon={faPen} /></span></th>
                                     </tr>

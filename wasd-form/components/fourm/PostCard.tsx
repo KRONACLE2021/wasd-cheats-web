@@ -58,13 +58,13 @@ const PostCard: React.FC<{ contents: string, uid: string | null, createdAt: stri
 
 
     let userActions = [
-        {
+        /* {
             name: "Edit",
             fasIcon: faEdit,
             fasSize: "lg",
             eventHandeler: () => {},
-            permission: props.uid == userStore.user.uid
-        },
+             permission: props.uid == userStore.user.uid
+        }, */
         {
             name: "Report",
             fasIcon: faExclamationTriangle,

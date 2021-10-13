@@ -73,6 +73,24 @@ Route.post("/subscription/:id/delete", checkAuth, async (req, res, next) => {
     return res.json({ doen: true, message: "Subscription has been deleted!"});
 });
 
+Route.post("/item/:id/delete", checkAuth, async (req, res, next) => {
+    if(!res.locals.user.permissions.includes("ADMINISTRATOR")) return res.json({ error: true, errors: ["You do not have premissions to modify this content!"]}).status(403);
+
+    let id = req.params.id;
+
+    let item = await Item.findOne({ id: id });
+
+    if(!item) return res.json({ error: true, errors: ["Item not found"]});
+
+    await Item.deleteOne({ id: id });
+    
+    return res.json({ 
+        done: true, 
+        item: item,
+        messaage: "Item deleted successfully"
+    });
+})
+
 Route.post("/item/:id/edit", checkAuth, async (req, res, next) => {
     if(!res.locals.user.permissions.includes("ADMINISTRATOR")) return res.json({ error: true, errors: ["You do not have premissions to modify this content!"]}).status(403);
 

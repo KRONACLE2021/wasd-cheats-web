@@ -68,6 +68,7 @@ const CategoryContainer: React.FC<{name: string, id: string, isAdmin: any, toggl
                                                 description={t.description}
                                                 imgUrl={BASE_IMAGE_URL(t.imgID)}
                                                 id={t.id}
+                                                threadAmount={t.threads.length}
                                     />
                         }
                     }) : "" }

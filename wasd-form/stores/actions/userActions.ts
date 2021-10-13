@@ -8,10 +8,14 @@ import {
     GET_USER_POSTS,
     GET_USERS,
     UPDATE_USER_PROFILE,
-    FETCH_USER
+    FETCH_USER,
+    BAN_USER
 } from '../../requests/config';
 import Requester from '../../requests/Requester';
 import { 
+    ADMIN_BAN_USER_FAILED,
+    ADMIN_BAN_USER_PENDING,
+    ADMIN_BAN_USER_SUCCESS,
     ADMIN_USER_FETCH_FAILED,
     ADMIN_USER_FETCH_PENDING,
     ADMIN_USER_FETCH_SUCCESS,
@@ -315,5 +319,47 @@ export const fetchOtherUser = (id: string, api_key?: string) => {
         }).catch((err) => {
             dispatcher(fetchOtherUserFailed(err.errors));
         });
+    }
+}
+
+const BanUserPending = () => {
+    return {
+        type: ADMIN_BAN_USER_PENDING
+    }
+}
+
+const BanUserSuccess = (id: string) => {
+    return {
+        type: ADMIN_BAN_USER_SUCCESS,
+        payload: id
+    }
+}
+
+const BanUserFailed = (err: Array<string>) => {
+    return {
+        type: ADMIN_BAN_USER_FAILED,
+        payload: err
+    }
+}
+
+export const BanUser = (id: string, api_key: string) => {
+    return (dispatcher: Dispatch<any>) => {
+        dispatcher(BanUserPending());
+        Requester_.makePostRequest(BAN_USER(id), {
+            
+        }, {
+            queryStringParams: [],
+            headers: {
+                Authorization: api_key
+            }
+        }).then((res) => {
+            if(!res.error) {
+                dispatcher(BanUserSuccess(id));
+            } else {
+                dispatcher(BanUserFailed(res.errors));
+            }
+        }).catch(err => {
+            dispatcher(BanUserFailed(err.errors))
+        })
     }
 }
