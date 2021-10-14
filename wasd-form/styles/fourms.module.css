@@ -613,6 +613,7 @@
     width: 100%;
     background-color: var(--bg-secondary);
 
+
 }
 
 .user_stats_items {
@@ -664,6 +665,7 @@
 .user_posts {
     position: relative;
     width: 100%;
+    margin-bottom: 40px;
     padding: 0px 20px;
 }
 
@@ -730,6 +732,7 @@
 
 .fourm_post_contents img {
     max-height: 400px;
+    max-width: 500px;
 }
 
 .report_model_content div input, .report_model_content div p  {

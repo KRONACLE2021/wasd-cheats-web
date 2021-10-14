@@ -7,6 +7,7 @@ export interface IAttachment {
     altText: string;
     url: string;
     uid: string;
+    size: string;
 }
 
 
@@ -16,7 +17,8 @@ const AttachmentSchema = new Schema<IAttachment>({
     altText: String,
     attachedTo: String,
     url: String,
-    uid: String
+    uid: String,
+    size: String
 });
 
 

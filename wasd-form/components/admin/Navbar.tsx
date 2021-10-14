@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import styles from '../../styles/admin.module.css';
 import getAvatar from '../../utils/getAvatar';
 import getUserPermission, { getPermissionColor, permissions } from '../../utils/getUserPermission';
-import { faUser, faShoppingBag, faExclamationTriangle, faTools, faBox } from '@fortawesome/free-solid-svg-icons';
+import { faUser, faShoppingBag, faExclamationTriangle, faTools, faBox, faFile } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Link from 'next/link';
 
@@ -23,9 +23,9 @@ const Navbar: React.FC<any> = () => {
             icon: <FontAwesomeIcon icon={faShoppingBag}></FontAwesomeIcon>
         },
         {
-            name: "Fourm",
-            to: "/admin/fourm",
-            icon: <FontAwesomeIcon icon={faTools}></FontAwesomeIcon>
+            name: "Manage Files",
+            to: "/admin/uploads",
+            icon: <FontAwesomeIcon icon={faFile}></FontAwesomeIcon>
         },
         {
             name: "Fourm Reports",

@@ -46,10 +46,12 @@ const draftEditor: React.FC<{output: Function, hasUploader: boolean, uploads: (u
     }
 
     const handleUploadChange = (data) => {
-        for(var i of data){
-            if(attachments.indexOf(i) !== -1) return;
-            setAttachments([...attachments, i]);
-            handleOnChange(imagePlugin.addImage(editorState, BASE_IMAGE_URL(i), null));
+        console.log(data);
+        for(var i in data){
+            console.log(data[i]);
+            if(attachments.indexOf(data[i]) !== -1) continue;
+            setAttachments([...attachments, data[i]]);
+            handleOnChange(imagePlugin.addImage(editorState, BASE_IMAGE_URL(data[i]), null));
         }
     } 
 
@@ -78,7 +80,15 @@ const draftEditor: React.FC<{output: Function, hasUploader: boolean, uploads: (u
                 />
 
                 {props.hasUploader ? (
-                    <MultiFileUploader reccomended_size={"1920x1080 - 20MB"} uploadType={"image"} output={handleUploadChange} custom_classes={["small_file-uploader"]} />
+                    <MultiFileUploader 
+                        reccomended_size={"1920x1080 - 20MB"} 
+                        uploadType={"image"} 
+                        output={(data) => handleUploadChange(data)} 
+                        custom_classes={["small_file-uploader"]} 
+                        getImage={(id) => {
+                            handleOnChange(imagePlugin.addImage(editorState, BASE_IMAGE_URL(id), null));
+                        }}    
+                    />
                 ): ""}
             </div>
         </div>

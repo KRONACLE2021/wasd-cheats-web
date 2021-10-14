@@ -12,6 +12,7 @@ import ItemRoutes from './store/items';
 import StoreCheckout from './store/checkout';
 import UploadsRoute from './Files';
 import ReportRoute from './report';
+import AdminContentRoute from './admin/Content';
 
 let Route = Router();
 
@@ -31,6 +32,7 @@ Route.use('/api/v1/posts', PostsRoute);
 Route.use("/api/v1/upload", UploadRoute);
 Route.use("/api/v1/uploads/", UploadsRoute)
 Route.use("/api/v1/report/", ReportRoute);
+Route.use("/api/v1/admin/content", AdminContentRoute);
 
 /* User Routes */
 Route.use("/api/v1/users", UserRoutes);

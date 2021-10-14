@@ -1,5 +1,5 @@
 import filterDuplicates from "../../utils/filterDuplicates";
-import { GET_ITMES_PENDING, SET_SHOP_ITEMS, GET_ITEMS_FAILED, APPEND_SHOP_ITEM, GET_ITEM_PENDING, GET_ITEM_SUCCESS, GET_ITEM_FAILED, DELETE_SHOP_ITEM_SUCCESS } from "../actions";
+import { GET_ITMES_PENDING, SET_SHOP_ITEMS, GET_ITEMS_FAILED, APPEND_SHOP_ITEM, GET_ITEM_PENDING, GET_ITEM_SUCCESS, GET_ITEM_FAILED, DELETE_SHOP_ITEM_SUCCESS, ADMIN_UPDATE_PRODUCT_SUCCESS } from "../actions";
 
 const initalState = {
     items: [],
@@ -40,6 +40,16 @@ export default function shopItemsReducer(state : any = initalState, action : { t
             return state;
         case DELETE_SHOP_ITEM_SUCCESS:
             state.items = state.items.filter((i : any)=> i.id !== action.payload);
+            return state;
+        case ADMIN_UPDATE_PRODUCT_SUCCESS:
+            state.items = state.items.map((i: any) => {
+                if(i.id == action.payload.id){
+                    return action.payload;
+                } else {
+                    return i;
+                }
+            });
+
             return state;
         default: 
             return state;

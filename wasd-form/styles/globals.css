@@ -209,6 +209,10 @@ a {
   background: #fefefe;
 }
 
+.editor img {
+  max-width: 500px;
+}
+
 .small_file-uploader {
   min-height: 75px !important;
   border-radius: 7px;
@@ -233,4 +237,23 @@ a {
 .file_uploader-smallText {
   font-size: 14px;
   color: rgb(158, 158, 158);
+}
+
+.DraftEditor-root img {
+  max-width: 100% !important;
+
+}
+
+.uploader-file-card {
+  position: relative;
+  z-index: 10;
+  background-color: var(--bg-secondary);
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.uploader-file-card img {
+ max-width: 200px;
+ min-height: 100px;
+ object-fit: cover; 
 }

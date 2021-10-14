@@ -1,7 +1,7 @@
 import { Router, json, Request, Response, NextFunction } from 'express';
 import { v4 as uuid } from 'uuid';
 import CheckAuth from '../middleware/checkAuth';
-import multer from 'multer';
+import multer, { MulterError } from 'multer';
 import multerS3 from 'multer-s3';
 import aws from 'aws-sdk';
 import Attachments, { IAttachment } from '../models/Attachments';
@@ -17,6 +17,15 @@ var s3 = new aws.S3({
     secretAccessKey: "uiuzAXd3BMehHHeK8qCsf2cdNFBRGshBD+bhRj1Dghg"
 });
 
+
+const ALLOWED_UPLOAD_TYPES = {
+  'image/png': 'png',
+  'image/jpeg': 'jpeg',
+  'image/jpg': 'jpg',
+  'image/gif': 'gif'
+}
+
+
 var upload = multer({
     storage: multerS3({
       s3: s3,
@@ -30,7 +39,16 @@ var upload = multer({
         let id = uuid();
         cb(null, id)
       }
-    })
+    }),
+    limits: { fileSize: 2e+7 },
+    fileFilter: (req, file, cb) => {
+      let isValid = false;
+      
+      if(ALLOWED_UPLOAD_TYPES[file.mimetype]) isValid = true;
+
+      let error = isValid ? null : new Error("Invlid mime type!!");
+      cb(error, isValid);
+    }
 })
 
 Route.post("/admin/upload", CheckAuth, (req, res, next) => {
@@ -82,6 +100,7 @@ Route.post("/usercontent", CheckAuth, upload.single('file'), async (req : Reques
     let attachedTo = null;
     let url = file.location;
     let uid = res.locals.user.uid;
+    let size = file.size;
 
     let attachment_ = await new Attachments({ 
       id,
@@ -89,7 +108,8 @@ Route.post("/usercontent", CheckAuth, upload.single('file'), async (req : Reques
       altText,
       attachedTo,
       uid,
-      url
+      url,
+      size
     }).save();
     
     res.json({attachment_});

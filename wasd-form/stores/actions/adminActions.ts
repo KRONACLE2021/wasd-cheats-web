@@ -1,9 +1,11 @@
 import Requester from "../../requests/Requester";
 import { 
+    ADMIN_GET_ATTACHMNETS,
     ADMIN_GET_USER_INCART_ITEMS,
     API,
     DELETE_SUBSCRIPTIONS,
-    GET_SUBSCRIPTIONS
+    GET_SUBSCRIPTIONS,
+    UPDATE_SHOP_ITEM
 } from '../../requests/config';
 import { Dispatch } from "react";
 import { 
@@ -17,8 +19,12 @@ import {
     DELETE_SUBSCRIPTION_ITEM_FAILED, 
     DELETE_SUBSCRIPTION_ITEM_PENDING, 
     DELETE_SUBSCRIPTION_ITEM_SUCCESS, 
+    GET_ATTACHMENTS_FAILED, 
+    GET_ATTACHMENTS_PENDING, 
+    GET_ATTACHMENTS_SUCCESS, 
     GET_SHOP_SUBSCRIPTIONS_FAILED, 
     GET_SHOP_SUBSCRIPTIONS_PENDING, 
+    REMOVE_ATTACHMENT, 
     SET_SHOP_SUBSCRIPTIONS
 } from "../actions";
 
@@ -176,10 +182,85 @@ const updateProductSuccess = (product: any) => {
         payload: product
     }
 }
-export const updateProduct = (id: string, api_key: string) => {
+
+export const AdminUpdateProduct = ({name, stock, price, imgID, description, subscription_id} : any, id: string, api_key: string) => {
     return (dispatcher: Dispatch<any>) => {
         dispatcher(updateProductPending());
 
-        Requester_.makePostRequest()
+        Requester_.makePostRequest(UPDATE_SHOP_ITEM(id), {
+            name,
+            stock,
+            price,
+            imgID,
+            description,
+            subscription: subscription_id
+        }, {
+            queryStringParams: [],
+            headers: {
+                Authorization: api_key
+            }
+        }).then((res) => {
+            if(!res.error) {
+                dispatcher(updateProductSuccess(res.item));
+            } else {
+                dispatcher(updateProductFailed(res.errors));
+            }
+        })
+    }
+}
+
+const adminGetAttachmentsFailed = (err: any) => {
+    return {
+        type: GET_ATTACHMENTS_FAILED,
+        payload: err
+    }
+}
+
+const adminGetAttachmentsPending = () => {
+    return {
+        type: GET_ATTACHMENTS_PENDING
+    }
+}
+
+const adminGetAttachmentsSuccess = (attachments: Array<any>) => {
+    return {
+        type: GET_ATTACHMENTS_SUCCESS,
+        payload: attachments
+    }
+}
+
+export const AdminGetAttachments = (skip: number, limit: number, api_key : string) => {
+    return (dispatcher: Dispatch<any>) => {
+        dispatcher(adminGetAttachmentsPending());
+        Requester_.makeGetRequest(ADMIN_GET_ATTACHMNETS, {
+            queryStringParams: [
+                {
+                    name: "skip",
+                    value: skip
+                },
+                {
+                    name: "limit",
+                    value: limit
+                },
+            ],
+            headers: {  
+                Authorization: api_key 
+            }
+        }).then(res => {
+            if(res.error) {
+                dispatcher(adminGetAttachmentsFailed(res.errors));
+            } else  {
+                dispatcher(adminGetAttachmentsSuccess(res.content));
+            }
+        }).catch(err => {
+            dispatcher(adminGetAttachmentsFailed(err.errors));
+        });
+    }
+}
+
+export const RemoveAttachment = (id: string) => {
+    return {
+        type: REMOVE_ATTACHMENT,
+        payload: id,
     }
 }

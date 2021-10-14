@@ -14,7 +14,7 @@ import { ADD_STORE_ITEM, ADD_SUBSCRIPTION, ADMIN_DELETE_SHOP_ITEM, API, BASE_IMA
 import { AdminDeleteItem, adminDeleteItemFailed, appendShopItem, GetItems } from '../../stores/actions/shopItemsActions';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck, faDollarSign, faFile, faPen, faSubscript, faTrash, faUser, faWalking, faWallet } from '@fortawesome/free-solid-svg-icons';
-import { appendShopSubscriptions, deleteSubscriptionItem, getShopSubscriptions, getUsersIncartItems } from '../../stores/actions/adminActions';
+import { AdminUpdateProduct, appendShopSubscriptions, deleteSubscriptionItem, getShopSubscriptions, getUsersIncartItems } from '../../stores/actions/adminActions';
 import FileUploader from '../../components/fourm/FileUploader';
 
 const Requester_ = new Requester(API);
@@ -147,9 +147,12 @@ export default function adminShopManager() {
     const editItem = (item: string) => {
         setCurrentProduct(item);
         setEditProductPopupActive(true);
+        setEditProductPopupActive(false);
     }
 
     const updateProduct = () => {
+        if(!currentProduct.id) return;
+        dispatch(AdminUpdateProduct(currentProduct, currentProduct.id, userStore.api_key));
 
     }
 

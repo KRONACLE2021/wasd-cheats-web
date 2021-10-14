@@ -23,15 +23,16 @@ export default function UserPage() {
     const dispatcher = useDispatch();
 
     const userStore = useSelector((state : any) => state.user.user);
-    const otherCachedUsers = useSelector((state : any) => state.user.otherCachedUsers)
+    const otherCachedUsers = useSelector((state : any) => state.user.otherCachedUsers.filter((i: IUser) => i.uid == id))
     console.log(userStore);
 
     useEffect(() => {
         if(id == "me") {
             if(!userStore.uid){
-                router.push('/login')
+                router.push('/login?after=/users/me')
             } else {
                 setUser(userStore);
+                setLoading(false);
             }
         } else if(id !== null && id !== undefined) {
             if(id == userStore.uid) return router.push("/users/me");
@@ -47,10 +48,9 @@ export default function UserPage() {
     }, [user]);
 
     useEffect(() => {
-        let user = otherCachedUsers.filter((i: IUser) => i.uid == id);
 
-        if(user.length !== 0){
-            setUser(user[0]);
+        if(otherCachedUsers.length !== 0){
+            setUser(otherCachedUsers[0]);
             setLoading(false);
         } else {
             
@@ -63,7 +63,7 @@ export default function UserPage() {
     }
 
     if(loading) return <Preloader />;
-
+ 
     return (
         <div style={{ display: "flex", alignItems: "center", maxWidth: "100%", justifyContent: "center"}}>
             <div className={styles.fourm_user_page_container}>

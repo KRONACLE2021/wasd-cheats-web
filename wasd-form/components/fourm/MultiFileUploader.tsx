@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import axios from 'axios';
-import { API, USER_FILE_UPLOAD } from '../../requests/config';
+import { API, BASE_IMAGE_URL, USER_FILE_UPLOAD } from '../../requests/config';
 import { useSelector } from 'react-redux';
 
 
@@ -17,8 +17,9 @@ const MultiFileUploader : React.FC<{
     reccomended_size: string, 
     uploadType: "icon" | "image", 
     output: (arg: Array<string>) => void, 
-    custom_classes: Array<string> | undefined 
-}> = ({ reccomended_size, uploadType, output, custom_classes })  => {
+    getImage?: (url: string) => void,
+    custom_classes: Array<string> | undefined
+}> = ({ reccomended_size, uploadType, output, custom_classes, getImage })  => {
     const [file, setFile] = useState<{selectedFiles: Array<{ file: File, url: string}> }>({ selectedFiles: [] });
     const [uploadedAttachemnts, setUploadedAttachemnts] = useState<Array<string>>([]);
     const [error, setError] = useState<string>("");
@@ -61,9 +62,13 @@ const MultiFileUploader : React.FC<{
             alert("[AXIOS] Error uploading file: " + result.errors);
         } else {
             setUploadedAttachemnts([ ...uploadedAttachemnts, result.data.attachment_.id ]);
-            output([ ...uploadedAttachemnts, result.data.attachment_.id ]);
         }
     }
+
+    useEffect(() => {
+        console.log(uploadedAttachemnts)
+        output(uploadedAttachemnts);
+    }, [uploadedAttachemnts])
     
     return (
         <div className={`file-uploader_container ${custom_classes}`}>
@@ -71,11 +76,16 @@ const MultiFileUploader : React.FC<{
             {file.selectedFiles.length !== 0 ? <>
                 <div>
                     <p>Your files: </p>
-                    {file.selectedFiles.map(file_ => {
+                    {uploadedAttachemnts.map(file_ => {
                         return (
-                            <div style={{ float: "left", marginLeft: "10px"}}>
-                                <img src={file_.url} style={{ height: "100px", width: "100%", objectFit: "scale-down"}}></img> 
-                                <p>{file_.file.name}</p>
+                            <div onClick={() => {
+                                if(getImage){
+                                    console.log("uwu");
+                                    getImage(file_)
+                                } 
+                            }} className={"uploader-file-card"} style={{ float: "left", marginLeft: "10px"}}>
+                                <img src={BASE_IMAGE_URL(file_)} style={{ height: "100px", width: "100%", objectFit: "scale-down"}}></img> 
+                                <p>Uploaded!</p>
                             </div>
                         )
                     })}
