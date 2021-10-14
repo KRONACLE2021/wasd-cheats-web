@@ -1,4 +1,5 @@
-import { ADD_TOPIC, DELETE_TOPIC_FAILED, DELETE_TOPIC_PENDING, DELETE_TOPIC_SUCCESS, FETCH_TOPICS_FAILED, FETCH_TOPICS_PENDING, FETCH_TOPICS_SUCCESS, LOCK_TOPIC_FAILED, LOCK_TOPIC_PENDING, LOCK_TOPIC_SUCCESS, REMOVE_TOPIC, SET_TOPICS, SET_TOTAL_THREADS } from "../actions";
+import filterDuplicates from "../../utils/filterDuplicates";
+import { ADD_TOPIC, APPEND_TOPICS, DELETE_TOPIC_FAILED, DELETE_TOPIC_PENDING, DELETE_TOPIC_SUCCESS, EDIT_TOPIC_SUCCESS, FETCH_TOPICS_FAILED, FETCH_TOPICS_PENDING, FETCH_TOPICS_SUCCESS, LOCK_TOPIC_FAILED, LOCK_TOPIC_PENDING, LOCK_TOPIC_SUCCESS, REMOVE_TOPIC, SET_TOPICS, SET_TOTAL_THREADS } from "../actions";
 
 const initalState = {
     topics: [],
@@ -20,6 +21,10 @@ export default function topicReducer(state : any = initalState, action : { type:
             } else {
                 state.topics.push(action.payload);
             }
+            return state;
+        case APPEND_TOPICS:
+            state.topics = state.topics.concat(action.payload);
+            state.topics = filterDuplicates(state.topics, (a: any, b: any) => a.id == b.id);
             return state;
         case FETCH_TOPICS_PENDING:
             state.loading = true;
@@ -68,6 +73,13 @@ export default function topicReducer(state : any = initalState, action : { type:
             return state;
         case LOCK_TOPIC_FAILED:
             state.loading = true;
+            return state;
+        case EDIT_TOPIC_SUCCESS: 
+            for(var i in state.topics) {
+                if(state.topics[i].id == action.payload.id){
+                    state.topics[i] = action.payload;
+                }
+            }
             return state;
         default:
             return state;

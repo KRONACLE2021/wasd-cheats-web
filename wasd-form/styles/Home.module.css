@@ -160,3 +160,58 @@
 .small_spacer {
     height: 10px;
 }
+
+.home_container {
+    position: relative;
+    z-index: 9 !important;
+    padding: 40px;
+    min-height: 250px;
+    display: flex;
+}
+
+.home_container_centered {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+    
+}
+
+
+.user_review_card {
+    transition: 1s ease all;
+    text-align: center;
+}
+
+.user_review_card img {
+    height: 150px;
+    width: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid var(--bg-lighter);
+}
+
+.home_slideshow .slideshow_dots {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.slideshow_dots {
+    position: relative;
+    z-index: 20;
+}
+
+.home_slideshow .slideshow_dots div{
+    height: 20px;
+    width: 20px;
+    background-color: var(--bg-lighter);
+    display: inline-block;
+    margin-left: 10px;
+    border-radius: 50px;
+}
+
+.slideshow_dots .active_dot {
+    background-color: var(--purple) !important;
+}

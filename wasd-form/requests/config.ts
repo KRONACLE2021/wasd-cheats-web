@@ -25,6 +25,8 @@ export const REPORT_POST = `api/v1/report/post`;
 export const UPDATE_USER_PROFILE = `api/v1/users/me/update`;
 export const LOCK_TOPIC = (id: string) => `api/v1/topics/${id}/lock`;
 export const UPDATE_SHOP_ITEM = (id: string) => `api/v1/shop/admin/item/${id}/edit`;
+export const UPADTE_TOPIC = (id: string) => `api/v1/topics/${id}/edit`;
+export const CREATE_CATEGORY = `api/v1/categorys/create`;
 
 /* Store Routes */
 export const GET_STORE_ITEMS = `api/v1/shop/items`;
@@ -44,6 +46,7 @@ export const ADMIN_DELETE_SHOP_ITEM = (id: string) => `api/v1/shop/admin/item/${
 export const USER_FILE_UPLOAD = `api/v1/upload/usercontent`;
 export const ADMIN_GET_ATTACHMNETS = `api/v1/admin/content/images`;
 export const DELETE_ATTACHMENT = (id: string) => `api/v1/admin/content/files/${id}/delete`;
+export const MASS_DELETE_ATTACHMENTS_ASSIGNEDCONTENT = `api/v1/admin/content/files/massdelete/assignedcontent`;
 
 /* USER ROUTES */
 export const GET_CURRENT_USER = `api/v1/users/me`;

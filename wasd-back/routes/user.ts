@@ -89,10 +89,28 @@ Route.get("/admin/users", checkAuth, async (req, res, next) => {
         return sanitizedUsers_;
     }   
 
+    const paginationUsers = async (limit: number, skip: number) => {
+        let users = await Users.find({}).skip(skip).limit(limit);
+
+        let sanitizedUsers_ = sanitizeUsers(users);
+
+        return sanitizedUsers_;
+    }
+
     switch(sortBy){
         case "RECENT":
             let users_ = await sortByRecentUsers()
             return res.json({ users: users_ });
+        case "PAGINATION":
+            let skip = parseInt(req.query.skip);
+            let limit = parseInt(req.query.limit);
+
+            if(isNaN(skip)) skip = 0;
+            if(isNaN(limit)) limit = 10;
+
+            let pagination_users = await paginationUsers(limit, skip);
+
+            return res.json({ users: pagination_users });
         default: 
             return res.json({ error: true, errors: ["You must sort a user by a type! Accepted sortBy types: ['RECENT']"]});
     }
@@ -110,6 +128,7 @@ Route.post("/:id/ban", checkAuth, async (req, res, next) => {
     let user_ = await Users.findOne({ uid: id });
 
     if(!user_) return res.json({ error: true, errors: ["This user does not exsist!"] });
+    if(id == res.locals.user.uid) return res.json({ error: true, errors: ["Why are you trying to ban yourself? thats just odd."]});
 
     if(user_.banned == true) {
         user_.banned = false;

@@ -32,6 +32,38 @@ Route.post("/:id/lock", checkAuth, async (req, res, next) => {
     return res.json({ topic: topic });
 });
 
+
+Route.post("/:id/edit", checkAuth, async (req, res, next) => {
+    if(!res.locals.user.permissions.includes("MODERATOR")) return res.json({ error: true, errors: ["You do not have permissions to lock a topic!"]});
+
+    let id = req.params.id;
+
+    let body = req.body;
+
+    let title = body.title;
+    let description = body.description;
+    let category = body.category;
+    let attachmentId = body.attachmentId;
+
+    let topic = await Topics.findOne({ id: id });
+
+    if(!topic) return res.json({ error: true, errors: ["Could not find topic!"]});
+
+    if(attachmentId){
+        let attachment_check = await Attachments.findOne({ id: attachmentId });
+        if(!attachment_check) attachmentId = null;
+    }
+
+    topic.title = title ? title : topic.title;
+    topic.description = description ? description : topic.description;
+    topic.category = category ? category : topic.category;
+    topic.imgID = attachmentId ? attachmentId : topic.imgID;
+
+    await topic.save();
+
+    return res.json({ done: true, topic: topic });
+});
+
 Route.get("/:id/threads", async (req, res, next) => {
 
 

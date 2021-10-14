@@ -1,8 +1,8 @@
 import { Dispatch } from 'redux';
-import { API, CREATE_NEW_TOPIC, DELETE_TOPIC, FETCH_TOPIC, FETCH_TOPICS_BY_CATEGORY, LOCK_TOPIC } from '../../requests/config';
+import { API, CREATE_NEW_TOPIC, DELETE_TOPIC, FETCH_TOPIC, FETCH_TOPICS_BY_CATEGORY, LOCK_TOPIC, UPADTE_TOPIC } from '../../requests/config';
 import Requester from '../../requests/Requester';
 
-import { ADD_CATEGORY, ADD_TOPIC, CREATE_TOPICS, DELETE_TOPIC_FAILED, DELETE_TOPIC_PENDING, DELETE_TOPIC_SUCCESS, FETCH_TOPICS_FAILED, FETCH_TOPICS_PENDING, FETCH_TOPICS_SUCCESS, LOCK_TOPIC_FAILED, LOCK_TOPIC_PENDING, LOCK_TOPIC_SUCCESS, SET_CATEGORYS, SET_TOPICS } from "../actions"
+import { ADD_CATEGORY, ADD_TOPIC, APPEND_TOPICS, CREATE_TOPICS, DELETE_TOPIC_FAILED, DELETE_TOPIC_PENDING, DELETE_TOPIC_SUCCESS, EDIT_TOPIC_PENDING, EDIT_TOPIC_SUCCESS, FETCH_TOPICS_FAILED, FETCH_TOPICS_PENDING, FETCH_TOPICS_SUCCESS, LOCK_TOPIC_FAILED, LOCK_TOPIC_PENDING, LOCK_TOPIC_SUCCESS, SET_CATEGORYS, SET_TOPICS } from "../actions"
 
 const Requester_ = new Requester(API);
 
@@ -78,7 +78,7 @@ export const FetchTopicsByCategory = async (id : string, dispatcher : any) => {
     if(!result.error){
         if(result.topics){
             dispatcher({
-                type: SET_TOPICS,
+                type: APPEND_TOPICS,
                 payload: result.topics
             });
 
@@ -172,5 +172,51 @@ export const AdminLockTopic = (id: string, api_key: string) => {
             dispatcher(lockTopicFailed(err.errors))
         });
 
+    }
+}
+
+
+const editTopicPending = () => {
+    return {
+        type: EDIT_TOPIC_PENDING
+    }
+}
+
+
+const editTopicSuccess = (topic: any) => {
+    return {
+        type: EDIT_TOPIC_SUCCESS,
+        payload: topic
+    }
+}
+
+const editTopicFailed = (err: Array<string>) => {
+    return {
+        type: EDIT_TOPIC_PENDING,
+        payload: err
+    }
+}
+
+export const AdminEditTopic = ({ title, description, icon } : any, id: string, api_key: string) => {
+    return (dispatcher: Dispatch<any>) => {
+        dispatcher(editTopicPending())
+        Requester_.makePostRequest(UPADTE_TOPIC(id), {
+            title,
+            description,
+            imgID: icon
+        }, {
+            queryStringParams: [],
+            headers: {
+                Authorization: api_key
+            }
+        }).then(res => {
+            if(!res.error) {
+                dispatcher(editTopicSuccess(res.topic));
+            } else {
+                dispatcher(editTopicFailed(res.errors));
+            }
+        }).catch((err) => {
+            dispatcher(editTopicFailed(err.errors));
+        })
     }
 }

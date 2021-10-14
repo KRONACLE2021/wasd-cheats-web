@@ -1,0 +1,12 @@
+.main_container {
+    margin-top: 100px;
+    max-width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.main_container_inner {
+    width: 1000px;
+    padding: 10px 30px;
+    background-color: var(--bg-secondary);
+}

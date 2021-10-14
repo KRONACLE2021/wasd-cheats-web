@@ -231,6 +231,31 @@ export const adminFetchUsers = (sortBy: string, api_key: string) => {
     }  
 };
 
+export const adminPaginationFetchUsers = (limit: number, skip: number, api_key: string) => {
+    return (dispatch: Dispatch<any>) => {
+        dispatch(adminFetchUsersPending());
+
+        Requester_.makeGetRequest(GET_USERS, {
+            queryStringParams: [
+                { name: "sort", value: "PAGINATION" }, 
+                { name: "limit", value: limit }, 
+                { name: "skip", value: skip}
+            ],
+            headers: {
+                Authorization: api_key
+            }
+        }).then((res) => {
+            if(!res.error) {
+                dispatch(adminFetchUsersSuccess(res.users));
+            } else {
+                dispatch(adminFetchUsersFailed(res.errors));
+            }
+        }).catch((err) => {
+            dispatch(adminFetchUsersFailed(err.errors))
+        });
+    } 
+}
+
 export const LogoutUser = () => {
     return {
         type: SET_USER,

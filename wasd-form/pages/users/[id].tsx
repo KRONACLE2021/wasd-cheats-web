@@ -105,6 +105,7 @@ export default function UserPage() {
                                     postOwner={user}
                                     createdAt={i.createdAt}
                                     attachments={i.attachments} 
+                                    threadId={i.threadId}
                                 /> 
                             })}
                             {user?.posts.length == 0 ? <div style={{ textAlign: "center"}}> 

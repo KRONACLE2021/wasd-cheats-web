@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styles from '../../../styles/fourms.module.css';
 import FourmRoot from '../../../components/fourm/FourmRoot';
-import { AdminDeleteTopic, AdminLockTopic, FetchTopicById } from '../../../stores/actions/topicActions';
+import { AdminDeleteTopic, AdminEditTopic, AdminLockTopic, FetchTopicById } from '../../../stores/actions/topicActions';
 import { Router, useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
 import { FetchThreadsByTopic } from '../../../stores/actions/threadActions';
@@ -120,6 +120,13 @@ const TopicPage : React.FC<any> = () => {
 
         setLockTopicModel(false);
     }
+
+    const updateTopic = () => {
+        if(!userStore.api_key) return router.push("/login");
+        dispatch(AdminEditTopic(editTopicData, id, userStore.api_key));
+        setEditModel(false);
+        router.reload();
+    }
    
     if(loading) return <Preloader />;
 
@@ -183,11 +190,11 @@ const TopicPage : React.FC<any> = () => {
 
                             <div>
                                 <p>Icon</p>
-                                <FileUploader />
+                                <FileUploader uploadType={"icon"} output={(d) => setEditTopicData({ ...editTopicData, icon: d })} reccomended_size={"32x32 (transparent)"} />
                             </div>
                         </div>
                     
-                        <button className={`${styles.delete_button}`} onClick={() => lockTopic()}>Update topic</button>
+                        <button className={`${styles.delete_button}`} onClick={() => updateTopic()}>Update topic</button>
                     </div>
             </ModelContainer>
             <div className={styles.fourm_container}>

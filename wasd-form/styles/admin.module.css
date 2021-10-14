@@ -130,13 +130,14 @@
 
 .admin_table {
     width: 100%;
+
 }
 
 .admin_table td, .admin_table th {
-    border: 2px solid #353535;
+    border-bottom: 2px solid  var(--bg-lighter);
+    margin: 0;
     text-align: left;
     padding: 8px;
-    border-radius: 2px;
 }
 
 .admin_table tr:nth-child(even) {

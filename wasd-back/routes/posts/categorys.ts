@@ -71,6 +71,8 @@ Route.post("/create", checkAuth, async (req, res, next) => {
     if(!title) errors.push("You mush have a title for your category!");
     if(!description) errors.push("You mush have a description for your category!");
 
+    if(errors.length !== 0) return res.json({ error: true, errors: errors });
+
     let id = uuid();
 
     let category = await Categorys.create({

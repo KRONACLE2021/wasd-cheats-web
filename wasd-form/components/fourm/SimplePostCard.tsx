@@ -4,8 +4,9 @@ import ActionsBar from './ActionsBar';
 import getUserPermission, { getPermissionColor } from '../../utils/getUserPermission';
 import DOMPurify from 'dompurify';
 import getAvatar from '../../utils/getAvatar';
+import router from 'next/router';
 
-const SimplePostCard: React.FC<{ id: string, contents: string, postOwner: any, createdAt: string, attachments: any }> = (props) => {
+const SimplePostCard: React.FC<{ id: string, contents: string, postOwner: any, createdAt: string, attachments: any, threadId: string }> = (props) => {
 
     const [contents, setContents] = useState<string | null>(null);
 
@@ -16,7 +17,7 @@ const SimplePostCard: React.FC<{ id: string, contents: string, postOwner: any, c
     }, [props.contents]);
 
     return (
-        <div className={styles.user_post_cards}>
+        <div onClick={() => router.push(`/fourm/threads/${props.threadId}`)}className={styles.user_post_cards}>
             <div className={styles.fourm_post_container}>
                     <div className={styles.post_user_container}>
                         <img src={getAvatar(props.postOwner)} className={styles.pfp} />

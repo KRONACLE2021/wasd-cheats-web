@@ -20,6 +20,14 @@ Route.use((req, res, next) => {
     next();
 })
 
+Route.post("/files/massdelete/assignedcontent", async (req, res, next) => {
+    
+    let attachments_ = await Attachments.find({ attachedTo: null });
+
+    await Attachments.deleteMany({ attachedTo: null });
+
+    return res.json({ message: `Deleted ${attachments_.length}`});
+});
 
 Route.post("/files/:id/delete", async (req, res, next) => {
     let id = req.params.id;

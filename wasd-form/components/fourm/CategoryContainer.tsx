@@ -12,7 +12,7 @@ const CategoryContainer: React.FC<{name: string, id: string, isAdmin: any, toggl
     const dispatch = useDispatch();
     const [modelIsActive, setModelActive] = useState<boolean>(false);
     const [topicCreateData, setTopicCreateData] = useState({ category: props.id });
-    const topics = useSelector(state => state.topics.topics);
+    const topics = useSelector(state => state.topics.topics.filter((i: any) => i.category == props.id));
     const userStore = useSelector(state =>  state.user.user);
 
     useEffect(() => {
@@ -57,7 +57,7 @@ const CategoryContainer: React.FC<{name: string, id: string, isAdmin: any, toggl
                         </div>
                     ) : ""}
                 </div>
-
+        
                 <div className={styles.bar_seporator}></div>
 
                 <div className={styles.category_topics_container}>
