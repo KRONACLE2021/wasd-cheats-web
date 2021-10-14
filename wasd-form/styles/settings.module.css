@@ -10,3 +10,35 @@
     padding: 10px 30px;
     background-color: var(--bg-secondary);
 }
+
+.download_card {
+    min-height: 100px;
+    width: 100%;
+    margin-top: 10px;
+    background-color: var(--bg-lighter);
+    padding: 5px 30px;
+}
+
+.download_title {
+    margin-bottom: 0px;
+}
+
+.download_description {
+    margin-top: 10px;
+}
+
+.download_button {
+    padding: 10px;
+    border: none;
+    font-family: "Roboto";
+    width: 150px;
+    font-size: 15px;
+    font-weight: 600;
+    border-radius: 2px;
+    background-color: var(--pink);
+    color: white;
+}
+
+.spacer {
+    height: 20px;
+}
