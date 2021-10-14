@@ -17,7 +17,7 @@ var s3 = new aws.S3({
 
 
 Route.use(json());
-Route.use(urlencoded());
+Route.use(urlencoded({ extended: true }));
 Route.use(CheckAuth);
 
 var upload = multer({
@@ -96,6 +96,14 @@ Route.post("/create", async (req, res, next) => {
     }).save();
 
     return res.json({ done: true, download: download });
+});
+
+Route.get("/get/all", async (req, res, next) => {
+    if(!res.locals.user.permissions.includes("ADMINISTRATOR")) return res.json({ error: true, errors: ["You do not have permission to access this endpoint"] }).status(403);
+    
+    let downloads = await Downloads.find({});
+    
+    return res.json({ done: true, downloads: downloads });
 });
 
 export default Route;

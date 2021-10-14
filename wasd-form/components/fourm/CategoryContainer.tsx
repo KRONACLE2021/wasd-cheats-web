@@ -57,8 +57,7 @@ const CategoryContainer: React.FC<{name: string, id: string, isAdmin: any, toggl
                         </div>
                     ) : ""}
                 </div>
-        
-                <div className={styles.bar_seporator}></div>
+    
 
                 <div className={styles.category_topics_container}>
                     {props.children}
@@ -77,6 +76,7 @@ const CategoryContainer: React.FC<{name: string, id: string, isAdmin: any, toggl
                         <h1>Things are empty in here..</h1> 
                         <p>Try adding a topic to start some conversations!</p>
                     </div> : ""}
+                    <div className={styles.spacer}></div>
                 </div>
             </div>
         </>

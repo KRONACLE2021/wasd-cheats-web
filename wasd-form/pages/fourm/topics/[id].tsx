@@ -138,7 +138,7 @@ const TopicPage : React.FC<any> = () => {
                     <div className={styles.topic_header}>
                         {topic.locked ? <InfoBanner title={"This thread has been locked!"} message={"WASD Admins have locked this thread."} /> : ""}
                         <h1 className={styles.header}>{topic.title}</h1>
-                        <p style={{ marginBottom: "0px"}}>{topic.description}</p>
+                        <p style={{ marginBottom: "0px", marginTop: "0px"}}>{topic.description}</p>
                         {userStore?.permissions?.includes("MODERATOR") ? <> 
                             <div className={styles.fourm_header_actions_bar_container}>
                                 <ActionsBar actions={adminActions}></ActionsBar> 

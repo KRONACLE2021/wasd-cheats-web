@@ -100,6 +100,9 @@ export default function AdminPanel() {
                     <div>
                         <button className={styles.button}>Create new download</button>
                     </div>
+                    <div>
+                        
+                    </div>
                 </div>
             </AdminDashboardRoot>
         </div>
