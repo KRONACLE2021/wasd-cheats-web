@@ -11,6 +11,7 @@ import "draft-js/dist/Draft.css";
 import {RefreshUser} from '../stores/actions/userActions';
 import { createWrapper } from 'next-redux-wrapper';
 import { fetchItemsInCart } from '../stores/actions/userCartActions';
+import Footer from '../components/shared/Footer';
 
 function MyApp({ Component, pageProps }: AppProps) {
 
@@ -30,10 +31,13 @@ function MyApp({ Component, pageProps }: AppProps) {
   }, [user]);
 
   return <>
-    <Provider store={Store}>
-      <Navbar></Navbar>
-      <Component {...pageProps} />
-    </Provider>
+    <div className={"page_container"}>
+      <Provider store={Store}>
+        <Navbar></Navbar>
+        <Component {...pageProps} />
+      </Provider>
+      <Footer></Footer>
+    </div>
   </>
 }
 

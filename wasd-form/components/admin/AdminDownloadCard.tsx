@@ -69,12 +69,12 @@ const AdminDownloadCard: React.FC<{
                     <button onClick={() => editDownload()} style={{ marginTop: "15px"}} className={styles.button}>Create Download</button>
                 </div>    
             </ModelContainer>
-            <div onClick={() => router.push(`/admin/downloads/${id}/new`)} className={styles.admin_download_card}>
+            <div className={styles.admin_download_card}>
                 <h2>{name}</h2>
                 <p>{description}</p>
                 <p>Current active release: {version ? version : "This product does not have a relesae!"}</p>
                 <button className={styles.button} onClick={() => setEditModel(true)}>Edit</button>
-                <button className={styles.button} style={{ marginLeft: "10px"}}>New release</button>
+                <button className={styles.button} style={{ marginLeft: "10px"}} onClick={() => router.push(`/admin/downloads/${id}/new`)} >New release</button>
                 <button className={styles.button} style={{ marginLeft: "10px"}}>Delete</button>
             </div>
         </>
