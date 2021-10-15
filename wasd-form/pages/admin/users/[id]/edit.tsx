@@ -7,6 +7,8 @@ import FullPageError from '../../../../components/shared/FullpageError';
 import Preloader from '../../../../components/shared/Preloader';
 import fetchUser from '../../../../requests/getUser';
 import styles from '../../../../styles/admin.module.css';
+import Dropdown from '../../../../components/shared/Dropdown';
+import MultiSelector from '../../../../components/shared/MultiSelector';
 
 export default function AdminPanel() {
 
@@ -16,7 +18,7 @@ export default function AdminPanel() {
 
     const [isLoading, setLoading] = useState(true);
     const [user, setUser] = useState({});
-    const [userEditing, setUserEditing] = useState({});
+    const [userEditing, setUserEditing] = useState<{ username: "", permissions: Array<string>; email: string; banned: boolean; }>({ username: "", permissions: [], email: "", banned: false });
     const [fullPageError, setFullPageError] = useState(""); 
 
     const dispatch = useDispatch();
@@ -55,13 +57,43 @@ export default function AdminPanel() {
         <div>
             <AdminDashboardRoot>
                 <div className={styles.dashboard_container}>
-                    <h1>Editing user {user?.username}</h1>
                     <div className={styles.dashboard_centered}>
-                        <div style={{ width: "100%"}}>
+                        <div style={{ width: "50%"}}>
+                            <h1>Editing user {user?.username}</h1>
                             <div>
                                 <p>Username</p>
-                                <input placeholder={"Username"} value={userEditing?.username} onChange={(e) => setUserEditing({ ...userEditing, username: e.target.value })} ></input>
+                                <input className={styles.admin_input} placeholder={"Username"} value={userEditing?.username} onChange={(e) => setUserEditing({ ...userEditing, username: e.target.value })} ></input>
                             </div>
+                            <div>
+                                <p>Permissions</p>
+                                <MultiSelector 
+                                    choices={["ADMINISTRATOR", "MODERATOR", "ALL", "DEVELOPER", "SUPERUSER", "ALLOW_POSTING"]}
+                                    selected={userEditing?.permissions}
+                                    output={(out) => {
+                                        console.log(out);
+                                    }}
+                                />
+                            </div>
+                            <div>
+                                <p>banned</p>
+                                <Dropdown 
+                                    choices={[{ name: "true", data: "true" }, { name: "false", data: "false" }]} 
+                                    default_state={userEditing?.banned.toString()}
+                                    output={(out) => {
+                                        switch(out){
+                                            case "false":
+                                                setUserEditing({ ...userEditing, banned: false });
+                                                break;
+                                            case "true":
+                                                setUserEditing({ ...userEditing, banned: true });
+                                                break;
+                                            default:
+                                                break;
+                                        }
+                                    }}
+                                />
+                            </div>
+
                         </div>
                     </div>
                 </div>
