@@ -49,6 +49,7 @@ export const DELETE_ATTACHMENT = (id: string) => `api/v1/admin/content/files/${i
 export const MASS_DELETE_ATTACHMENTS_ASSIGNEDCONTENT = `api/v1/admin/content/files/massdelete/assignedcontent`;
 export const CREATE_NEW_DOWNLOAD = `api/v1/downloads/create`;
 export const GET_ALL_DOWNLOADS = `api/v1/downloads/get/all`;
+export const EDIT_DOWNLOAD = (id: string) => `api/v1/downloads/${id}/edit`;
 
 /* USER ROUTES */
 export const GET_CURRENT_USER = `api/v1/users/me`;

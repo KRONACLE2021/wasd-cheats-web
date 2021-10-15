@@ -2,7 +2,7 @@ import { Dispatch } from 'redux';
 import { API, CREATE_NEW_TOPIC, DELETE_TOPIC, FETCH_TOPIC, FETCH_TOPICS_BY_CATEGORY, LOCK_TOPIC, UPADTE_TOPIC } from '../../requests/config';
 import Requester from '../../requests/Requester';
 
-import { ADD_CATEGORY, ADD_TOPIC, APPEND_TOPICS, CREATE_TOPICS, DELETE_TOPIC_FAILED, DELETE_TOPIC_PENDING, DELETE_TOPIC_SUCCESS, EDIT_TOPIC_PENDING, EDIT_TOPIC_SUCCESS, FETCH_TOPICS_FAILED, FETCH_TOPICS_PENDING, FETCH_TOPICS_SUCCESS, LOCK_TOPIC_FAILED, LOCK_TOPIC_PENDING, LOCK_TOPIC_SUCCESS, SET_CATEGORYS, SET_TOPICS } from "../actions"
+import { ADD_CATEGORY, ADD_TOPIC, APPEND_TOPICS, CREATE_TOPICS, DELETE_TOPIC_FAILED, DELETE_TOPIC_PENDING, DELETE_TOPIC_SUCCESS, EDIT_TOPIC_PENDING, EDIT_TOPIC_SUCCESS, FETCH_TOPICS_FAILED, FETCH_TOPICS_PENDING, FETCH_TOPICS_SUCCESS, LOCK_TOPIC_FAILED, LOCK_TOPIC_PENDING, LOCK_TOPIC_SUCCESS, SET_CATEGORYS, SET_TOPICS, TOPIC_CREATE_ERROR } from "../actions"
 
 const Requester_ = new Requester(API);
 
@@ -53,21 +53,33 @@ export const FetchTopicById = (id : string) => {
     }
 }
 
-export const CreateTopic = (data: { name: string, description: string, attachmentId: string, category: string }, api_key: string) => {
+export const CreateTopic = (data: { title: string, description: string, attachmentId: string, category: string }, api_key: string) => {
     
     return (dispatcher: Dispatch<any>) => {
-        let res = Requester_.makePostRequest(CREATE_NEW_TOPIC, data, {
+        Requester_.makePostRequest(CREATE_NEW_TOPIC, data, {
             headers: {
                 authorization: api_key
             },
             queryStringParams: []
         }).then(res => {
-            console.log(res);
+            if(!res.error){
+                dispatcher({
+                    type: ADD_TOPIC,
+                    payload: res
+                })
+            } else {
+                dispatcher({ 
+                    type: TOPIC_CREATE_ERROR,
+                    payload: res.errors
+                })
+            }
+        }).catch(err => {
+            dispatcher({ 
+                type: TOPIC_CREATE_ERROR,
+                payload: err.errors
+            }) 
         });
-    
-        if(!res.error){
-            console.log(res);
-        }
+
     }
 }
 

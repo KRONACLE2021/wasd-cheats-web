@@ -4,6 +4,7 @@ import {
     ADMIN_GET_USER_INCART_ITEMS,
     API,
     DELETE_SUBSCRIPTIONS,
+    GET_ALL_DOWNLOADS,
     GET_SUBSCRIPTIONS,
     UPDATE_SHOP_ITEM
 } from '../../requests/config';
@@ -19,12 +20,14 @@ import {
     DELETE_SUBSCRIPTION_ITEM_FAILED, 
     DELETE_SUBSCRIPTION_ITEM_PENDING, 
     DELETE_SUBSCRIPTION_ITEM_SUCCESS, 
+    FETCH_DOWNLODAS_FAILED, 
     GET_ATTACHMENTS_FAILED, 
     GET_ATTACHMENTS_PENDING, 
     GET_ATTACHMENTS_SUCCESS, 
     GET_SHOP_SUBSCRIPTIONS_FAILED, 
     GET_SHOP_SUBSCRIPTIONS_PENDING, 
     REMOVE_ATTACHMENT, 
+    SET_DOWNLOADS, 
     SET_SHOP_SUBSCRIPTIONS
 } from "../actions";
 
@@ -262,5 +265,26 @@ export const RemoveAttachment = (id: string) => {
     return {
         type: REMOVE_ATTACHMENT,
         payload: id,
+    }
+}
+
+export const AdminGetAllDownloads = (api_key: string) => {
+    return (dispatcher: Dispatch<any>) => {
+        Requester_.makeGetRequest(GET_ALL_DOWNLOADS, {
+            queryStringParams: [],
+            headers: {
+                Authorization: api_key
+            }
+        }).then((res) => {
+            dispatcher({
+                type: SET_DOWNLOADS,
+                payload: res.downloads
+            });
+        }).catch((err) => {
+            dispatcher({ 
+                type: FETCH_DOWNLODAS_FAILED,
+                payload: err.errors
+            })
+        });
     }
 }

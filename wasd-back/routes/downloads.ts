@@ -68,7 +68,7 @@ Route.post("/upload", async (req, res, next) => {
     });
 });
 
-Route.post("/create", async (req, res, next) => {
+Route.post("/:id/edit", async (req, res, next) => {
     if(!res.locals.user.permissions.includes("ADMINISTRATOR")) return res.json({ error: true, errors: ["You do not have permission to access this endpoint"] }).status(403);
     
     let {
@@ -77,11 +77,35 @@ Route.post("/create", async (req, res, next) => {
         linkedSubscripton
     } = req.body;
 
+    let id = req.params.id;
+
+    let editingItem = await Downloads.findOne({ id: id });
+    
+    if(!editingItem) return res.json({ error: true, errors: ["Could not find download that you want to edit"]});
+
+    editingItem.name = name ? name : editingItem.name;
+    editingItem.description = description ? description : editingItem.description;
+    editingItem.linkedSubscription = linkedSubscripton ? linkedSubscripton : editingItem.linkedSubscription;
+
+    await editingItem.save();
+
+    return res.json({ done: true, item: editingItem });
+})
+
+Route.post("/create", async (req, res, next) => {
+    if(!res.locals.user.permissions.includes("ADMINISTRATOR")) return res.json({ error: true, errors: ["You do not have permission to access this endpoint"] }).status(403);
+    
+    let {
+        name,
+        description,
+        linkedSubscription
+    } = req.body;
+
     if(!name) return res.json({ error: true, errors: ["Your download must have a name!"] });
     if(!description) return res.json({ error: true, errors: ["Your download must have a description!"] });
-    if(!linkedSubscripton) return res.json({ error: true, errors: ["Your download must have a linked subscription!"] });
+    if(!linkedSubscription) return res.json({ error: true, errors: ["Your download must have a linked subscription!"] });
 
-    const subscription_check = await Subscription.findOne({ id: linkedSubscripton });
+    const subscription_check = await Subscription.findOne({ id: linkedSubscription });
 
     if(!subscription_check || subscription_check == null) return res.json({ error: true, errors: ["You need to select a valid subscription!"]});
 
@@ -91,7 +115,7 @@ Route.post("/create", async (req, res, next) => {
         id,
         name,
         description,
-        linkedSubscripton,
+        linkedSubscription,
         file_Ids: []
     }).save();
 

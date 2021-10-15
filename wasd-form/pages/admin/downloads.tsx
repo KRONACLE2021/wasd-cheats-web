@@ -8,8 +8,9 @@ import Dropdown from '../../components/shared/Dropdown';
 import Requester from '../../requests/Requester';
 import FourmError from '../../components/shared/FourmError';
 import { useDispatch, useSelector } from 'react-redux';
-import { getShopSubscriptions } from '../../stores/actions/adminActions';
+import { AdminGetAllDownloads, getShopSubscriptions } from '../../stores/actions/adminActions';
 import { API, CREATE_NEW_DOWNLOAD } from '../../requests/config';
+import AdminDownloadCard from '../../components/admin/AdminDownloadCard';
 
 const Requester_ = new Requester(API);
 
@@ -23,9 +24,12 @@ export default function AdminPanel() {
 
     let userStore = useSelector(state => state.user.user);
     let adminSubscriptions = useSelector(state => state.adminStore.subscriptions);
+    let downloads = useSelector(state => state.adminStore.downloads);
 
     const fetchAdminInfo = () => {
         dispatch(getShopSubscriptions(userStore.api_key));
+        dispatch(AdminGetAllDownloads(userStore.api_key));
+        setLoading(false);
     }
 
     useEffect(() => {
@@ -33,7 +37,6 @@ export default function AdminPanel() {
             if(userStore.username){
                 console.log(userStore);
                 if(userStore.permissions.includes("ADMINISTRATOR")) {
-                    setLoading(false);
                     fetchAdminInfo();
                 } else {
                     Router.push("/fourm")  
@@ -101,7 +104,18 @@ export default function AdminPanel() {
                         <button className={styles.button}>Create new download</button>
                     </div>
                     <div>
-                        
+                        {downloads.map((i: any) => {
+                            return <AdminDownloadCard
+                                id={i.id} 
+                                name={i.name} 
+                                fileIds={i.file_ids} 
+                                description={i.description} 
+                                version={i.version} 
+                                subscripton_id={i.linkedSubscription}
+                                subscriptions={adminSubscriptions} 
+                                api_key={userStore.api_key} 
+                            />
+                        })}
                     </div>
                 </div>
             </AdminDashboardRoot>

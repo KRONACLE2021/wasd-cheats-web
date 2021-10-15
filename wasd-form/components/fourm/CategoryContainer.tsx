@@ -6,14 +6,16 @@ import TopicCard from './TopicCard';
 import ModelContainer from '../models/ModelContainer';
 import FileUploader from './FileUploader';
 import { BASE_IMAGE_URL } from '../../requests/config';
+import FourmError from '../shared/FourmError';
 
 const CategoryContainer: React.FC<{name: string, id: string, isAdmin: any, toggleAddModel: any}> = (props) => {
 
     const dispatch = useDispatch();
     const [modelIsActive, setModelActive] = useState<boolean>(false);
-    const [topicCreateData, setTopicCreateData] = useState({ category: props.id });
+    const [topicCreateData, setTopicCreateData] = useState<{ category: string; attachmentId: string; title: string; description: string; }>({ category: props.id, name: "", description: "", attachmentId: "" });
     const topics = useSelector(state => state.topics.topics.filter((i: any) => i.category == props.id));
     const userStore = useSelector(state =>  state.user.user);
+    const [modelError, setModelError] = useState("");
 
     useEffect(() => {
         FetchTopicsByCategory(props.id, dispatch);
@@ -21,8 +23,14 @@ const CategoryContainer: React.FC<{name: string, id: string, isAdmin: any, toggl
 
     const adminCreateTopic = () => {
         if(userStore.api_key){
-            console.log(topicCreateData);
-            dispatch(CreateTopic(topicCreateData, userStore.api_key))
+            setModelError("");
+            if(topicCreateData.title == "" || !topicCreateData.title) return setModelError("Please provide a name for the topic you want to create!");
+            if(topicCreateData.description == "" || !topicCreateData.description) return setModelError("Please provide a description for the topic you want to create!");
+            if(topicCreateData.attachmentId == "" || !topicCreateData.attachmentId) return setModelError("Please upload an icon for the topic!");
+            if(topicCreateData.category == "" || !topicCreateData.category) return setModelError("Could not be attached to a category! Please reload the page.  ");
+
+            dispatch(CreateTopic(topicCreateData, userStore.api_key));
+            setModelActive(false);
         }
     }
 
@@ -31,6 +39,7 @@ const CategoryContainer: React.FC<{name: string, id: string, isAdmin: any, toggl
             <ModelContainer isActive={modelIsActive} setModelActive={setModelActive}>
                 <div className={styles.topic_create_model}>
                     <h1>Create a new topic</h1>
+                    {modelError !== "" ? <FourmError error={"Error!"} errorDescription={modelError} /> : "" }
                     <div>
                         <div>
                             <p>Topic name</p>

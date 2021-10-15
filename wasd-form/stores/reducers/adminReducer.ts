@@ -1,4 +1,4 @@
-import { ADMIN_GET_INCART_ITEMS_PENDING, ADMIN_GET_INCART_ITEMS_SUCCESS, APPEND_SHOP_SUBSCRIPTIONS, DELETE_SUBSCRIPTION_ITEM_FAILED, DELETE_SUBSCRIPTION_ITEM_PENDING, DELETE_SUBSCRIPTION_ITEM_SUCCESS, GET_ATTACHMENTS_FAILED, GET_ATTACHMENTS_PENDING, GET_ATTACHMENTS_SUCCESS, GET_SHOP_SUBSCRIPTIONS_FAILED, GET_SHOP_SUBSCRIPTIONS_PENDING, REMOVE_ATTACHMENT, SET_SHOP_SUBSCRIPTIONS } from "../actions";
+import { ADMIN_GET_INCART_ITEMS_PENDING, ADMIN_GET_INCART_ITEMS_SUCCESS, APPEND_SHOP_SUBSCRIPTIONS, DELETE_SUBSCRIPTION_ITEM_FAILED, DELETE_SUBSCRIPTION_ITEM_PENDING, DELETE_SUBSCRIPTION_ITEM_SUCCESS, FETCH_DOWNLODAS_FAILED, GET_ATTACHMENTS_FAILED, GET_ATTACHMENTS_PENDING, GET_ATTACHMENTS_SUCCESS, GET_SHOP_SUBSCRIPTIONS_FAILED, GET_SHOP_SUBSCRIPTIONS_PENDING, REMOVE_ATTACHMENT, SET_DOWNLOADS, SET_SHOP_SUBSCRIPTIONS } from "../actions";
 
 const initalState = {
     loading: false,
@@ -7,6 +7,7 @@ const initalState = {
     completed_transactions: 0,
     total_transaction_value: 0,
     subscriptions: [],
+    downloads: [],
     attachments: [],
     orders: {}
 };
@@ -65,6 +66,12 @@ export default function adminReducer(state: any = initalState, action : { type: 
                 }
             });
 
+            return state;
+        case SET_DOWNLOADS:
+            state.downloads = action.payload;
+            return state;
+        case FETCH_DOWNLODAS_FAILED:
+            state.erorr = action.payload;
             return state;
         default:
             return state;
