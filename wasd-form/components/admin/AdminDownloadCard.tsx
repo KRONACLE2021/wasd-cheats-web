@@ -5,6 +5,7 @@ import FourmError from '../shared/FourmError';
 import Dropdown from '../shared/Dropdown';
 import axios from 'axios';
 import { API, EDIT_DOWNLOAD } from '../../requests/config';
+import router from 'next/router';
 
 const AdminDownloadCard: React.FC<{ 
     id: string,
@@ -47,7 +48,6 @@ const AdminDownloadCard: React.FC<{
 
     return (
         <>
-
             <ModelContainer isActive={editModel} setModelActive={setEditModel}>
                 <div className={styles.model_popup_container}>
                     <h1>Editing {name}</h1>
@@ -69,7 +69,7 @@ const AdminDownloadCard: React.FC<{
                     <button onClick={() => editDownload()} style={{ marginTop: "15px"}} className={styles.button}>Create Download</button>
                 </div>    
             </ModelContainer>
-            <div className={styles.admin_download_card}>
+            <div onClick={() => router.push(`/admin/downloads/${id}/new`)} className={styles.admin_download_card}>
                 <h2>{name}</h2>
                 <p>{description}</p>
                 <p>Current active release: {version ? version : "This product does not have a relesae!"}</p>

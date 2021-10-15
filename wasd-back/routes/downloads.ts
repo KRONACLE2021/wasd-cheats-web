@@ -39,28 +39,35 @@ var upload = multer({
 
 Route.post("/upload", async (req, res, next) => {
     if(!res.locals.user.permissions.includes("ADMINISTRATOR")) return res.json({ error: true, errors: ["You do not have permission to access this endpoint"] }).status(403);
-    
-    let {
-        id,
-        version
-    } = req.body;
-    
-    let upload_to = await Downloads.findOne({ id: id });
 
-    if(!upload_to || upload_to == null) return res.json({ error: true, errors: ["Could not find a download to link this upload to!"]})
-
-    if(!version || version == "") version = upload_to.version; 
-
-    upload_to.version = version;
 
     upload(req, res, async (err) => {
         if(err){
             return res.json({ error: true, errors: ["Error uplaoding file to AWS"] });
         }
 
+        let {
+            id,
+            version,
+            notes
+        } = req.body;
+        
+        let upload_to = await Downloads.findOne({ id: id });
+    
+        if(!upload_to || upload_to == null) return res.json({ error: true, errors: ["Could not find a download to link this upload to!"]})
+    
+        if(!version || version == "") version = upload_to.version; 
+    
+        upload_to.version = version;
+
         let file = req.file;
 
-        upload_to?.file_ids.push(file.key);
+        upload_to?.releases.push({
+            file_id: file.key,
+            version: version,
+            notes: notes,
+            date: new Date()
+        });
 
         await upload_to.save();
 
@@ -116,7 +123,8 @@ Route.post("/create", async (req, res, next) => {
         name,
         description,
         linkedSubscription,
-        file_Ids: []
+        file_Ids: [],
+        releases: []
     }).save();
 
     return res.json({ done: true, download: download });

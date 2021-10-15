@@ -106,6 +106,7 @@ export default function AdminPanel() {
                     <div>
                         {downloads.map((i: any) => {
                             return <AdminDownloadCard
+                                
                                 id={i.id} 
                                 name={i.name} 
                                 fileIds={i.file_ids} 

@@ -6,6 +6,10 @@
     background-color: var(--bg-secondary);
 }
 
+.spacer {
+    height: 20px;
+}
+
 .admin_root {
     position: absolute;
     left: 250px;
