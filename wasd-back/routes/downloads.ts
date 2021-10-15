@@ -6,6 +6,8 @@ import multerS3 from 'multer-s3';
 import aws from 'aws-sdk';
 import Downloads from '../models/Downloads';
 import Subscription from '../models/Subscription';
+import { RedisClient } from 'redis';
+import path from 'path';
 
 let Route = Router();
 
@@ -30,11 +32,13 @@ var upload = multer({
         cb(null, {fieldName: file.fieldname});
       },
       key: function (req, file, cb) {
-        let id = uuid();
+        let id = uuid() + path.extname(file.originalname);
         cb(null, id)
       }
     }),
 }).single('file');
+
+
 
 
 Route.post("/upload", async (req, res, next) => {
@@ -66,7 +70,8 @@ Route.post("/upload", async (req, res, next) => {
             file_id: file.key,
             version: version,
             notes: notes,
-            date: new Date()
+            date: new Date(),
+            user_id: res.locals.user.uid
         });
 
         await upload_to.save();
@@ -138,4 +143,30 @@ Route.get("/get/all", async (req, res, next) => {
     return res.json({ done: true, downloads: downloads });
 });
 
+
+Route.get("/:id/:version", async (req, res, next) => {
+    let isAdmin = res.locals.user.permissions.includes("ADMINISTRATOR") ||  res.locals.user.permissions.includes("MODERATOR");
+    let user = res.locals.user;
+    let download = await Downloads.findOne({ id: req.params.id });
+
+    const reids : RedisClient = req.app.get('redis');
+
+    if(!download) return res.json({ error: true, errors: ["Could not find download!"] });
+    
+    let release : any = download.releases.filter((i: any) => i.version == req.params.version);
+
+    if(release.length == 0) return res.json({ error: true, errors: ["Could not find version!"]});
+
+    release = release[0];
+
+    if(!user.active_subscriptions.includes(download.linkedSubscription) && !isAdmin) return res.json({ error: true, errors: ["You dont have permission to access this content!"]});
+
+    let downloadID = uuid();
+
+    reids.set(downloadID, JSON.stringify({ file_id: release.file_id, expire: Date.now() + 3.6e+6 }), (err, res_) => {
+        if(err) return res.json({ error: true, errors: ["Internal server errror whilst trying to contact redis!"]});
+
+        res.json({ done: true, download_link: `https://api.wasdcheats.cc/files/protected/${downloadID}`, expire: 3.6e+6});
+    });
+}); 
 export default Route;

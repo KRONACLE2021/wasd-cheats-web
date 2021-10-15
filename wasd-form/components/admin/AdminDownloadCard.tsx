@@ -46,6 +46,8 @@ const AdminDownloadCard: React.FC<{
     }
 
 
+    
+
     return (
         <>
             <ModelContainer isActive={editModel} setModelActive={setEditModel}>
@@ -75,6 +77,7 @@ const AdminDownloadCard: React.FC<{
                 <p>Current active release: {version ? version : "This product does not have a relesae!"}</p>
                 <button className={styles.button} onClick={() => setEditModel(true)}>Edit</button>
                 <button className={styles.button} style={{ marginLeft: "10px"}} onClick={() => router.push(`/admin/downloads/${id}/new`)} >New release</button>
+                <button className={styles.button} style={{ marginLeft: "10px"}} onClick={() => router.push(`/admin/downloads/${id}/releases`)} >Releases</button>
                 <button className={styles.button} style={{ marginLeft: "10px"}}>Delete</button>
             </div>
         </>

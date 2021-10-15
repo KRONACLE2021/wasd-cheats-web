@@ -51,6 +51,7 @@ export const CREATE_NEW_DOWNLOAD = `api/v1/downloads/create`;
 export const GET_ALL_DOWNLOADS = `api/v1/downloads/get/all`;
 export const EDIT_DOWNLOAD = (id: string) => `api/v1/downloads/${id}/edit`;
 export const RELEASE_NEW_DOWNLOAD = `api/v1/downloads/upload`;
+export const INITATE_PROTECTED_DOWNLOAD = (id: string, version: string) => `api/v1/downloads/${id}/${version}`;
 
 /* USER ROUTES */
 export const GET_CURRENT_USER = `api/v1/users/me`;

@@ -79,6 +79,8 @@ export default function AdminPanel() {
                 Authorization: userStore.api_key,
                 "Content-Type": "application/x-www-form-urlencoded"
             }
+        }).then(res => {
+            console.log(res.data);
         })
 
     }

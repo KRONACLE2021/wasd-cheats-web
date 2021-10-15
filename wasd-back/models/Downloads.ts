@@ -6,7 +6,7 @@ export interface IDownload {
     version: string;
     description: string;
     linkedSubscription: string;
-    releases: Array<{ file_id: string; version: string; notes: string; date: Date; }>;
+    releases: Array<{ file_id: string; version: string; notes: string; date: Date; user_id: string; }>;
     file_ids: Array<string>;
 }
 

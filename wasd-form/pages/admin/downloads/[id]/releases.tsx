@@ -71,16 +71,23 @@ export default function AdminPanel() {
                 <div className={styles.dashboard_container}>
                     <h1>Release history for {download?.name}</h1>
                     <div className={styles.dashboard_centered}>
-                        {download.releases?.map((i: any) => {
-                            return <DownloadCard 
-                                key={i.name}
-                                name={download?.name}
-                                version={i.version}
-                                description={i.notes}
-                                content_id={i.file_id}
-                                subscription_status={{ time_left: "Not applicable in this context."}}
-                            />
-                        })}
+                        <div style={{ width: "100%"}}>
+
+                            {download?.releases?.map((i: any) => {
+                                return <DownloadCard 
+                                    key={i.name}
+                                    name={download?.name}
+                                    version={i.version}
+                                    description={i.notes}
+                                    content_id={i.file_id}
+                                    userId={i.user_id}
+                                    date={i.date}
+                                    id={download?.id}
+                                    subscription_status={{ time_left: "Not applicable in this context."}}
+                                    api_key={userStore.api_key}
+                                />
+                            })}
+                        </div>
                     </div>
                 </div>
             </AdminDashboardRoot>
