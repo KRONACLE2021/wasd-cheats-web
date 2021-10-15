@@ -5,6 +5,7 @@ import { v4 as uuid } from 'uuid';
 import bcrypt from 'bcrypt';
 import DiscordOauth from './discord_oauth';
 import HCaptchaVerify from "../utils/hCaptcha";
+import UserSubscription from "../models/UserSubscription";
 
 
 let Route = Router();
@@ -114,12 +115,33 @@ Route.post("/login", async (req, res, next) => {
 
     if(!pwdCheck) return res.json({error: true, errors: ["Password is incorrect!"]});
 
+    if(user.banned == true) return res.json({ error: true, errors: ["You have been banned from WASD."] }) 
+
     let userIP = req.headers['x-forwarded-for'] || req.socket.remoteAddress; 
 
     if(!user.permissions.includes("PROTECTED_USER")){
         user.last_logged_in_location = userIP ? userIP : "";
         await user.save();
     }
+
+
+    /* Validate user subscriptions */
+    for await (var i in user.active_subscriptions) {
+        
+        let sub = user.active_subscriptions[i];
+
+        let userSubscription = await UserSubscription.findOne({ id: sub });
+
+        if(!userSubscription) continue;
+
+        if(+(new Date()) > + userSubscription?.date_end){
+            user.active_subscriptions.splice(i, 1);
+            userSubscription.is_active = false;
+        }
+
+        await userSubscription.save();
+    };
+
 
 
     let cleanUser = {

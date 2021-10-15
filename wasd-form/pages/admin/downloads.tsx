@@ -17,7 +17,7 @@ const Requester_ = new Requester(API);
 export default function AdminPanel() {
     const [isLoading, setLoading] = useState(true);
     const [createDownloadModelActive, setCreateDownloadModelActive] = useState<boolean>(false); 
-    const [createDownloadBody, setCreateDownloadBody] = useState<{ name: string, description: string, linkedSubscripton: string }>({ name: "", description: "", linkedSubscripton: "" });
+    const [createDownloadBody, setCreateDownloadBody] = useState<{ name: string, description: string, linkedSubscription: string }>({ name: "", description: "", linkedSubscription: "" });
     const [formError, setFormError] = useState("");
 
     const dispatch = useDispatch();
@@ -49,9 +49,10 @@ export default function AdminPanel() {
     const createDownload = () => {
 
         setFormError("");
+        console.log(createDownloadBody);
         if(!createDownloadBody.name || createDownloadBody.name == "") return setFormError("Please provide a name for your download!");
         if(!createDownloadBody.description || createDownloadBody.description == "") return setFormError("Please provide a description for your download!");
-        if(!createDownloadBody.linkedSubscripton || createDownloadBody.linkedSubscripton == "") return setFormError("Please provide a linked subscription for your download!");
+        if(!createDownloadBody.linkedSubscription || createDownloadBody.linkedSubscription == "") return setFormError("Please provide a linked subscription for your download!");
 
         
         Requester_.makePostRequest(CREATE_NEW_DOWNLOAD, 
@@ -92,7 +93,7 @@ export default function AdminPanel() {
                     </div>
                     <div>
                         <p>Linked Subscription</p>
-                        <Dropdown choices={adminSubscriptions.map(i => { return { name: i.name, data: i.id} })} output={(choice) => setCreateDownloadBody({ ...createDownloadBody, linkedSubscripton: choice })} />
+                        <Dropdown choices={adminSubscriptions.map(i => { return { name: i.name, data: i.id} })} output={(choice) => setCreateDownloadBody({ ...createDownloadBody, linkedSubscription: choice })} />
                     </div>
                     <button onClick={() => createDownload()} style={{ marginTop: "15px"}} className={styles.button}>Create Download</button>
                 </div>    
@@ -101,7 +102,7 @@ export default function AdminPanel() {
                 <div className={styles.dashboard_container}>
                     <h1>Manage your downloads</h1>
                     <div>
-                        <button className={styles.button}>Create new download</button>
+                        <button className={styles.button} onClick={() => setCreateDownloadModelActive(true)}>Create new download</button>
                     </div>
                     <div>
                         {downloads.map((i: any) => {

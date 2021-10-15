@@ -13,7 +13,7 @@ const Login : React.FC<any> = (props) => {
     const dispatch = useDispatch();
     const router = useRouter();
 
-    const userStore = useSelector(state => state.user);
+    const userStore = useSelector(state => state.user.user);
 
     const [loginBody, setLoginBody] = useState<{ h_captcha?: string | undefined | null, username: string, password: string}>({ username: "", password: "" });
     const [isSubmitting, setSubmitting] = useState<boolean>(false);
@@ -23,7 +23,7 @@ const Login : React.FC<any> = (props) => {
     
     useEffect(() => {
         if(userStore){
-            if(userStore.user.username){
+            if(userStore.username){
 
                 router.push(router.query.after ? router.query.after : "/fourm");
             }

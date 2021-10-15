@@ -6,14 +6,40 @@ import checkAuth from '../middleware/checkAuth';
 import Posts from '../models/Posts';
 import sanitizeUsers from '../utils/sanitizeUsers';
 import Attachments from '../models/Attachments';
+import UserSubscription from "../models/UserSubscription";
 
 let Route = Router();
 
 Route.use(json());
 
-Route.get("/me", checkAuth, (req, res, next) => {
+Route.get("/me", checkAuth, async (req, res, next) => {
 
     let user = res.locals.user;
+
+
+    let dbUser = await Users.findOne({ id: user.uid });
+
+    if(!dbUser) return res.json({ error: true, errors: ["We couldnt find your user? What? Impossible!"]});
+
+    /* Validate user subscriptions */
+    for await (var i in dbUser.active_subscriptions) {
+        
+        let sub = user.active_subscriptions[i];
+
+        let userSubscription = await UserSubscription.findOne({ id: sub });
+
+        if(!userSubscription) continue;
+
+        if(+(new Date()) > + userSubscription?.date_end){
+            dbUser.active_subscriptions.splice(i, 1);
+            userSubscription.is_active = false;
+        }
+
+        await userSubscription.save();
+    };
+
+    await dbUser.save();
+
 
     let cleanUser = {
         avatar: user.avatar, 
@@ -25,7 +51,8 @@ Route.get("/me", checkAuth, (req, res, next) => {
         permissions: user.permissions, 
         uid: user.uid, 
         tags: user.tags,
-        banner: user.banner
+        banner: user.banner,
+        active_subscriptions: dbUser.active_subscriptions
     };
 
     return res.json(cleanUser);
@@ -179,10 +206,8 @@ Route.get("/:id", async (req, res, next) => {
     let userCheck = await Users.findOne({ api_key: apiKey });
 
     if(userCheck) {
-        console.log("gotten api key with user request")
         if(userCheck.permissions.includes("MODERATOR") || userCheck.permissions.includes("ADMINISTRATOR")) {
             isAdmin = true;
-            console.log("user is admin")
         }
     }
     

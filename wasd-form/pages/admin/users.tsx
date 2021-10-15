@@ -11,6 +11,7 @@ import styles from '../../styles/admin.module.css';
 import WASDTable from '../../components/shared/Table';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPen, faTrash } from '@fortawesome/free-solid-svg-icons';
+import router from 'next/router';
 
 export default function AdminPanel() {
     const [isLoading, setLoading] = useState(true);
@@ -72,7 +73,7 @@ export default function AdminPanel() {
                                         <th><span onClick={() => {
                                            
                                         }}><FontAwesomeIcon icon={faTrash} /></span><span onClick={() => {
-                                           
+                                           router.push(`/admin/users/${i.uid}/edit`)
                                         }}><FontAwesomeIcon icon={faPen} /></span></th>
                                     </tr>
                                 )
