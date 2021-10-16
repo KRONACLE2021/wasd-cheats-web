@@ -4,11 +4,13 @@ WORKDIR /usr/src/app
 
 COPY package.json .
 
-RUN npm install
-RUN npm install typescript
+RUN npm i
+
 ADD . /usr/src/app
 
-RUN tsc --build
+ENV NODE_PATH=./build
+
+RUN npm run build
 
 CMD [ "npm", "start" ]
 EXPOSE 80
