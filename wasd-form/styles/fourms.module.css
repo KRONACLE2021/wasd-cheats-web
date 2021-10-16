@@ -43,10 +43,6 @@
 }
 
 
-.spacer {
- 
-}
-
 @media (max-width: 700px) {
     .topic_title {
         height: auto !important;
@@ -383,7 +379,7 @@
 
 
 .user_info p {
-    padding : 0;
+    padding: 0;
     margin: 3px 8px;
     font-size: 15px;
     color: grey;
@@ -491,11 +487,11 @@
     width: 50%;
     background-color: var(--bg-secondary);
     padding: 0px;
-    animation: 1s upAndIn ease 0s 1;
+    /* animation: 1s ease 1 upAndIn; */ 
 }
 
 .model_popup_show .model_popup_container {
-    animation: upAndIn 0.5s ease;
+    /* animation: 0.5s upAndIn ease; */
     display: block;
 }
 

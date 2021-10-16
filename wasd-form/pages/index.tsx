@@ -4,6 +4,7 @@ import styles from '../styles/Home.module.css';
 import useApiCheck from '../requests/useApiCheck';
 import ReviewCard from '../components/home/TestomonialCard';
 import router from 'next/router';
+import HeaderOG from '../components/shared/HeaderOG';
 
 export default  function Home() {
 
@@ -24,9 +25,9 @@ export default  function Home() {
 
   return (
     <div>
-      <Head>
-        <title>WASD - A Cheating Community</title>
-      </Head>
+      <HeaderOG
+        title={"WASD Cheats - Home"}
+      />
 
       <div className={styles.header_container}>
         <div className={styles.header_left}>
