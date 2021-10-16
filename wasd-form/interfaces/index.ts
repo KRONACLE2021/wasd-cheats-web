@@ -5,7 +5,7 @@ export interface IThread {
     createdAt: Date;
     topicId: string;
     locked: boolean;
-    pinned: boolean | null;
+    pinned?: boolean | null;
     posts: Array<IPost>;
 }
 

@@ -17,7 +17,7 @@ import Preloader from '../../components/shared/Preloader';
 export default function UserPage() {
     
     const router = useRouter();
-    const { query: { id } } = router;
+    const { query: { id } } : any = router;
     const [user, setUser] = useState<any>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const dispatcher = useDispatch();
@@ -35,7 +35,7 @@ export default function UserPage() {
                 setLoading(false);
             }
         } else if(id !== null && id !== undefined) {
-            if(id == userStore.uid) return router.push("/users/me");
+            if(id == userStore.uid) router.push("/users/me");
             dispatcher(fetchOtherUser(id, userStore.api_key));
         }
     }, [userStore, id]);
@@ -97,7 +97,7 @@ export default function UserPage() {
                         </div>
                         <div className={styles.user_posts}>
                             <h3>Posts:</h3>
-                            {user?.posts.map(i => {
+                            {user?.posts.map((i: any) => {
                                 return <SimplePostCard    
                                     key={i.id} 
                                     id={i.id}

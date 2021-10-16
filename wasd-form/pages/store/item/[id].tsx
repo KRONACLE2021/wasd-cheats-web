@@ -9,13 +9,13 @@ import styles from '../../../styles/store.module.css';
 export default function StoreItem() {
   
     const dispatcher = useDispatch();
-    const { query: { id } } = useRouter();
-    const [item, setItem] = useState(null);
+    const { query: { id } } : any = useRouter();
+    const [item, setItem] = useState<any>(null);
 
-    const cart = useSelector(state => state.userCart);
+    const cart = useSelector((state: any) => state.userCart);
 
-    const userStore = useSelector(state => state.user.user);
-    const itemStore = useSelector(state => state.shopStore.items.filter((i) => (i["id"] == id)));
+    const userStore = useSelector((state: any) => state.user.user);
+    const itemStore = useSelector((state: any) => state.shopStore.items.filter((i : { id : string }) => (i["id"] == id)));
 
     useEffect(() => {
         if(id && !item) {

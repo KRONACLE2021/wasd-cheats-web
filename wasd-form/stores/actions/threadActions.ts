@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { Dispatch } from 'redux';
 import { IUser } from '../../interfaces';
 import { API, CREATE_NEW_THREAD, FETCH_THREADS, FETCH_THREAD } from '../../requests/config';
 import Requester from '../../requests/Requester';
@@ -35,7 +36,7 @@ export const FetchThreadsFailed = (errors: Array<string>) => {
     }
 }
 
-export const CreateThread = async ({title, post, attachments, topic_id} : {title: string, post : any, attachments: Array<any> | null, topic_id: string}, api_key: string, dispatcher : any) => {
+export const CreateThread = async ({title, post, attachments, topic_id} : {title: string, post : any, attachments: Array<any> | null, topic_id: string | string[] | undefined}, api_key: string, dispatcher : any) => {
 
     let response = await Requester_.makePostRequest(CREATE_NEW_THREAD, { 
         title,
@@ -67,7 +68,7 @@ export const FetchThreadsByTopic = (topic_id : string, skip : number, limit: num
     let skip_ = skip;
     let limit_ = limit;
 
-    return (disaptch) => {
+    return (disaptch: Dispatch<any>) => {
 
         disaptch(FetchThreadsPending());
         Requester_.makeGetRequest(FETCH_THREADS(topic_id_), { 

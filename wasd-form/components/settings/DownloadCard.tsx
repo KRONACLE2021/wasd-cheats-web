@@ -7,15 +7,15 @@ import { API, INITATE_PROTECTED_DOWNLOAD } from '../../requests/config';
 import styles from '../../styles/settings.module.css';
 
 const DownloadCard: React.FC<{ 
-    name: string, 
-    description: string, 
-    version: string, 
-    content_id: string, 
-    subscription_status: { time_left: number }, 
-    userId: string, 
-    date: Date,
-    id: id,
-    api_key: string
+    name?: string, 
+    description?: string, 
+    version?: string, 
+    content_id?: string, 
+    subscription_status?: { time_left: number }, 
+    userId?: string, 
+    date?: Date,
+    id?: string,
+    api_key?: string
 }> = ({ name, userId, description, version, content_id, subscription_status, date, id, api_key }) => {
 
 

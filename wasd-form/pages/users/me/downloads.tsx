@@ -11,15 +11,15 @@ export default function downlaods() {
 
     const [downloadsData, setDownloadsData] = useState([]);
     const [loading, setLoading] = useState(true);
-    const userStore = useSelector(state => state.user.user);
-    const isLoading = useSelector(state => state.user.loading);
+    const userStore = useSelector((state: any) => state.user.user);
+    const isLoading = useSelector((state: any) => state.user.loading);
 
     const getData = async () => {
         axios.get(`${API}/${GET_USERS_DOWNLOADS}`, {
             headers: {
                 Authorization: userStore.api_key
             }
-        }).then(res => {
+        }).then((res: any) => {
             if(!res.error){
                 setDownloadsData(res.data.downloads);
                 setLoading(false);
@@ -49,7 +49,7 @@ export default function downlaods() {
                 <h1>Your downloads:</h1>
                 <p>Downloads for products you've purchased</p>
                 <div>
-                    {downloadsData?.map((i) => {
+                    {downloadsData?.map((i : any) => {
 
                         let release = i?.releases[i.releases.length - 1];
 

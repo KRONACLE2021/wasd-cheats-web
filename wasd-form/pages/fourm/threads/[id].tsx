@@ -20,11 +20,11 @@ const ThreadPage: React.FC<any> = (props) => {
     const router = useRouter();
     const dispatch = useDispatch();
 
-    const { query: { id } } = router;
+    const { query: { id } } : any = router;
 
-    const userStore = useSelector(store => store.user);
-    const thread = useSelector(store => store.threadStore.threads.filter((item) => (item["id"] == id)));
-    const posts = useSelector(store => store.postStore.posts.filter((i) => (i["threadId"] == id)));
+    const userStore = useSelector((store: any) => store.user);
+    const thread = useSelector((store: any) => store.threadStore.threads.filter((item : any) => (item["id"] == id)));
+    const posts = useSelector((store: any) => store.postStore.posts.filter((i: any) => (i["threadId"] == id)));
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
@@ -58,13 +58,13 @@ const ThreadPage: React.FC<any> = (props) => {
             FetchPostsByThreadId(id, 20, 0, dispatch);
 
             //clear text editor
-            dispatch(SpawnNewInstacne({ therad_id: id, state: "" }));
+            dispatch(SpawnNewInstacne({ thread_id: id, state: "" }));
 
             setLoading(false);
         }
     }, [id, thread[0]]);
 
-    useEffect(async () => {
+    const fetchThreads = async () => {
         if(id){
             let res = await FetchThreadById(id, dispatch);
 
@@ -73,6 +73,10 @@ const ThreadPage: React.FC<any> = (props) => {
                 setLoading(false);
             };
         }
+    }
+
+    useEffect(() => {
+        fetchThreads()
     }, [id]);
 
 
@@ -105,7 +109,7 @@ const ThreadPage: React.FC<any> = (props) => {
             </div>
         </>}>
 
-        {posts.map((i) => { 
+        {posts.map((i: any) => { 
             return <PostCard    key={i.id} 
                                 id={i.id}
                                 contents={i.contents} 

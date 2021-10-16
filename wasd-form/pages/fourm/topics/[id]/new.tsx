@@ -15,7 +15,7 @@ import MultiFileUploader from '../../../../components/fourm/MultiFileUploader';
 const NewThread: React.FC<any> = (props) => {
 
     const dispatch = useDispatch();
-    const user = useSelector(state => state.user);
+    const user = useSelector((state: any) => state.user);
     const router = useRouter();
 
     const { query: { id } } = router;
@@ -24,7 +24,7 @@ const NewThread: React.FC<any> = (props) => {
     const [attachments, setAttachments] = useState<Array<string>>([]);
     const [htmlPost, setHtmlPost] = useState<string>("");
     const [loading, setLoading] = useState<boolean>(true);
-    const [errors, setErrors] = useState<Array<String>>([]);
+    const [errors, setErrors] = useState<Array<string>>([]);
 
 
     const submitForm = async () => {

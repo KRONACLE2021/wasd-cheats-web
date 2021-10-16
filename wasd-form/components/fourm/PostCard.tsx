@@ -16,12 +16,12 @@ import ReportModel from '../shared/ReportModel';
 import Link from 'next/dist/client/link';
 
 
-const PostCard: React.FC<{ contents: string, uid: string | null, createdAt: string, id: string, attachments: Array<string>, user: IUser | null, replyToPost: Function, thread: any}> = (props) => {
+const PostCard: React.FC<{ contents: string, uid: string | null, createdAt: string, id: string, attachments: Array<string>, user: IUser | null, replyToPost?: Function, thread: any}> = (props) => {
 
-    const [contents, setContents] = useState<string | null>(null);
+    const [contents, setContents] = useState<string>("");
     const [deleteModelActive, setDeleteModelActive] = useState(false);
     const [reportModelActive, setReportModelActive] = useState(false);
-    const userStore = useSelector(state => state.user);
+    const userStore = useSelector((state: any) => state.user);
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -30,13 +30,16 @@ const PostCard: React.FC<{ contents: string, uid: string | null, createdAt: stri
         setContents(santiziedHtml);
     }, [props.contents]);
 
-
-    useEffect(async () => {
+    const requests = async () => {
         if(props.uid){
             let res = await fetchUser(props.uid);
-            
+                
             dispatch(SetPostUser(props.id, res));
         }
+    }
+
+    useEffect(() => {
+        requests();
     }, [props.uid]);
 
     const ReplyToPost = () => {

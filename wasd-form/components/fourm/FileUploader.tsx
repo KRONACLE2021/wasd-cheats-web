@@ -15,16 +15,16 @@ let allowedFileTypes = [
 
 const FileUploader : React.FC<{ 
     reccomended_size: string, 
-    uploadType: "icon" | "image", 
+    uploadType: string, 
     output: (arg: string) => void, 
-    custom_classes: Array<string> | undefined 
+    custom_classes?: Array<string> | undefined 
 }> = ({ reccomended_size, uploadType, output, custom_classes })  => {
     const [file, setFile] = useState<{selectedFile: null | File }>({ selectedFile: null });
     const [fileUrl, setFileUrl] = useState<any>("");
 
-    const userStore = useSelector(state => state.user);
+    const userStore = useSelector((state: any) => state.user);
 
-    const onFileChange = e => {
+    const onFileChange = (e : any) => {
         console.log("[WASD Uploader] Got file user wants to upload");
         if(!allowedFileTypes.includes(e.target.files[0].type)){
             //in update change this to a nicely formed error!
@@ -65,7 +65,7 @@ const FileUploader : React.FC<{
     return (
         <div className={`file-uploader_container ${custom_classes}`}>
             <input className="file-uploader_input" type="file" onChange={onFileChange} />
-            {fileUrl !== "" ? <> 
+            {fileUrl !== "" && file.selectedFile !== null ? <> 
                 <div>
                     <p>Your uploaded file (Click to change): </p>
                     <img src={fileUrl} style={{ height: "100px", width: "100%", objectFit: "scale-down"}}></img> 
@@ -74,7 +74,7 @@ const FileUploader : React.FC<{
             </> : (
                 <>
                     <div>
-                        <p><span style={{fontWeight: "600"}}>Click </span> to upload a {uploadType}</p>
+                        <p><span style={{fontWeight: "bolder"}}>Click </span> to upload a {uploadType}</p>
                         <p>Reccomended size: {reccomended_size}</p>
                     </div>
                 </>

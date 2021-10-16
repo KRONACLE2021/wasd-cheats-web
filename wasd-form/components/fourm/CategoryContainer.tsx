@@ -12,9 +12,9 @@ const CategoryContainer: React.FC<{name: string, id: string, isAdmin: any, toggl
 
     const dispatch = useDispatch();
     const [modelIsActive, setModelActive] = useState<boolean>(false);
-    const [topicCreateData, setTopicCreateData] = useState<{ category: string; attachmentId: string; title: string; description: string; }>({ category: props.id, name: "", description: "", attachmentId: "" });
-    const topics = useSelector(state => state.topics.topics.filter((i: any) => i.category == props.id));
-    const userStore = useSelector(state =>  state.user.user);
+    const [topicCreateData, setTopicCreateData] = useState<{ category: string; attachmentId: string; title: string; description: string; }>({ category: props.id, title: "", description: "", attachmentId: "" });
+    const topics = useSelector((state : any) => state.topics.topics.filter((i: any) => i.category == props.id));
+    const userStore = useSelector((state : any) =>  state.user.user);
     const [modelError, setModelError] = useState("");
 
     useEffect(() => {
@@ -70,7 +70,7 @@ const CategoryContainer: React.FC<{name: string, id: string, isAdmin: any, toggl
 
                 <div className={styles.category_topics_container}>
                     {props.children}
-                    {topics !== [] ? topics.map((t) => {
+                    {topics !== [] ? topics.map((t: any) => {
                         if(t.category == props.id) {
                             return <TopicCard   title={t.title}
                                                 description={t.description}

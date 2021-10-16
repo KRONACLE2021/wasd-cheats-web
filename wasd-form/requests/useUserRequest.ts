@@ -5,7 +5,7 @@ import { IUser, IApiError } from '../interfaces';
 
 export default function useUserRequest(id: string) {
 
-    const [user, setUser] = useState<IUser | IApiError>(false);
+    const [user, setUser] = useState<any>(false);
 
     
     const startFetch = async () => {

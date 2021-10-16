@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import styles from '../../../styles/fourms.module.css';
 import FourmRoot from '../../../components/fourm/FourmRoot';
 import { AdminDeleteTopic, AdminEditTopic, AdminLockTopic, FetchTopicById } from '../../../stores/actions/topicActions';
-import { Router, useRouter } from 'next/router';
+import { NextRouter, Router, useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
 import { FetchThreadsByTopic } from '../../../stores/actions/threadActions';
 import ThreadCard from '../../../components/fourm/ThreadCard';
@@ -25,14 +25,14 @@ const TopicPage : React.FC<any> = () => {
     const router = useRouter();
     const dispatch = useDispatch();
     
-    const { query: { id } } = router;
+    const { query: { id } } : any = router;
 
-    const topics = useSelector(state => state.topics.topics.filter((item) => (item["id"] == id)));
-    const threads = useSelector(state => state.threadStore.threads.filter((item) => (item["topicId"] == id)));
-    const userStore = useSelector(state => state.user.user);
+    const topics = useSelector((state: any) => state.topics.topics.filter((item : any) => (item["id"] == id)));
+    const threads = useSelector((state: any) => state.threadStore.threads.filter((item : any) => (item["topicId"] == id)));
+    const userStore = useSelector((state: any) => state.user.user);
 
     const [editTopicData, setEditTopicData] = useState<{ title: string, description: string, icon: string }>({ title: "", description: "", icon: "" });
-    const [topic, setTopic] = useState<{ title: string, locked: boolean, description: string, icon?: string, threads: Array<IThread> }>({ title: "", locked: false, description: "", icon: "", threads: [] });
+    const [topic, setTopic] = useState<{ title: string, locked: boolean, description: string, icon?: string, threads: Array<IThread>, id: string; }>({ title: "", locked: false, description: "", icon: "", threads: [], id: "" });
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [activeThreads, setActiveThreads] = useState<Array<any>>([]);
     const [lockTopicModel, setLockTopicModel] = useState<boolean>(false);
@@ -73,6 +73,7 @@ const TopicPage : React.FC<any> = () => {
 
     useEffect(() => {
         if(topics.length == 0) {
+            if(id == null) return;
             dispatch(FetchTopicById(id));
         }
 

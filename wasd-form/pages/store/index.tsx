@@ -8,7 +8,7 @@ export default function StoreIndex() {
 
     const dispatcher = useDispatch();
 
-    const items = useSelector(state => state.shopStore.items);
+    const items = useSelector((state: any) => state.shopStore.items);
 
     useEffect(() => {
         dispatcher(GetItems());
@@ -24,7 +24,7 @@ export default function StoreIndex() {
                     </div>
                 </div>
                 <div className={styles.shop_items}>
-                    {items.map(i => {
+                    {items.map((i: any) => {
                         return <ItemCard cover_image={"/test-banner.jpg"} name={i.name} description={i.description} price={i.price} currency={"CAD"} id={i.id} />
                     })}
                    

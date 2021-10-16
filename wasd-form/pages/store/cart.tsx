@@ -12,24 +12,24 @@ import { API, CAPTURE_PAYPAL_ORDER, GET_PAYPAL_ORDER } from '../../requests/conf
 
 export default function cart() {
 
-    const userStore = useSelector(state => state.user);
-    const cartItems = useSelector((state) => state.userCart.items);
+    const userStore = useSelector((state: any) => state.user);
+    const cartItems = useSelector((state: any) => state.userCart.items);
     const [hasCompletedPayment, setCompletedPayment] = useState(true);
     const [error, setError] = useState<Array<String> | null>(null);
     const dispatcher = useDispatch();
 
-    const initalOptions: ReactPayPalScriptOptions = {
+    const initalOptions: any = {
         "client-id": "Afq0gJghMMDsCEPGnpFuI_WVXgU7CZxBfobBBUj5B5nAKKt330AmSglybiq9hpXZnQWo8qah0SOfglSA",
         currency: "USD",
-        intent: "capture"
+        intent: "capture",
     }
 
     const RemoveItem = (i: any) => {
         dispatcher(removeItemFromCart(i));
     }
 
-    const createPaypalOrder  = () : Promise<String> => {
-        return new Promise<String>((resolve, reject) => {
+    const createPaypalOrder  = () : Promise<string> => {
+        return new Promise<string>((resolve, reject) => {
             axios.post(`${API}/${GET_PAYPAL_ORDER}`, {} ,{
                 headers: {
                     Authorization: userStore.user.api_key
@@ -54,8 +54,8 @@ export default function cart() {
         })
     }
 
-    const capturePaypalOrder = (data : any) : Promise<String> => {
-        return new Promise<String>((resolve, reject) => {
+    const capturePaypalOrder = (data : any) : Promise<void> => {
+        return new Promise<void>((resolve, reject) => {
             axios.post(`${API}/${CAPTURE_PAYPAL_ORDER}`, {
                 orderID: data.orderID
             }, {
@@ -66,12 +66,10 @@ export default function cart() {
                 if(!res.data.error){
                     console.log("Payment completed!");
                     dispatcher(clearCart());
-                    resolve("")
+                 
                 } else {
                     console.log("Payment has failed");
-
                     setError(["Could not process paymnet! Please try again."]);
-                    resolve("")
                 }
             })
         });
@@ -80,7 +78,7 @@ export default function cart() {
     useEffect(() => {
         if(cartItems && userStore.user.api_key){
             console.log(cartItems);
-            dispatcher(postCartItems(cartItems.map(i => i.id), userStore.user.api_key));
+            dispatcher(postCartItems(cartItems.map((i: any) => i.id), userStore.user.api_key));
         }
     }, [cartItems]);
 
@@ -92,14 +90,14 @@ export default function cart() {
                     <div className={styles.store_cart_inner}>
                         <h1>Cart summery</h1>
                         <p>{cartItems.length} Items in cart</p>
-                        {cartItems.map((i) => {
+                        {cartItems.map((i: any) => {
                             return <CartItemLongCard item={i} remove={RemoveItem}></CartItemLongCard>
                         })}
                     </div>
                     <div className={styles.store_checkout_box}>
                         <h3>Your Order</h3>
                         {userStore.user.api_key ? <PayPalScriptProvider options={initalOptions}>
-                            <PayPalButtons createOrder={() => createPaypalOrder()} onApprove={(data) => capturePaypalOrder(data)} />
+                            <PayPalButtons createOrder={(data, error) => createPaypalOrder()} onApprove={(data) => capturePaypalOrder(data)} />
                         </PayPalScriptProvider> : ""}
                     </div>
                 </>

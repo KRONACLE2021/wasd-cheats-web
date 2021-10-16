@@ -11,8 +11,8 @@ export default function UserSettings() {
 
     const [userUpdateBody, setUserUpdateBody] = useState({ bio: "", username: "", banner: "", avatar: ""});
     const [initalLoad, setInitalLoad] = useState(true);
-    const userStore = useSelector(state => state.user.user);
-    const isLoading = useSelector(state => state.user.loading);
+    const userStore = useSelector((state: any) => state.user.user);
+    const isLoading = useSelector((state: any) => state.user.loading);
     const dispatcher = useDispatch();
 
     useEffect(() => {

@@ -44,7 +44,7 @@ export const colorPermissionTable : { [unit: string]: string} = {
     ALLOW_POSTING: "perm-member",
 }
 
-export function getPermissionColor(permissionSet: Array<string>){
+export function getPermissionColor(permissionSet: Array<string> | undefined){
     if(!permissionSet) return "perm-member";
 
     let highestPermission = 4;

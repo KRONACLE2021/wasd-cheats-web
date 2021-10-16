@@ -14,7 +14,7 @@ import FourmError from '../../components/shared/FourmError';
 const FourmHome: React.FC<any> = () => {
 
     const dispatch = useDispatch();
-    const userStore = useSelector(state => state.user.user);
+    const userStore = useSelector((state : any) => state.user.user);
 
     const [isLoading, setLoading] = useState(true);
     const [error, setError] = useState();
@@ -22,7 +22,7 @@ const FourmHome: React.FC<any> = () => {
     const [modelIsActive, setModelActive] = useState<boolean>(false);
     const [createCategoryData, setCreateCategoryData] = useState<{ title: string, description: string }>({ title: "", description: "" });
 
-    const categorys = useSelector(state => state.categorys.categorys);
+    const categorys = useSelector((state : any) => state.categorys.categorys);
   
     useEffect(() => {
         
@@ -83,7 +83,7 @@ const FourmHome: React.FC<any> = () => {
                 </div>
             }>
                 <div className={styles.fourm_content}>
-                    {categorys.map((c) => {
+                    {categorys.map((c : any) => {
                         return <> 
                             <CategoryContainer 
                                 toggleAddModel={setModelActive} 
