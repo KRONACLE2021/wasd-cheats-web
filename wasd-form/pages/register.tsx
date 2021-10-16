@@ -71,8 +71,6 @@ const Login : React.FC<any> = (props) => {
                     <div className={styles.spacer_top}></div>
 
                     <div className={styles.login_box_buttons}>
-                        <button className={`${styles.login_button} ${styles.discord_login}`} disabled={isSubmitting}>Register With Discord</button>
-                        <div className={styles.spacer_top}></div>
                         <button className={`${styles.login_button}`} onClick={submitForm} disabled={isSubmitting}>Create an account</button>
                         <div className={styles.spacer_top}></div>
                     </div>

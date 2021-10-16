@@ -69,8 +69,6 @@ const Login : React.FC<any> = (props) => {
                     <div className={styles.spacer_top}></div>
 
                     <div className={styles.login_box_buttons}>
-                        <button className={`${styles.login_button} ${styles.discord_login}`} disabled={isSubmitting}>Login With Discord</button>
-                        <div className={styles.spacer_top}></div>
                         <button className={`${styles.login_button}`} onClick={submitForm} disabled={isSubmitting}><span className="button_loader_text">Login</span> { isSubmitting ? ( <div className="loader_"></div> ) : "" }</button>
                         <div className={styles.spacer_top}></div>
                     </div>

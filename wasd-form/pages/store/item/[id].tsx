@@ -45,7 +45,6 @@ export default function StoreItem() {
                     <h1 className={styles.price}>${item?.price}<span className={styles.currency}>{item?.currency ? item?.currency : "USD"}</span></h1>
                     <p>{item?.description}</p>
                     {userStore.username ? <button className={styles.buy_now_button} onClick={() => addItem()}>Add to cart</button> : <button className={styles.buy_now_button} onClick={() => Router.push("/login")}>Login To buy</button>}
-                    <button className={`${styles.buy_now_button} ${styles.gift_button}`}>Gift to user</button>
                 </div>
             </div>
         </div>

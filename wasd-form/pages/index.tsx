@@ -13,13 +13,8 @@ export default  function Home() {
   const homeSlideShowCards = [
       <ReviewCard 
         profile_picture={"http://localhost:8080/api/v1/uploads/file/bbe90bf1-8daf-4eed-80f4-f4b055cb0120"}
-        username={"Astrid"}
-        review={"WASD Has the best cheats ever!! You should totally join and check them out."}
-    />,
-    <ReviewCard 
-      profile_picture={"https://cdn.discordapp.com/avatars/488794349774176266/a_01b97de4f2b6f811a4d9e02ece32e3b3.webp?size=80"}
-      username={"Kronacle"}
-      review={"WASD Has the best cheats ever!! You should totally join and check them out."}
+        username={"GreyBurger"}
+        review={"I'd say the aim works great , there's 0 performance drops , and played almost the entire day and had no issued no crashes or anything at all. Worked really smooth and to be honest comparing to other products on the market , you'll realise this has significantly lesser crashes."}
     />
   ]
  

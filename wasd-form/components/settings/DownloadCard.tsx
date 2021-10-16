@@ -38,7 +38,6 @@ const DownloadCard: React.FC<{
         <div className={styles.download_card}>
             <h1 className={styles.download_title}>{name} - {version}</h1>
             <p>{userId ? "" : "Unknown user"} released this {moment(date).format('MMMM Do YYYY')}</p>
-            <p>Remaining time: { subscription_status?.time_left }</p>
             <p className={styles.download_description}>{description}</p>
             <button className={styles.download_button} onClick={() => initateDownload()}><FontAwesomeIcon icon={faDownload} /> Download</button>
             <div className={styles.spacer}></div>

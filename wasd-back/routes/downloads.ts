@@ -207,7 +207,7 @@ Route.get("/:id/:version", async (req, res, next) => {
     reids.set(downloadID, JSON.stringify({ file_id: release.file_id, expire: Date.now() + 3.6e+6 }), (err, res_) => {
         if(err) return res.json({ error: true, errors: ["Internal server errror whilst trying to contact redis!"]});
 
-        res.json({ done: true, download_link: `https://api.wasdcheats.cc/files/protected/${downloadID}`, expire: 3.6e+6});
+        res.json({ done: true, download_link: `https://api.wasdcheats.cc/api/v1/uploads/protected/${downloadID}`, expire: 3.6e+6});
     });
 }); 
 export default Route;

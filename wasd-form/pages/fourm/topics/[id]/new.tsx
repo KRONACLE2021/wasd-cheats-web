@@ -29,10 +29,11 @@ const NewThread: React.FC<any> = (props) => {
 
     const submitForm = async () => {
         let response = await CreateThread({title, post: htmlPost, attachments: attachments, topic_id: id }, user.user.api_key, dispatch);
+        console.log(response);
         if(!response.error){
             router.push(`/fourm/threads/${response.id}`);
         } else {
-            setErrors(response.errors);
+            setErrors([response.message]);
         }
     }
 
