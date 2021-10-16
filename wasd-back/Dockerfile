@@ -12,5 +12,6 @@ ENV NODE_PATH=./build
 
 RUN npm run build
 
-CMD [ "npm", "start" ]
 EXPOSE 80
+
+CMD [ "npm", "start" ]
