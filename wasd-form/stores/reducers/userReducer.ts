@@ -15,7 +15,9 @@ import {
     CACHE_USER_PENDING,
     CACHE_USER_FAILED,
     CACHE_USER_SUCCESS,
-    ADMIN_BAN_USER_SUCCESS
+    ADMIN_BAN_USER_SUCCESS,
+    EDIT_CACHED_USER,
+    UPDATE_CACHED_USER_FAILED
 } from "../actions";
 
 const initalState = {
@@ -88,6 +90,18 @@ export default function userReducer(state : any = initalState, action : { type: 
                 }
             });
 
+            return state;
+        case EDIT_CACHED_USER:
+            state.otherCachedUsers = state.otherCachedUsers.map((i) => {
+                if(i.uid == action.payload.uid){
+                    return action.payload;
+                } else {
+                    return i;
+                }
+            })
+            return state;
+        case UPDATE_CACHED_USER_FAILED:
+            state.error = action.payload;
             return state;
         default:
             return state;

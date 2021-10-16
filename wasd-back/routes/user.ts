@@ -12,10 +12,37 @@ let Route = Router();
 
 Route.use(json());
 
+
+Route.post("/admin/users/:id/update",  checkAuth, async (req, res, next) => {
+
+    if(!res.locals.user.permissions.includes("MODERATOR") || !res.locals.user.permissions.includes("ADMINISTRATOR")) return res.json({ error: true, errors: ["You do not have permission to execute this command!"]});
+
+    let id = req.params.id;
+
+    let {
+        permissions,
+        avatar,
+        banner,
+        banned
+    } = req.body;
+
+    let user = await Users.findOne({ uid: id });
+
+    if(!user) return res.json({ error: true, errors: ["Could not find user!"]});W
+
+    user.permissions = permissions ? permissions : user.permissions; 
+    user.avatar = avatar ? avatar : user.avatar; 
+    user.banner = banner ? banner : user.banner; 
+    user.banned = banned ? banned : user.banned; 
+
+    await user.save();
+
+    return res.json({ done: true, user: user });
+})
+
 Route.get("/me", checkAuth, async (req, res, next) => {
 
     let user = res.locals.user;
-
 
     let dbUser = await Users.findOne({ id: user.uid });
 

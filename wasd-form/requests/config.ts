@@ -27,6 +27,8 @@ export const LOCK_TOPIC = (id: string) => `api/v1/topics/${id}/lock`;
 export const UPDATE_SHOP_ITEM = (id: string) => `api/v1/shop/admin/item/${id}/edit`;
 export const UPADTE_TOPIC = (id: string) => `api/v1/topics/${id}/edit`;
 export const CREATE_CATEGORY = `api/v1/categorys/create`;
+export const EDIT_USER = (id: string) => `api/v1/users/admin/users/${id}/update`;
+export const GET_USERS_DOWNLOADS = `api/v1/downloads/user/all`;
 
 /* Store Routes */
 export const GET_STORE_ITEMS = `api/v1/shop/items`;

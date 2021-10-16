@@ -9,7 +9,8 @@ import {
     GET_USERS,
     UPDATE_USER_PROFILE,
     FETCH_USER,
-    BAN_USER
+    BAN_USER,
+    EDIT_USER
 } from '../../requests/config';
 import Requester from '../../requests/Requester';
 import { 
@@ -22,11 +23,13 @@ import {
     CACHE_USER_FAILED,
     CACHE_USER_PENDING,
     CACHE_USER_SUCCESS,
+    EDIT_CACHED_USER,
     FETCH_USER_PENDING, 
     FETCH_USER_POSTS_PENDING, 
     FETCH_USER_POSTS_SUCCESS, 
     FETCH_USER_SUCCESS, 
     SET_USER, 
+    UPDATE_CACHED_USER_FAILED, 
     UPDATE_USER_FAILED, 
     UPDATE_USER_PENDING,
     UPDATE_USER_SUCCESS
@@ -386,5 +389,39 @@ export const BanUser = (id: string, api_key: string) => {
         }).catch(err => {
             dispatcher(BanUserFailed(err.errors))
         })
+    }
+}
+
+
+export const AdminUpdateUser = ({ permissions, banned, avatar, banner} : any, id: string, api_key: string) => {
+    return (dispatcher: Dispatch<any>) => {
+        Requester_.makePostRequest(EDIT_USER(id), {
+            permissions,
+            avatar,
+            banner,
+            banned
+        }, {
+            queryStringParams: [],
+            headers: {
+                Authorization: api_key
+            }
+        }).then(res => {
+            if(!res.error){
+                dispatcher({
+                    type: EDIT_CACHED_USER,
+                    payload: res
+                })
+            } else {
+                dispatcher({
+                    type: UPDATE_CACHED_USER_FAILED,
+                    payload: res.errors
+                })
+            }
+        }).catch(err => {
+            dispatcher({
+                type: UPDATE_CACHED_USER_FAILED,
+                payload: err.errors
+            })
+        });
     }
 }

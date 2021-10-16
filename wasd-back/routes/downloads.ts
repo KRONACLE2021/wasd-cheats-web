@@ -8,6 +8,8 @@ import Downloads from '../models/Downloads';
 import Subscription from '../models/Subscription';
 import { RedisClient } from 'redis';
 import path from 'path';
+import UserSubscription from '../models/UserSubscription';
+import Users from '../models/Users';
 
 let Route = Router();
 
@@ -39,7 +41,46 @@ var upload = multer({
 }).single('file');
 
 
+Route.get("/user/all", async (req, res, next) => {
 
+    let user = await Users.findOne({ uid: res.locals.user.uid });
+
+    for await (var i in user.active_subscriptions) {
+        
+        let sub = user.active_subscriptions[i];
+
+        let userSubscription = await UserSubscription.findOne({ id: sub });
+
+        if(!userSubscription) continue;
+
+        if(+(new Date()) > +userSubscription?.date_end){
+            user.active_subscriptions.splice(i, 1);
+            userSubscription.is_active = false;
+        }
+
+        await userSubscription.save();
+    };
+
+    await user.save();
+
+    let activeDownloads = [];
+
+    for await (var i in user?.active_subscriptions) {
+
+        let sub = user.active_subscriptions[i];
+        let userSubscription = await UserSubscription.findOne({ id: sub });
+
+        let download_check = await Downloads.findOne({ linkedSubscription: userSubscription.plan_id });
+
+        if(download_check){
+            activeDownloads.push(download_check);
+        }
+
+    }
+
+    return res.json({ done: true, downloads: activeDownloads});
+
+});
 
 Route.post("/upload", async (req, res, next) => {
     if(!res.locals.user.permissions.includes("ADMINISTRATOR")) return res.json({ error: true, errors: ["You do not have permission to access this endpoint"] }).status(403);
