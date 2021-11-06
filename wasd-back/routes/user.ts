@@ -49,7 +49,7 @@ Route.get("/me", checkAuth, async (req, res, next) => {
     if(!dbUser) return res.json({ error: true, errors: ["We couldnt find your user? What? Impossible!"]});
 
     /* Validate user subscriptions */
-    for await (var i in dbUser.active_subscriptions) {
+    for(let i = 0; i < user.active_subscriptions.length; i++){
         
         let sub = user.active_subscriptions[i];
 

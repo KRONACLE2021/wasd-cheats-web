@@ -126,7 +126,7 @@ Route.post("/login", async (req, res, next) => {
 
 
     /* Validate user subscriptions */
-    for await (var i in user.active_subscriptions) {
+    for(let i = 0; i < user.active_subscriptions.length; i++){
         
         let sub = user.active_subscriptions[i];
 

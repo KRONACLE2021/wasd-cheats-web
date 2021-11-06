@@ -45,9 +45,13 @@ Route.get("/user/all", async (req, res, next) => {
 
     let user = await Users.findOne({ uid: res.locals.user.uid });
 
-    for await (var i in user.active_subscriptions) {
+    if(user == null) return res.json({ error: true, message: "Could not find user"});
+
+    for(let i = 0; i < user.active_subscriptions.length; i++){
         
-        let sub = user.active_subscriptions[i];
+        let sub : String = user.active_subscriptions[i];
+
+        if(!sub) continue;
 
         let userSubscription = await UserSubscription.findOne({ id: sub });
 
@@ -59,16 +63,18 @@ Route.get("/user/all", async (req, res, next) => {
         }
 
         await userSubscription.save();
-    };
+    }
 
     await user.save();
 
     let activeDownloads = [];
 
-    for await (var i in user?.active_subscriptions) {
+    for(let i = 0; i < user.active_subscriptions.length; i++){
 
         let sub = user.active_subscriptions[i];
         let userSubscription = await UserSubscription.findOne({ id: sub });
+
+        if(userSubscription == null) continue;
 
         let download_check = await Downloads.findOne({ linkedSubscription: userSubscription.plan_id });
 
@@ -106,6 +112,8 @@ Route.post("/upload", async (req, res, next) => {
         upload_to.version = version;
 
         let file = req.file;
+
+        if(file == null) return res.json({ error: true, errors: ["error uploading file"]});
 
         upload_to?.releases.push({
             file_id: file.key,
@@ -204,7 +212,7 @@ Route.get("/:id/:version", async (req, res, next) => {
 
     let downloadID = uuid();
 
-    reids.set(downloadID, JSON.stringify({ file_id: release.file_id, expire: Date.now() + 3.6e+6 }), (err, res_) => {
+    reids.set(downloadID, JSON.stringify({ file_id: release.file_id, expire: Date.now() + 3.6e+6 }), (err : any, res_ : any) => {
         if(err) return res.json({ error: true, errors: ["Internal server errror whilst trying to contact redis!"]});
 
         res.json({ done: true, download_link: `https://api.wasdcheats.cc/api/v1/uploads/protected/${downloadID}`, expire: 3.6e+6});
