@@ -25,6 +25,6 @@
   },
   "scripts": {
     "start": "NODE_PATH=./build node build/index.js",
-    "build": "tsc -p ."
+    "build": "tsc -b ."
   }
 }
