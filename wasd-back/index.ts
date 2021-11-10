@@ -11,7 +11,7 @@ let app = express();
 app.use("/", Router);
 
 app.listen(process.env.PORT, () => {
-    Mongoose.connect("mongodb://admin:tB26E7Fgpfs9cDWp@143.110.214.153/").then(() => {
+    Mongoose.connect("mongodb://mongo:cuDZYa9YoRsfPxTimEUE@containers-us-west-19.railway.app:6939").then(() => {
         console.log("[DATABASE] Connected to mongodb");
     });
 
