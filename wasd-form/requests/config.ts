@@ -1,4 +1,4 @@
-const development = true;
+const development = process.env.DEVELOPMENT;
 
 export const API = development ? "http://localhost:8080" : "https://api.wasdcheats.cc";
 export const API_STATUS_CHECK = "api/status";
