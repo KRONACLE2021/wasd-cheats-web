@@ -25,7 +25,7 @@ Route.post("/register", async (req, res, next) => {
     if(!body.email) return res.json({error: true, errors: ["No email provided!"]}).status(300);
     if(!body.h_captcha) return res.json({ error: true, errors: ["No h-captcha token provided!"] });
 
-    await HCaptchaVerify(body.h_captcha).then((res_) => {
+    await HCaptchaVerify(body.h_captcha).then((res_ : { success: boolean }) => {
         if(!res_.success){
             return res.json({ error: true, errors: ["Please retry the captcha!"]})
         }
@@ -120,8 +120,10 @@ Route.post("/login", async (req, res, next) => {
     let userIP = req.headers['x-forwarded-for'] || req.socket.remoteAddress; 
 
     if(!user.permissions.includes("PROTECTED_USER")){
-        user.last_logged_in_location = userIP ? userIP : "";
-        await user.save();
+        if(typeof userIP == "string"){
+            user.last_logged_in_location = userIP ? userIP : "";
+            await user.save();
+        }
     }
 
 

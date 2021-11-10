@@ -22,9 +22,9 @@ Route.use((req, res, next) => {
 
 Route.post("/files/massdelete/assignedcontent", async (req, res, next) => {
     
-    let attachments_ = await Attachments.find({ attachedTo: null });
+    let attachments_ = await Attachments.find({ attachedTo: "" });
 
-    await Attachments.deleteMany({ attachedTo: null });
+    await Attachments.deleteMany({ attachedTo: "" });
 
     return res.json({ message: `Deleted ${attachments_.length}`});
 });
@@ -55,8 +55,16 @@ Route.post("/files/:id/delete", async (req, res, next) => {
 
 Route.get("/images", async (req, res, next) => {
     
-    let limit = parseInt(req.query.limit);
-    let skip = parseInt(req.query.skip);
+    let limit : number = NaN;
+    let skip : number = NaN;
+
+    if(typeof req.query.limit == "string"){
+        limit = parseInt(req.query.limit);
+    }
+
+    if(typeof req.query.skip == "string"){
+        skip = parseInt(req.query.skip);
+    }
 
     if(isNaN(limit)) limit = 30;
     if(isNaN(skip)) skip = 0;

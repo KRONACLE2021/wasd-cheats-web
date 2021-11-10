@@ -37,7 +37,7 @@ Route.delete("/delete/:id", checkAuth, async (req, res, next) => {
 
     if(!thread) return res.json({ error: true, errors: ["This post could not be deleted because its not attached to any thread! Thats weird..."]})
 
-    thread.posts.splice(thread.posts.indexOf(post_), 1);
+    thread.posts.splice(thread.posts.indexOf(post_.id), 1);
 
     await thread.save();
 
@@ -89,14 +89,17 @@ Route.post("/create", checkAuth, async (req, res, next) => {
 
     /* check if we're refrencing another thread basically checking if were replying to someone else */
     if(refrenced_post_id !== "") {
-        let refrenced_post = await Posts.find({ id: refrenced_post_id });
+        let refrenced_post = await Posts.findOne({ id: refrenced_post_id });
 
-        if(refrenced_post.threadID !== thread.id) refrenced_post_id = null;
+        if(refrenced_post){
+            if(refrenced_post.threadId !== thread.id) refrenced_post_id = null;
 
-        if(!refrenced_post) refrenced_post_id = null; 
+            if(!refrenced_post) refrenced_post_id = null; 
+        } else {
+            refrenced_post_id == null;
+        }
     } 
-
-
+    
     let post = await CreatePost(validatedAttachments, contents, user.uid, threadId, refrenced_post_id);
 
     if(post == false) return res.json({ error: true, errors: ["Could not save post to database! If this error continues please contact a website admin. "]});
