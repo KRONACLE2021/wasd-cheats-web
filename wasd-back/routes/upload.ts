@@ -18,7 +18,7 @@ var s3 = new aws.S3({
 });
 
 
-const ALLOWED_UPLOAD_TYPES = {
+const ALLOWED_UPLOAD_TYPES : { [key: string]: string } = {
   'image/png': 'png',
   'image/jpeg': 'jpeg',
   'image/jpg': 'jpg',
@@ -47,7 +47,12 @@ var upload = multer({
       if(ALLOWED_UPLOAD_TYPES[file.mimetype]) isValid = true;
 
       let error = isValid ? null : new Error("Invlid mime type!!");
-      cb(error, isValid);
+      
+      if(error){
+        cb(null, false);
+      }
+
+      cb(null, isValid);
     }
 })
 
@@ -59,7 +64,7 @@ Route.post("/admin/upload", CheckAuth, (req, res, next) => {
 
 }, upload.array('files', 10), async (req : Request, res: Response, next: NextFunction) => {
 
-  let files : Express.MulterS3.File[] | undefined = req.files;
+  let files : Express.MulterS3.File[] = req.files as Express.MulterS3.File[];
 
   if(!files) return res.json({ error: true, errors: ["Failed to upload files."]}).status(500);
 
@@ -90,7 +95,7 @@ Route.post("/admin/upload", CheckAuth, (req, res, next) => {
 
 Route.post("/usercontent", CheckAuth, upload.single('file'), async (req : Request, res: Response, next: NextFunction) => {
 
-    let file : Express.MulterS3.File | undefined = req.file;
+    let file : Express.MulterS3.File = req.file as Express.MulterS3.File;
 
     if(!file) return res.json({ error: true, errors: ["Failed to upload"]}).status(500);
 

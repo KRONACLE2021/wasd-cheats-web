@@ -28,7 +28,7 @@ Route.post("/admin/users/:id/update",  checkAuth, async (req, res, next) => {
 
     let user = await Users.findOne({ uid: id });
 
-    if(!user) return res.json({ error: true, errors: ["Could not find user!"]});W
+    if(!user) return res.json({ error: true, errors: ["Could not find user!"]});
 
     user.permissions = permissions ? permissions : user.permissions; 
     user.avatar = avatar ? avatar : user.avatar; 
@@ -103,19 +103,19 @@ Route.post("/me/update", checkAuth, async (req, res, next) => {
     if(banner) {
         let attachment_check = await Attachments.findOne({ id: banner });
         if(!attachment_check) banner = "";
-        dbUser.banner = attachment_check.id;
+        else dbUser.banner = attachment_check.id;
     } 
     if(avatar) {
         let attachment_check = await Attachments.findOne({ id: avatar });
         if(!attachment_check) avatar = "";
-        dbUser.avatar = attachment_check.id;
+        else dbUser.avatar = attachment_check.id;
     }
 
     dbUser.bio = bio ? bio : dbUser.bio;
 
     await dbUser.save();
 
-    let sanitizedUser = sanitizeUsers(dbUser);
+    let sanitizedUser = sanitizeUsers(null, dbUser);
 
     return res.json({ done: true, user: sanitizedUser });
 });
@@ -156,8 +156,8 @@ Route.get("/admin/users", checkAuth, async (req, res, next) => {
             let users_ = await sortByRecentUsers()
             return res.json({ users: users_ });
         case "PAGINATION":
-            let skip = parseInt(req.query.skip);
-            let limit = parseInt(req.query.limit);
+            let skip = parseInt(req.query.skip as string);
+            let limit = parseInt(req.query.limit as string);
 
             if(isNaN(skip)) skip = 0;
             if(isNaN(limit)) limit = 10;
@@ -184,7 +184,7 @@ Route.post("/:id/ban", checkAuth, async (req, res, next) => {
     if(!user_) return res.json({ error: true, errors: ["This user does not exsist!"] });
     if(id == res.locals.user.uid) return res.json({ error: true, errors: ["Why are you trying to ban yourself? thats just odd."]});
 
-    if(user_.banned == true) {
+    if(user_.banned == true && user_.banId !== null) {
         user_.banned = false;
 
         await Ban.deleteOne({ id: user_.banId });

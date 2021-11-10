@@ -14,10 +14,10 @@ export interface IUser {
     created_at: Date;
     banned: boolean;
     banId: string | null;
-    active_subscriptions: Array<String>;
-    purchased_products: Array<String>;
-    bio: String;
-    banner: String;
+    active_subscriptions: Array<string>;
+    purchased_products: Array<string>;
+    bio: string;
+    banner: string;
     last_logged_in_location: string;
 }
 

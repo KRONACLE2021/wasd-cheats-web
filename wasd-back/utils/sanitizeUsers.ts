@@ -1,8 +1,8 @@
 import { IUser } from "../models/Users";
 
-export default function sanitizeUsers(users: Array<IUser>, user : IUser | null = null) {
+export default function sanitizeUsers(users: Array<IUser> | null, user : IUser | null = null) {
     
-    if(users.length){
+    if(users !== null && users.length){
         let sanitizedUsers = [];
 
         for(var i of users){

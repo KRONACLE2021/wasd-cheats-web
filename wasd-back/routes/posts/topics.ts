@@ -159,7 +159,7 @@ Route.post("/create", checkAuth, async (req, res, next) => {
 
     let attachment = await Attachments.findOne({ id: attachmentId });
 
-    if(!attachment) errors.push("That attachment id is invalid, please upload a image!");
+    if(!attachment || attachment == null) errors.push("That attachment id is invalid, please upload a image!");
     if(!title) errors.push("The topic you want to create must have a title!");
     if(!description) errors.push("The topic you want to create must have a description!");
     if(!category) errors.push("The topic you want to create must have a category id!");
@@ -172,9 +172,12 @@ Route.post("/create", checkAuth, async (req, res, next) => {
 
     let id = uuid();
 
-    let topic = await Topics.create({ id, description, category, imgID: attachment.id, threads: [], title });
+    let topic = await Topics.create({ id, description, category, imgID: attachment?.id, threads: [], title });
 
-    attachment.attachedTo = id;
+    if(attachment) {
+        attachment.attachedTo = id;
+    }
+    
     attachment?.save();
 
     Category?.topics.push(id);

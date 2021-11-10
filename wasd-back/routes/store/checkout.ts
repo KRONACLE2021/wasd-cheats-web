@@ -3,7 +3,7 @@ import { RedisClient } from 'redis';
 import { v4 as uuid } from 'uuid';
 import checkAuth from '../../middleware/checkAuth';
 import Item from '../../models/Item';
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import Payment from '../../models/Payments';
 import Users from '../../models/Users';
 import Subscription from '../../models/Subscription';
@@ -18,9 +18,12 @@ const PAYPAL_ORDER_API = "v2/checkout/orders";
 const PAYPAL_CLIENT = "Afq0gJghMMDsCEPGnpFuI_WVXgU7CZxBfobBBUj5B5nAKKt330AmSglybiq9hpXZnQWo8qah0SOfglSA";
 const PAYPAL_SECRET = "ELXcMlLV4KwTwpmzqPXfu1HZKCYJ1F2cyPLsEdvYrvSUwMF-iqTz2t_gH_B3YfgcC8cFOgI9fH9sDK5P";
 
-const PAYPAL_API_AUTH = new Buffer.from(`${ PAYPAL_CLIENT }:${ PAYPAL_SECRET }`);
+const PAYPAL_API_AUTH = Buffer.from(`${ PAYPAL_CLIENT }:${ PAYPAL_SECRET }`);
 
-let PAYPAL_AUTH : Object | null = null;
+let PAYPAL_AUTH : { created_at: Date | undefined, access_token: string | undefined } = {
+    created_at: undefined,
+    access_token: undefined
+};
 
 Route.use(json());
 
@@ -30,10 +33,12 @@ const getPaypalOAuthKey = async () => {
             Authorization: `Basic ${PAYPAL_API_AUTH.toString('base64')}`,
             Accept: `application/json`
         }
-    }).then(res => {
+    }).then((res : any) => {
         if(res.data) {
-            PAYPAL_AUTH = res.data;
-            PAYPAL_AUTH.created_at = new Date();
+            PAYPAL_AUTH = {
+                access_token: res.data.access_token,
+                created_at: new Date()
+            }
             return res.data;
         } 
     }).catch(err => {
@@ -126,7 +131,7 @@ Route.post("/payment/paypal", checkAuth, async (req, res, next) => {
 
     const redis: RedisClient = req.app.get("redis");
 
-    if(!PAYPAL_AUTH){
+    if(PAYPAL_AUTH?.access_token == undefined || PAYPAL_AUTH?.access_token == null){
         await getPaypalOAuthKey()
     }
 
@@ -140,7 +145,7 @@ Route.post("/payment/paypal", checkAuth, async (req, res, next) => {
 
         let order = await axios.post(`${PAYPAL_BASE}${PAYPAL_ORDER_API}`, {
             intent: "CAPTURE",
-            purchase_units: redisDataParsed.items.map((i) => {
+            purchase_units: redisDataParsed.items.map((i : any) => {
                 return {
                     custom_id: i.id,
                     amount: {
@@ -154,7 +159,7 @@ Route.post("/payment/paypal", checkAuth, async (req, res, next) => {
                 Accpet: `application/json`,
                 Authorization: `Bearer ${ PAYPAL_AUTH.access_token }`
             }
-        }).then((order) => {
+        }).then((order : any) => {
             if(order.data.id) {
                 return res.json({ orderID: order.data.id }).status(200); 
             } else {
@@ -201,7 +206,7 @@ Route.post("/capture/paypal/", checkAuth, async (req, res, next) => {
         }).save();
 
         //Assign items to users
-        paypal_Capture.purchase_units[0].payments.captures.forEach(item => {
+        paypal_Capture.purchase_units[0].payments.captures.forEach((item : any) => {
             assignItemsToUser(userId, item.custom_id);
         });
 

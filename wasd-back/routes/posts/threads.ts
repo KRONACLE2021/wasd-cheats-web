@@ -12,8 +12,9 @@ Route.use(json());
 
 Route.get('/:id/posts', async (req, res, next) => {
     
-    let limit : any = parseInt(req.query.limit);
-    let skip : any = parseInt(req.query.skip);
+
+    let limit : number = parseInt(req.query.limit as string);
+    let skip : number = parseInt(req.query.skip as string);
 
 
     if(isNaN(limit)) limit = 20;

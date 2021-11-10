@@ -1,7 +1,7 @@
 import { Router, json, urlencoded } from 'express';
 import { v4 as uuid } from 'uuid';
 import CheckAuth from '../middleware/checkAuth';
-import multer from 'multer';
+import multer, { Multer } from 'multer';
 import multerS3 from 'multer-s3';
 import aws from 'aws-sdk';
 import Downloads from '../models/Downloads';
@@ -49,7 +49,7 @@ Route.get("/user/all", async (req, res, next) => {
 
     for(let i = 0; i < user.active_subscriptions.length; i++){
         
-        let sub : String = user.active_subscriptions[i];
+        let sub : string = user.active_subscriptions[i];
 
         if(!sub) continue;
 
@@ -111,12 +111,14 @@ Route.post("/upload", async (req, res, next) => {
     
         upload_to.version = version;
 
-        let file = req.file;
+        if(!req.file) return res.json({ error: true });
+
+        let file : Express.MulterS3.File = req.file as Express.MulterS3.File;
 
         if(file == null) return res.json({ error: true, errors: ["error uploading file"]});
 
         upload_to?.releases.push({
-            file_id: file.key,
+            file_id: file?.key,
             version: version,
             notes: notes,
             date: new Date(),
