@@ -18,7 +18,7 @@ import DownloadsRoute from './downloads';
 let Route = Router();
 
 Route.use(cors({
-    allowedHeaders: ["wasdcheats.cc", "api.wasdcheats.cc", "wasdapp.netlify.app"]
+    origin: ["wasdcheats.cc", "api.wasdcheats.cc", "wasdapp.netlify.app"]
 }));
 
 Route.get("/api/status", (req, res, next) => {
