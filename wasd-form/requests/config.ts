@@ -1,6 +1,3 @@
-import dotenv from 'dotenv';
-dotenv.config()
-
 const development = process.env.DEVELOPMENT;
 
 export const API = development ? "http://localhost:8080" : "https://api.wasdcheats.cc";
