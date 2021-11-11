@@ -18,7 +18,7 @@ import DownloadsRoute from './downloads';
 let Route = Router();
 
 Route.use(cors({
-    origin: "https://wasdcheats.cc"
+    origin: "https://wasdcheats.cc/"
 }));
 
 Route.get("/api/status", (req, res, next) => {
