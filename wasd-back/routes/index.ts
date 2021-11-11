@@ -17,7 +17,9 @@ import DownloadsRoute from './downloads';
 
 let Route = Router();
 
-Route.use(cors());
+Route.use(cors({
+    allowedHeaders: ["wasdcheats.cc", "api.wasdcheats.cc", "wasdapp.netlify.app"]
+}));
 
 Route.get("/api/status", (req, res, next) => {
     res.json({status: "online"});
